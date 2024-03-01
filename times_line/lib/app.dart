@@ -173,57 +173,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
           ),
         ],
       ),
-      StatefulShellRoute.indexedStack(
-          builder: (BuildContext context, GoRouterState state,
-              StatefulNavigationShell navigationShell) {
-            // 사용자 정의 셸을 구현하는 위젯을 반환합니다. (BottomNavigationBar)
-            return SizedBox(
-              height: 85,
-              child: Container(
-                height: bottomNavigationBarHeight,
-                decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black26, spreadRadius: 0, blurRadius: 10),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(bottomNavigationBarBorderRadius),
-                    topRight: Radius.circular(bottomNavigationBarBorderRadius),
-                  ),
-                  child: Scaffold(
-                    bottomNavigationBar: BottomNavigationBar(
-                      items: navigationBarItems(context),
-                      selectedItemColor: context.appColors.text,
-                      unselectedItemColor:
-                          context.appColors.iconButtonInactivate,
-                      onTap: (index) => navigationShell.goBranch(index),
-                      showSelectedLabels: true,
-                      showUnselectedLabels: true,
-                      type: BottomNavigationBarType.fixed,
-                      currentIndex: navigationShell.currentIndex,
 
-                    ),
-                    body: navigationShell,
-
-                  ),
-                ),
-              ),
-            );
-          },
-          branches: <StatefulShellBranch>[
-            // Tab A (First Tab)
-            StatefulShellBranch(
-              routes: <RouteBase>[
-                GoRoute(
-                  path: '/home',
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const MainScreen(firstTab: TabItem.home),
-                ),
-              ],
-            ),
-          ])
     ],
     redirect: _auth.guard,
     refreshListenable: _auth,

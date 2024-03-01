@@ -7,11 +7,11 @@ import 'package:times_line/screen/main/tab/near_me/f_near_me.dart';
 import 'package:flutter/material.dart';
 
 enum TabItem {
-  home(Icons.home, '홈', HomeFragment()),
-  localLife(Icons.holiday_village_outlined, '동네생활', LocalLifeFragment()),
-  nearMe(Icons.pin_drop_outlined, '내 근처', NearMeFragment()),
-  chat(Icons.chat_bubble_outline, '채팅', ChatFragment()),
-  my(Icons.person_outline_rounded, '나의 당근', MyFragment()),
+  localLife(Icons.add_circle, '일정추가', LocalLifeFragment()),
+  nearMe(Icons.note_alt, '세줄일기', NearMeFragment()),
+  home(Icons.format_list_bulleted, '일정', HomeFragment()),
+  chat(Icons.stacked_bar_chart, '통계', ChatFragment()),
+  my(Icons.settings, '설정', MyFragment()),
   ;
 
   final IconData activeIcon;

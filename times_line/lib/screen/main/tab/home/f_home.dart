@@ -1,17 +1,13 @@
-import 'package:times_line/common/cli_common.dart';
-import 'package:times_line/common/common.dart';
-import 'package:times_line/common/widget/animated_arrow_up_down.dart';
-import 'package:times_line/common/widget/w_arrow.dart';
-import 'package:times_line/data/post_dummy.dart';
-import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
-import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
-import 'package:times_line/screen/main/s_main.dart';
-import 'package:times_line/screen/main/tab/home/provider/post_provider.dart';
-import 'package:times_line/screen/main/tab/home/w_product_post_item.dart';
-import 'package:times_line/screen/main/tab/tab_item.dart';
-import 'package:times_line/screen/notification/s_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:times_line/common/common.dart';
+import 'package:times_line/common/widget/animated_arrow_up_down.dart';
+import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
+import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
+import 'package:times_line/screen/main/tab/home/provider/post_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/task_provider.dart';
+import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
+import 'package:times_line/screen/notification/s_notification.dart';
 
 class HomeFragment extends ConsumerStatefulWidget {
   const HomeFragment({super.key});
@@ -28,7 +24,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
 
   @override
   void initState() {
-
     scrollController.addListener(() {
       final floatingState = ref.read(floatingButtonStateProvider);
 
@@ -45,6 +40,8 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   @override
   Widget build(BuildContext context) {
     final postList = ref.watch(postProvider);
+    final taskList = ref.watch(taskProvider);
+
     return Column(
       children: [
         AppBar(
@@ -91,7 +88,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
               onPressed: () {
                 Nav.push(NotificationScreen());
               },
-
               icon: const Icon(Icons.notifications_none_rounded),
             )
           ],
@@ -100,7 +96,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           child: ListView.separated(
             padding: EdgeInsets.only(bottom: FloatingDaangnButton.height),
             controller: scrollController,
-            itemBuilder: (context, index) => ProductPostItem(postList[index]),
+            itemBuilder: (context, index) => TimesLineItem(taskList[index], taskList[index]),
             itemCount: postList.length,
             separatorBuilder: (context, index) =>
                 const Line().pSymmetric(h: 15),

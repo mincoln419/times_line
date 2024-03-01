@@ -53,4 +53,6 @@ abstract class AbstractThemeColors {
   Color get unreadColor => AppColors.darkGrey;
 
   Color get lessImportant => const Color.fromARGB(255, 77, 77, 79);
+
+  Color get knowlegeColor => const Color.fromARGB(255, 236, 105, 105);
 }
