@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "865047079487",
+    "project_id": "dangn-app",
+    "storage_bucket": "dangn-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865047079487:android:fdbcc3c1b870abffd5268a",
+        "android_client_info": {
+          "package_name": "com.example.fast_app_base"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYD-K6R1F28OvjCMSE6ETMZiRTqIlRupQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
