@@ -78,11 +78,7 @@ class MainScreenState extends ConsumerState<MainScreen>
               ),
               bottomNavigationBar: _buildBottomNavigationBar(context),
             ),
-            AnimatedOpacity(
-              opacity: _currentTab != TabItem.chat ? 1 : 0,
-              duration: 300.ms,
-              child: FloatingDaangnButton(),
-            )
+
           ],
         ),
       ),

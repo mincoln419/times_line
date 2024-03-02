@@ -55,4 +55,20 @@ abstract class AbstractThemeColors {
   Color get lessImportant => const Color.fromARGB(255, 77, 77, 79);
 
   Color get knowlegeColor => const Color.fromARGB(255, 236, 105, 105);
+
+  Color get soulColor => const Color.fromARGB(255, 12, 126, 33);
+
+  Color get physicalColor => const Color.fromARGB(255, 53, 118, 203);
+
+  Color get socialColor => const Color.fromARGB(255, 218, 112, 56);
+
+  Color get etcColor => const Color.fromARGB(255, 176, 47, 239);
+
+  Color get sleepColor => const Color.fromARGB(255, 86, 62, 10);
+
+  Color get wasteColor => const Color.fromARGB(255, 117, 110, 87);
+
+
+
+
 }

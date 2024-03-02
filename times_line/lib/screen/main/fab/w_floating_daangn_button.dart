@@ -1,12 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:times_line/common/cli_common.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/s_main.dart';
-import 'package:times_line/screen/main/tab/tab_item.dart';
-import 'package:times_line/screen/write/s_write.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../common/widget/animated_width_collapse.dart';
 
@@ -72,7 +70,7 @@ class FloatingDaangnButton extends ConsumerWidget {
                       Tap(
                         onTap: (){
                           //글작성페이지 모달
-                          Nav.push(WriteScreen());
+
                         },
                         child: Container(
                           width: 160,

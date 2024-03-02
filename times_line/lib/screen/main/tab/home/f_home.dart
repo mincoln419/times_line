@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:times_line/app.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/widget/animated_arrow_up_down.dart';
+import 'package:times_line/data/task_dummy.dart';
+import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
-import 'package:times_line/screen/main/tab/home/provider/post_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/task_provider.dart';
+import 'package:times_line/screen/main/tab/home/vo_write_todo.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
 import 'package:times_line/screen/notification/s_notification.dart';
 
@@ -39,7 +43,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    final postList = ref.watch(postProvider);
     final taskList = ref.watch(taskProvider);
 
     return Column(
@@ -96,8 +99,20 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           child: ListView.separated(
             padding: EdgeInsets.only(bottom: FloatingDaangnButton.height),
             controller: scrollController,
-            itemBuilder: (context, index) => TimesLineItem(taskList[index], taskList[index]),
-            itemCount: postList.length,
+            itemBuilder: (context, index) => TimesLineItem(taskList[index], taskList[index]
+              , onTap: () async {
+                print("tap");
+                //처리한 업무 다이얼로그 호출
+
+                WriteTodoResult? result = await GoRouter.of(context)
+                    .pushNamed<WriteTodoResult>('writeTask', extra: task1);
+                if (result != null) {
+                  //   String text = result.text;
+                  //   DateTime dueDtm = result.dateTime;
+                  debugPrint(result.text);
+                }
+              },),
+            itemCount: taskList.length,
             separatorBuilder: (context, index) =>
                 const Line().pSymmetric(h: 15),
           ),

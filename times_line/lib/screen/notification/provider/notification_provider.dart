@@ -1,9 +1,9 @@
-import 'package:times_line/data/network/dangn_api.dart';
+import 'package:times_line/data/network/task_api.dart';
 import 'package:times_line/screen/notification/vo/vo_notification.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final remoteNotificationProvider = FutureProvider((ref) async {
-  final result = await DangnApi.getNotification();
+  final result = await TaskApi.getNotification();
   return result.successData;
 });
 

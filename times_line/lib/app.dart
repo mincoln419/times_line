@@ -4,9 +4,11 @@ import 'package:times_line/common/fcm/fcm_manager.dart';
 import 'package:times_line/common/route/fade_trasition_page.dart';
 import 'package:times_line/common/theme/custom_theme_app.dart';
 import 'package:times_line/common/widget/w_round_button.dart';
+import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/s_main.dart';
+import 'package:times_line/screen/main/tab/home/d_dialog_page.dart';
+import 'package:times_line/screen/main/tab/home/d_write_task.dart';
 import 'package:times_line/screen/main/tab/tab_item.dart';
-import 'package:times_line/screen/post_detail/s_post_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -124,15 +126,26 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     initialLocation: '/main',
     routes: <RouteBase>[
       GoRoute(
+        path: '/writeTask',
+        name: 'writeTask',
+        pageBuilder:  (context, state)  {
+          return DialogPage(builder: (_) => WriteTaskDialog(todoTask: state.extra as TodoTask));
+        },
+      ),
+      GoRoute(
         path: '/',
+        name: 'home',
         redirect: (_, __) => '/main',
+
       ),
       GoRoute(
         path: '/main',
+        name: 'name',
         redirect: (_, __) => '/main/home',
       ),
       GoRoute(
         path: '/signin',
+        name: 'signin',
         pageBuilder: (context, state) => FadeTransitionPage(
           key: state.pageKey,
           child: Container(
@@ -156,24 +169,15 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       ),
       GoRoute(
         path: '/main/:kind(home|localLife|nearMe|chat|my)',
+        name: 'path',
         pageBuilder: (context, state) => FadeTransitionPage(
           key: _scaffoldKey,
           child: MainScreen(
             firstTab: TabItem.find(state.pathParameters['kind']),
           ),
         ),
-        routes: [
-          GoRoute(
-            path: ':postId',
-            builder: (context, state) {
-              final postId = state.pathParameters['postId']!;
-              print(postId);
-              return PostDetailScreen(int.parse(postId));
-            },
-          ),
-        ],
-      ),
 
+      ),
     ],
     redirect: _auth.guard,
     refreshListenable: _auth,
