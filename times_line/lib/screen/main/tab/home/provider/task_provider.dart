@@ -12,9 +12,8 @@ class TaskDataHolder extends StateNotifier<List<TodoTask>> {
 
   void changeTodoTaksStatus(TodoTask todoTask) async {
     switch(todoTask.todoTaskStatus){
-
       case TodoTaskStatus.not_yet:
-        // TODO: Handle this case.
+        todoTask.todoTaskStatus = TodoTaskStatus.not_yet;
       case TodoTaskStatus.matched:
         // TODO: Handle this case.
       case TodoTaskStatus.unmatched:
