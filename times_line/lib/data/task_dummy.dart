@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:times_line/entity/todo_task/task_type.dart';
+import 'package:times_line/entity/todo_task/todo_task_status.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 
 DateTime generateCreateDtm() {
@@ -12,6 +13,7 @@ final TodoTask task1 = TodoTask(
   4,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -20,6 +22,7 @@ final TodoTask task2 = TodoTask(
   5,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -28,6 +31,7 @@ final TodoTask task3 = TodoTask(
   6,
   '명상하기',
   'Daily Calm',
+  TodoTaskStatus.not_yet,
   TaskType.soul,
   generateCreateDtm(),
 );
@@ -36,6 +40,7 @@ final TodoTask task4 = TodoTask(
   7,
   '운동하기',
   '헬스장-가슴,등 파트',
+  TodoTaskStatus.not_yet,
   TaskType.physical,
   generateCreateDtm(),
 );
@@ -44,6 +49,7 @@ final TodoTask task5 = TodoTask(
   8,
   '타임트래킹',
   '타임트래킹, 자기계발도서 독서',
+  TodoTaskStatus.not_yet,
   TaskType.soul,
   generateCreateDtm(),
 );
@@ -53,6 +59,7 @@ final TodoTask task6 = TodoTask(
   9,
   '공부하기',
   'Spring Security 공부',
+  TodoTaskStatus.not_yet,
   TaskType.knowledge,
   generateCreateDtm(),
 );
@@ -62,6 +69,7 @@ final TodoTask task7 = TodoTask(
   10,
   '업무모니터링',
   '업무모니터링',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -71,6 +79,7 @@ final TodoTask task8 = TodoTask(
   11,
   '업무개발',
   '업무개발',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -80,6 +89,7 @@ final TodoTask task9 = TodoTask(
   12,
   '점심식사',
   '김치찌개, 제육볶음',
+  TodoTaskStatus.not_yet,
   TaskType.etc,
   generateCreateDtm(),
 );
@@ -89,6 +99,7 @@ final TodoTask task10 = TodoTask(
   13,
   '업무개발',
   '업무개발',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -98,6 +109,7 @@ final TodoTask task11 = TodoTask(
   14,
   '업무개발',
   '업무개발',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -107,6 +119,7 @@ final TodoTask task12 = TodoTask(
   15,
   '업무개발',
   '업무개발',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -116,6 +129,7 @@ final TodoTask task13 = TodoTask(
   16,
   '업무개발',
   '업무개발',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -125,6 +139,7 @@ final TodoTask task14 = TodoTask(
   17,
   '주간보고',
   '주간보고',
+  TodoTaskStatus.not_yet,
   TaskType.social,
   generateCreateDtm(),
 );
@@ -134,6 +149,7 @@ final TodoTask task15 = TodoTask(
   18,
   '공부하기',
   'flutter 공부',
+  TodoTaskStatus.not_yet,
   TaskType.knowledge,
   generateCreateDtm(),
 );
@@ -143,6 +159,7 @@ final TodoTask task16 = TodoTask(
   19,
   '독서',
   '피터드러커 자기개발론',
+  TodoTaskStatus.not_yet,
   TaskType.knowledge,
   generateCreateDtm(),
 );
@@ -152,6 +169,7 @@ final TodoTask task17 = TodoTask(
   20,
   '야채 식단 식사',
   '야채 식단 식사',
+  TodoTaskStatus.not_yet,
   TaskType.physical,
   generateCreateDtm(),
 );
@@ -161,6 +179,7 @@ final TodoTask task18 = TodoTask(
   21,
   '아들과 몸놀이',
   '아들과 몸놀이',
+  TodoTaskStatus.not_yet,
   TaskType.etc,
   generateCreateDtm(),
 );
@@ -170,6 +189,7 @@ final TodoTask task19 = TodoTask(
   22,
   '독서하기',
   'IT 도서',
+  TodoTaskStatus.not_yet,
   TaskType.knowledge,
   generateCreateDtm(),
 );
@@ -179,6 +199,7 @@ final TodoTask task20 = TodoTask(
   23,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -188,6 +209,7 @@ final TodoTask task21 = TodoTask(
   0,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -197,6 +219,7 @@ final TodoTask task22 = TodoTask(
   1,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -206,6 +229,7 @@ final TodoTask task23 = TodoTask(
   2,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );
@@ -215,6 +239,7 @@ final TodoTask task24 = TodoTask(
   3,
   '잠자기',
   '잠자기',
+  TodoTaskStatus.not_yet,
   TaskType.sleep,
   generateCreateDtm(),
 );

@@ -20,6 +20,7 @@ mixin _$TodoTask {
   int get timeline => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  TodoTaskStatus get todoTaskStatus => throw _privateConstructorUsedError;
   TaskType get taskType => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
 
@@ -38,6 +39,7 @@ abstract class $TodoTaskCopyWith<$Res> {
       int timeline,
       String title,
       String description,
+      TodoTaskStatus todoTaskStatus,
       TaskType taskType,
       DateTime createdTime});
 }
@@ -59,6 +61,7 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
     Object? timeline = null,
     Object? title = null,
     Object? description = null,
+    Object? todoTaskStatus = null,
     Object? taskType = null,
     Object? createdTime = null,
   }) {
@@ -79,6 +82,10 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      todoTaskStatus: null == todoTaskStatus
+          ? _value.todoTaskStatus
+          : todoTaskStatus // ignore: cast_nullable_to_non_nullable
+              as TodoTaskStatus,
       taskType: null == taskType
           ? _value.taskType
           : taskType // ignore: cast_nullable_to_non_nullable
@@ -103,6 +110,7 @@ abstract class _$$_TodoTaskCopyWith<$Res> implements $TodoTaskCopyWith<$Res> {
       int timeline,
       String title,
       String description,
+      TodoTaskStatus todoTaskStatus,
       TaskType taskType,
       DateTime createdTime});
 }
@@ -122,6 +130,7 @@ class __$$_TodoTaskCopyWithImpl<$Res>
     Object? timeline = null,
     Object? title = null,
     Object? description = null,
+    Object? todoTaskStatus = null,
     Object? taskType = null,
     Object? createdTime = null,
   }) {
@@ -142,6 +151,10 @@ class __$$_TodoTaskCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      null == todoTaskStatus
+          ? _value.todoTaskStatus
+          : todoTaskStatus // ignore: cast_nullable_to_non_nullable
+              as TodoTaskStatus,
       null == taskType
           ? _value.taskType
           : taskType // ignore: cast_nullable_to_non_nullable
@@ -158,7 +171,7 @@ class __$$_TodoTaskCopyWithImpl<$Res>
 
 class _$_TodoTask implements _TodoTask {
   const _$_TodoTask(this.id, this.timeline, this.title, this.description,
-      this.taskType, this.createdTime);
+      this.todoTaskStatus, this.taskType, this.createdTime);
 
   @override
   final int id;
@@ -169,13 +182,15 @@ class _$_TodoTask implements _TodoTask {
   @override
   final String description;
   @override
+  final TodoTaskStatus todoTaskStatus;
+  @override
   final TaskType taskType;
   @override
   final DateTime createdTime;
 
   @override
   String toString() {
-    return 'TodoTask(id: $id, timeline: $timeline, title: $title, description: $description, taskType: $taskType, createdTime: $createdTime)';
+    return 'TodoTask(id: $id, timeline: $timeline, title: $title, description: $description, todoTaskStatus: $todoTaskStatus, taskType: $taskType, createdTime: $createdTime)';
   }
 
   @override
@@ -189,6 +204,8 @@ class _$_TodoTask implements _TodoTask {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.todoTaskStatus, todoTaskStatus) ||
+                other.todoTaskStatus == todoTaskStatus) &&
             (identical(other.taskType, taskType) ||
                 other.taskType == taskType) &&
             (identical(other.createdTime, createdTime) ||
@@ -196,8 +213,8 @@ class _$_TodoTask implements _TodoTask {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, timeline, title, description, taskType, createdTime);
+  int get hashCode => Object.hash(runtimeType, id, timeline, title, description,
+      todoTaskStatus, taskType, createdTime);
 
   @JsonKey(ignore: true)
   @override
@@ -212,6 +229,7 @@ abstract class _TodoTask implements TodoTask {
       final int timeline,
       final String title,
       final String description,
+      final TodoTaskStatus todoTaskStatus,
       final TaskType taskType,
       final DateTime createdTime) = _$_TodoTask;
 
@@ -223,6 +241,8 @@ abstract class _TodoTask implements TodoTask {
   String get title;
   @override
   String get description;
+  @override
+  TodoTaskStatus get todoTaskStatus;
   @override
   TaskType get taskType;
   @override
