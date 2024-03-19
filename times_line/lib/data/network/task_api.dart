@@ -16,7 +16,6 @@ class TaskApi {
 
   static Future<TodoTask> getPost(int id) async {
     await sleepAsync(100.ms);
-    return TodoTask(
-        id, 1, "", "", TodoTaskStatus.not_yet, TaskType.etc, DateTime.now());
+    return TodoTask(id: id, timeline: 1, createdTime: DateTime.now(), title: '', taskType: TaskType.etc);
   }
 }

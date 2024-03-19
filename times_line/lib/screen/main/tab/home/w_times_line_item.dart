@@ -35,7 +35,7 @@ class _TimesLineItemState extends State<TimesLineItem> {
               children: [
                 SizedBox(
                   width: screenWidth * 0.08,
-                  child: widget.todoTask.timeline.text.make(),
+                  child: widget.todoTask.timeline.toString().text.make(),
                 ),
                 Container(
                   alignment: Alignment.center,

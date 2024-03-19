@@ -3,26 +3,25 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/todo_task_status.dart';
 
+part 'vo_todo_task.freezed.dart';
+part 'vo_todo_task.g.dart';
 
-class TodoTask {
-  TodoTask(
-      this.id,
-      this.timeline,
-      this.title,
-      this.description,
-      this.todoTaskStatus,
-      this.taskType,
-      this.createdTime,
-  );
+@unfreezed
+class TodoTask with _$TodoTask{
 
-  int id;
-  int timeline;
-  String title;
-  String description;
-  TodoTaskStatus todoTaskStatus;
-  TaskType taskType;
-  DateTime createdTime;
+  TodoTask._();
 
+  factory TodoTask ({
+    required final int id,
+    @JsonKey(name: 'created_time')required final DateTime createdTime,
+    DateTime? modifyTime,
+    required String title,
+    int? timeline,
+    required TaskType taskType,
+    @Default(TodoTaskStatus.not_yet) TodoTaskStatus todoTaskStatus,
+  }) = _TodoTask;
+
+  factory TodoTask.fromJson(Map<String, Object?> json) => _$TodoTaskFromJson(json);
 
 }
 

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:times_line/app.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/widget/animated_arrow_up_down.dart';
-import 'package:times_line/data/task_dummy.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
@@ -43,7 +42,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    final taskList = ref.watch(taskProvider);
+    final taskList = ref.watch(todoDataProvider);
 
     return Column(
       children: [
@@ -105,7 +104,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 //처리한 업무 다이얼로그 호출
 
                 WriteTodoResult? result = await GoRouter.of(context)
-                    .pushNamed<WriteTodoResult>('writeTask', extra: task1);
+                    .pushNamed<WriteTodoResult>('writeTask', extra: null);
                 if (result != null) {
                   //   String text = result.text;
                   //   DateTime dueDtm = result.dateTime;
