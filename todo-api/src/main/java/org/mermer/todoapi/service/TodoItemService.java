@@ -29,9 +29,10 @@ public class TodoItemService {
 		return item -> TodoItemDto
 				.builder()
 				.title(item.getTitle())
-				.contents(item.getContents())
-				.createdAt(item.getCreatedAt())
-				.targetDate(item.getTargetDate())
+				.description(item.getContents())
+				.createdTime(item.getCreatedAt())
+				.taskType(item.getTaskType())
+				.todoTaskStatus(item.getTodoTaskStatus())
 				.build();
 	}
 }

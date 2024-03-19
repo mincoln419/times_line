@@ -14,14 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 public class TodoItemDto {
 
+	private int timeline;
 	private String title;
-
-	private String contents;
-
-	private LocalDate targetDate;
-
-	private LocalDateTime createdAt;
-
-	private String userId;
+	private String description;
+	private TodoTaskStatus todoTaskStatus;
+	private TaskType taskType;
+	private LocalDateTime createdTime;
 
 }

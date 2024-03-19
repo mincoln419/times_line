@@ -1,6 +1,8 @@
 {
   "title": "테스트제목1",
   "contents": "테스트내용1",
+  "taskType": "SOUL",
+  "todoTaskStatus": "NOT_YET",
   "createdAt": "2024-03-07T09:55:33",
   "targetDate": "2024-03-08"
 }

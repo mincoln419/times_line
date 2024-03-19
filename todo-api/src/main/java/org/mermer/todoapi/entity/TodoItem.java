@@ -1,11 +1,10 @@
 package org.mermer.todoapi.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.mermer.todoapi.dto.TaskType;
+import org.mermer.todoapi.dto.TodoTaskStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -25,6 +24,12 @@ public class TodoItem {
 	private String title;
 
 	private String contents;
+
+	@Enumerated(EnumType.STRING)
+	private TaskType  taskType;
+
+	@Enumerated(EnumType.STRING)
+	private TodoTaskStatus todoTaskStatus;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate targetDate;
