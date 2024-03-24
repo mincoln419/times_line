@@ -1,6 +1,6 @@
 import 'package:times_line/common/common.dart';
 import 'package:times_line/screen/main/tab/chat/f_chat.dart';
-import 'package:times_line/screen/main/tab/home/f_home.dart';
+import 'package:times_line/screen/main/tab/home/home_fragment.dart';
 import 'package:times_line/screen/main/tab/local_life/f_local_life.dart';
 import 'package:times_line/screen/main/tab/my/f_my.dart';
 import 'package:times_line/screen/main/tab/diary/f_three_line_diary.dart';

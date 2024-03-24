@@ -68,7 +68,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 title = value;
               });
             },
-            itemBuilder: (BuildContext context) => ["천호동", "잠실", "역삼동"]
+            itemBuilder: (BuildContext context) => ["어제", "오늘", "내일"]
                 .map((e) => PopupMenuItem(
                       value: e,
                       child: Text(e, style: TextStyle(fontSize: 20)),
@@ -96,7 +96,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
         ),
         Expanded(
           child: ListView.separated(
-            padding: EdgeInsets.only(bottom: FloatingDaangnButton.height),
+            padding: const EdgeInsets.only(bottom: FloatingDaangnButton.height),
             controller: scrollController,
             itemBuilder: (context, index) => TimesLineItem(taskList[index], taskList[index]
               , onTap: () async {
