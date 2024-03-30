@@ -50,19 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAYD-K6R1F28OvjCMSE6ETMZiRTqIlRupQ',
-    appId: '1:865047079487:android:fdbcc3c1b870abffd5268a',
-    messagingSenderId: '865047079487',
-    projectId: 'dangn-app',
-    storageBucket: 'dangn-app.appspot.com',
+    apiKey: 'AIzaSyDS39FhFxjrAcF5KzJzId3DdA7ocy5byBc',
+    appId: '1:260196666467:android:78c19e7c429b073fe73c56',
+    messagingSenderId: '260196666467',
+    projectId: 'time-line-mermer',
+    databaseURL: 'https://time-line-mermer-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'time-line-mermer.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD4GkVe5lOsf4fyXvpPq_EvlpXRvcaVirM',
-    appId: '1:865047079487:ios:b0bf1ec730bdd887d5268a',
-    messagingSenderId: '865047079487',
-    projectId: 'dangn-app',
-    storageBucket: 'dangn-app.appspot.com',
+    apiKey: 'AIzaSyAdkakjPMomZzh5sLoVVV9jXGePb5P_wOY',
+    appId: '1:260196666467:ios:0cd45ed355b9052be73c56',
+    messagingSenderId: '260196666467',
+    projectId: 'time-line-mermer',
+    databaseURL: 'https://time-line-mermer-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'time-line-mermer.appspot.com',
     iosBundleId: 'com.example.fastAppBase',
   );
 }

@@ -9,7 +9,7 @@ enum TaskType {
   social,
   etc,
   sleep,
-  waste,
+  waste, nill,
 }
 
 Color getTaskColor(BuildContext context, TaskType taskType ){
@@ -30,5 +30,7 @@ Color getTaskColor(BuildContext context, TaskType taskType ){
     case TaskType.waste:
       return context.appColors.wasteColor;
 
+    case TaskType.nill:
+      return context.appColors.hintText;
   }
 }

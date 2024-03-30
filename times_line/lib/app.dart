@@ -1,6 +1,5 @@
 import 'package:times_line/auth.dart';
 import 'package:times_line/common/common.dart';
-import 'package:times_line/common/fcm/fcm_manager.dart';
 import 'package:times_line/common/route/fade_trasition_page.dart';
 import 'package:times_line/common/theme/custom_theme_app.dart';
 import 'package:times_line/common/widget/w_round_button.dart';
@@ -38,8 +37,6 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    FcmManager.requestPermission();
-    FcmManager.initialize();
     WidgetsBinding.instance.addObserver(this);
   }
 

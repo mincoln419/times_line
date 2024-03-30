@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "865047079487",
-    "project_id": "dangn-app",
-    "storage_bucket": "dangn-app.appspot.com"
+    "project_number": "260196666467",
+    "firebase_url": "https://time-line-mermer-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "time-line-mermer",
+    "storage_bucket": "time-line-mermer.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:865047079487:android:fdbcc3c1b870abffd5268a",
+        "mobilesdk_app_id": "1:260196666467:android:78c19e7c429b073fe73c56",
         "android_client_info": {
           "package_name": "com.example.fast_app_base"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAYD-K6R1F28OvjCMSE6ETMZiRTqIlRupQ"
+          "current_key": "AIzaSyDS39FhFxjrAcF5KzJzId3DdA7ocy5byBc"
         }
       ],
       "services": {

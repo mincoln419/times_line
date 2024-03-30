@@ -80,8 +80,15 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   image_picker: ^1.0.7
   go_router: ^13.2.0
-  firebase_core: ^2.25.4
-  firebase_messaging: ^14.7.17
+
+
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
+  cloud_firestore: ^4.8.1
+  firebase_storage: ^11.2.3
+  camera: ^0.10.5+3
+  rxdart: ^0.27.7
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:
@@ -126,28 +133,67 @@ flutter:
     - assets/image/write/
     - assets/translations/
     - assets/
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+    - ios/
+    - ios/Runner/
+    - ios/Runner/Base.lproj/
+    - ios/Runner/Assets.xcassets/
+    - ios/Runner/Assets.xcassets/AppIcon.appiconset/
+    - ios/Runner/Assets.xcassets/LaunchImage.imageset/
+    - ios/Runner/Assets.xcassets/LaunchBackground.imageset/
+    - ios/Flutter/
+    - ios/Runner.xcodeproj/
+    - ios/Runner.xcodeproj/xcshareddata/
+    - ios/Runner.xcodeproj/xcshareddata/xcschemes/
+    - ios/Runner.xcodeproj/project.xcworkspace/
+    - ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/
+    - ios/Runner.xcworkspace/
+    - ios/Runner.xcworkspace/xcshareddata/
+    - lib/
+    - lib/data/
+    - lib/data/local/
+    - lib/data/local/error/
+    - lib/data/network/
+    - lib/data/network/client/
+    - lib/data/network/result/
+    - lib/common/
+    - lib/common/fcm/
+    - lib/common/dart/
+    - lib/common/dart/extension/
+    - lib/common/dart/collection/
+    - lib/common/dart/kotlin_style/
+    - lib/common/data/
+    - lib/common/data/preference/
+    - lib/common/data/preference/item/
+    - lib/common/util/
+    - lib/common/util/async/
+    - lib/common/route/
+    - lib/common/theme/
+    - lib/common/theme/color/
+    - lib/common/theme/shadows/
+    - lib/common/widget/
+    - lib/common/widget/mixin/
+    - lib/common/widget/scaffold/
+    - lib/common/constant/
+    - lib/common/language/
+    - lib/entity/
+    - lib/entity/user/
+    - lib/entity/todo_task/
+    - lib/screen/
+    - lib/screen/main/
+    - lib/screen/main/fab/
+    - lib/screen/main/tab/
+    - lib/screen/main/tab/my/
+    - lib/screen/main/tab/chat/
+    - lib/screen/main/tab/home/
+    - lib/screen/main/tab/home/provider/
+    - lib/screen/main/tab/diary/
+    - lib/screen/main/tab/local_life/
+    - lib/screen/write/
+    - lib/screen/dialog/
+    - lib/screen/opensource/
+    - lib/screen/notification/
+    - lib/screen/notification/vo/
+    - lib/screen/notification/provider/
+    - web/
+    - web/icons/
+    - web/splash/

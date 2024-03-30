@@ -7,7 +7,8 @@ part of 'vo_todo_task.dart';
 // **************************************************************************
 
 _$_TodoTask _$$_TodoTaskFromJson(Map<String, dynamic> json) => _$_TodoTask(
-      id: json['id'] as int,
+      id: json['id'] as String,
+      workDate: DateTime.parse(json['workDate'] as String),
       createdTime: DateTime.parse(json['created_time'] as String),
       modifyTime: json['modifyTime'] == null
           ? null
@@ -23,6 +24,7 @@ _$_TodoTask _$$_TodoTaskFromJson(Map<String, dynamic> json) => _$_TodoTask(
 Map<String, dynamic> _$$_TodoTaskToJson(_$_TodoTask instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'workDate': instance.workDate.toIso8601String(),
       'created_time': instance.createdTime.toIso8601String(),
       'modifyTime': instance.modifyTime?.toIso8601String(),
       'title': instance.title,
@@ -39,6 +41,7 @@ const _$TaskTypeEnumMap = {
   TaskType.etc: 'etc',
   TaskType.sleep: 'sleep',
   TaskType.waste: 'waste',
+  TaskType.nill: 'nill',
 };
 
 const _$TodoTaskStatusEnumMap = {

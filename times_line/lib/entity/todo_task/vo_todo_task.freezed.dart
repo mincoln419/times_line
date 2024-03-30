@@ -20,7 +20,8 @@ TodoTask _$TodoTaskFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TodoTask {
-  int get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  DateTime get workDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_time')
   DateTime get createdTime => throw _privateConstructorUsedError;
   DateTime? get modifyTime => throw _privateConstructorUsedError;
@@ -47,7 +48,8 @@ abstract class $TodoTaskCopyWith<$Res> {
       _$TodoTaskCopyWithImpl<$Res, TodoTask>;
   @useResult
   $Res call(
-      {int id,
+      {String id,
+      DateTime workDate,
       @JsonKey(name: 'created_time') DateTime createdTime,
       DateTime? modifyTime,
       String title,
@@ -70,6 +72,7 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
   @override
   $Res call({
     Object? id = null,
+    Object? workDate = null,
     Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? title = null,
@@ -81,7 +84,11 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
+      workDate: null == workDate
+          ? _value.workDate
+          : workDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -118,7 +125,8 @@ abstract class _$$_TodoTaskCopyWith<$Res> implements $TodoTaskCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int id,
+      {String id,
+      DateTime workDate,
       @JsonKey(name: 'created_time') DateTime createdTime,
       DateTime? modifyTime,
       String title,
@@ -139,6 +147,7 @@ class __$$_TodoTaskCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? workDate = null,
     Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? title = null,
@@ -150,7 +159,11 @@ class __$$_TodoTaskCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
+      workDate: null == workDate
+          ? _value.workDate
+          : workDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -184,6 +197,7 @@ class __$$_TodoTaskCopyWithImpl<$Res>
 class _$_TodoTask extends _TodoTask {
   _$_TodoTask(
       {required this.id,
+      required this.workDate,
       @JsonKey(name: 'created_time') required this.createdTime,
       this.modifyTime,
       required this.title,
@@ -196,7 +210,9 @@ class _$_TodoTask extends _TodoTask {
       _$$_TodoTaskFromJson(json);
 
   @override
-  final int id;
+  final String id;
+  @override
+  final DateTime workDate;
   @override
   @JsonKey(name: 'created_time')
   final DateTime createdTime;
@@ -214,7 +230,7 @@ class _$_TodoTask extends _TodoTask {
 
   @override
   String toString() {
-    return 'TodoTask(id: $id, createdTime: $createdTime, modifyTime: $modifyTime, title: $title, timeline: $timeline, taskType: $taskType, todoTaskStatus: $todoTaskStatus)';
+    return 'TodoTask(id: $id, workDate: $workDate, createdTime: $createdTime, modifyTime: $modifyTime, title: $title, timeline: $timeline, taskType: $taskType, todoTaskStatus: $todoTaskStatus)';
   }
 
   @JsonKey(ignore: true)
@@ -233,7 +249,8 @@ class _$_TodoTask extends _TodoTask {
 
 abstract class _TodoTask extends TodoTask {
   factory _TodoTask(
-      {required final int id,
+      {required final String id,
+      required final DateTime workDate,
       @JsonKey(name: 'created_time') required final DateTime createdTime,
       DateTime? modifyTime,
       required String title,
@@ -245,7 +262,9 @@ abstract class _TodoTask extends TodoTask {
   factory _TodoTask.fromJson(Map<String, dynamic> json) = _$_TodoTask.fromJson;
 
   @override
-  int get id;
+  String get id;
+  @override
+  DateTime get workDate;
   @override
   @JsonKey(name: 'created_time')
   DateTime get createdTime;
