@@ -1,7 +1,9 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rxdart/streams.dart';
@@ -46,13 +48,15 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
         ref.read(floatingButtonStateProvider.notifier).changeButtonSize(false);
       }
     });
+
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final taskList = ref.watch(todoDataProvider);
-
     return Column(
       children: [
         AppBar(
@@ -111,7 +115,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                   final taskMap = snapshot.data;
                   final List<TodoTask> todoTaskList = taskMap!["todo"];
                   final List<TodoTask> doneTaskList = taskMap["done"];
-                  print(taskList);
+
                   return ListView.separated(
                     padding: const EdgeInsets.only(
                         bottom: FloatingDaangnButton.height),
@@ -120,12 +124,13 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                       todoTaskList[index],
                       doneTaskList[index],
                       onTap: () async {
-                        print("tap");
                         //처리한 업무 다이얼로그 호출
-
                         TextEditingController tec = TextEditingController(
                           text: doneTaskList[index].title,
                         );
+                        ref
+                            .watch(currentTaskTypeProvider)
+                            .currentTypeOnChange(doneTaskList[index].taskType);
                         showAdaptiveDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -133,16 +138,44 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                               controller: tec,
                             ),
                             actions: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  width10,
+                                  Container(
+                                    width: 120,
+                                    height: 40,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.blue,
+                                    ),
+                                    child: Center(
+                                      child: _DropDownWidgetConsumer(),
+                                    ),
+                                  ),
+                                  width10,
+                                ],
+                              ),
                               TextButton(
                                 onPressed: () async {
                                   if (tec.text.isNotEmpty) {
-                                    final TodoTask copyItem = doneTaskList[index];
+                                    final TodoTask copyItem =
+                                        doneTaskList[index];
                                     copyItem.title = tec.text.trim();
+                                    copyItem.taskType = ref
+                                        .watch(currentTaskTypeProvider)
+                                        .currentType;
                                     await addDoneTask(copyItem);
                                     Navigator.of(context).pop();
                                   }
                                 },
                                 child: const Text("확인"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                    Navigator.of(context).pop();
+
+                                },
+                                child: const Text("취소"),
                               ),
                             ],
                           ),
@@ -197,12 +230,10 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
         TodoTask item = TodoTask.fromJson(ele.data());
         return item.copyWith();
       }).toList());
-      print("tempList: $tempList");
     }
 
     List<TodoTask> doneTasks = await RangeStream(1, 24).map((i) {
       final matchedTask = tempList.filter((tmp) => tmp.timeline == i).toList();
-
 
       return matchedTask.isEmpty
           ? TodoTask(
@@ -215,19 +246,42 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
             )
           : matchedTask[0];
     }).toList();
-    print("hello");
 
     final Map<String, dynamic> returnMap = {
       "todo": todoTasks,
       "done": doneTasks
     };
 
-    debugPrint("returnMap : $returnMap");
-
     return returnMap;
   }
 
   Future addDoneTask(TodoTask todoTask) async {
     TodoApi.instance.addDoneTask(todoTask);
+  }
+}
+
+class _DropDownWidgetConsumer extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentType = ref.watch(currentTaskTypeProvider).currentType;
+    return DropdownButton(
+      padding: EdgeInsets.all(5),
+      value: currentType,
+      items: _dropDownTaskType,
+      onChanged: (value) {
+        ref.watch(currentTaskTypeProvider.notifier).currentTypeOnChange(value);
+      },
+    );
+  }
+
+  List<DropdownMenuItem> get _dropDownTaskType {
+    return TaskType.values
+        .map(
+          (e) => DropdownMenuItem(
+            value: e,
+            child: e.name.text.make(),
+          ),
+        )
+        .toList();
   }
 }

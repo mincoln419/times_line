@@ -1,13 +1,13 @@
 import 'package:times_line/common/common.dart';
 import 'package:times_line/screen/main/tab/chat/f_chat.dart';
 import 'package:times_line/screen/main/tab/home/home_fragment.dart';
-import 'package:times_line/screen/main/tab/local_life/f_local_life.dart';
+import 'package:times_line/screen/main/tab/local_life/write_plan_fragment.dart';
 import 'package:times_line/screen/main/tab/my/f_my.dart';
 import 'package:times_line/screen/main/tab/diary/f_three_line_diary.dart';
 import 'package:flutter/material.dart';
 
 enum TabItem {
-  localLife(Icons.add_circle, '일정추가', LocalLifeFragment()),
+  localLife(Icons.add_circle, '일정추가', WritePlanFragment()),
   nearMe(Icons.note_alt, '세줄일기', ThreeLineDiary()),
   home(Icons.format_list_bulleted, '일정', HomeFragment()),
   chat(Icons.stacked_bar_chart, '통계', ChatFragment()),
