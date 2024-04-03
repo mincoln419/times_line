@@ -17,7 +17,7 @@ class WritePlanFragment extends ConsumerStatefulWidget {
 
 class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> {
   final scrollController = ScrollController();
-
+  List<TextEditingController> tecList = [];
   @override
   void initState() {
     scrollController.addListener(() {
@@ -35,31 +35,40 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: intList(),
-        builder: (context, snapshot) {
-          List<int> list = snapshot.data ?? [];
-          if (list.isNotEmpty) {
-            return ListView.separated(
-              padding:
-                  const EdgeInsets.only(bottom: FloatingDaangnButton.height),
-              controller: scrollController,
-              itemBuilder: (BuildContext context, int index) {
-                TextEditingController tec = TextEditingController();
-                return WritePlanItem(index: index, tec: tec);
-              },
-              separatorBuilder: (context, index) =>
-                  const Line().pSymmetric(h: 15),
-              itemCount: list.length,
+
+    return Scaffold(
+      appBar: AppBar(
+        title: '일일계획'.text.make(),
+      ),
+      body: FutureBuilder(
+          future: intList(),
+          builder: (context, snapshot) {
+            List<int> list = snapshot.data ?? [];
+            if (list.isNotEmpty) {
+              return ListView.separated(
+                padding:
+                    const EdgeInsets.only(bottom: FloatingDaangnButton.height),
+                controller: scrollController,
+                itemBuilder: (BuildContext context, int index) {
+                  return WritePlanItem(index: index, tec: tecList[index]);
+                },
+                separatorBuilder: (context, index) =>
+                    const Line().pSymmetric(h: 15),
+                itemCount: list.length,
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+          }),
+    );
   }
 
   Future<List<int>> intList() async {
-    return await RangeStream(1, 24).toList();
+    return await RangeStream(1, 24).map((i) {
+      TextEditingController tec = TextEditingController();
+      tecList.add(tec);
+      return i;
+    }).toList();
   }
 }

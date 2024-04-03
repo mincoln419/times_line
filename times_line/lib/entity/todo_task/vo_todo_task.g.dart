@@ -6,7 +6,8 @@ part of 'vo_todo_task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_TodoTask _$$_TodoTaskFromJson(Map<String, dynamic> json) => _$_TodoTask(
+_$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
+    _$TodoTaskImpl(
       id: json['id'] as String,
       workDate: DateTime.parse(json['workDate'] as String),
       createdTime: DateTime.parse(json['created_time'] as String),
@@ -21,7 +22,7 @@ _$_TodoTask _$$_TodoTaskFromJson(Map<String, dynamic> json) => _$_TodoTask(
           TodoTaskStatus.not_yet,
     );
 
-Map<String, dynamic> _$$_TodoTaskToJson(_$_TodoTask instance) =>
+Map<String, dynamic> _$$TodoTaskImplToJson(_$TodoTaskImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'workDate': instance.workDate.toIso8601String(),

@@ -12,7 +12,7 @@ part of 'vo_todo_task.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TodoTask _$TodoTaskFromJson(Map<String, dynamic> json) {
   return _TodoTask.fromJson(json);
@@ -118,10 +118,11 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
 }
 
 /// @nodoc
-abstract class _$$_TodoTaskCopyWith<$Res> implements $TodoTaskCopyWith<$Res> {
-  factory _$$_TodoTaskCopyWith(
-          _$_TodoTask value, $Res Function(_$_TodoTask) then) =
-      __$$_TodoTaskCopyWithImpl<$Res>;
+abstract class _$$TodoTaskImplCopyWith<$Res>
+    implements $TodoTaskCopyWith<$Res> {
+  factory _$$TodoTaskImplCopyWith(
+          _$TodoTaskImpl value, $Res Function(_$TodoTaskImpl) then) =
+      __$$TodoTaskImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -136,11 +137,11 @@ abstract class _$$_TodoTaskCopyWith<$Res> implements $TodoTaskCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_TodoTaskCopyWithImpl<$Res>
-    extends _$TodoTaskCopyWithImpl<$Res, _$_TodoTask>
-    implements _$$_TodoTaskCopyWith<$Res> {
-  __$$_TodoTaskCopyWithImpl(
-      _$_TodoTask _value, $Res Function(_$_TodoTask) _then)
+class __$$TodoTaskImplCopyWithImpl<$Res>
+    extends _$TodoTaskCopyWithImpl<$Res, _$TodoTaskImpl>
+    implements _$$TodoTaskImplCopyWith<$Res> {
+  __$$TodoTaskImplCopyWithImpl(
+      _$TodoTaskImpl _value, $Res Function(_$TodoTaskImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -155,7 +156,7 @@ class __$$_TodoTaskCopyWithImpl<$Res>
     Object? taskType = null,
     Object? todoTaskStatus = null,
   }) {
-    return _then(_$_TodoTask(
+    return _then(_$TodoTaskImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -194,8 +195,8 @@ class __$$_TodoTaskCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TodoTask extends _TodoTask {
-  _$_TodoTask(
+class _$TodoTaskImpl extends _TodoTask {
+  _$TodoTaskImpl(
       {required this.id,
       required this.workDate,
       @JsonKey(name: 'created_time') required this.createdTime,
@@ -206,8 +207,8 @@ class _$_TodoTask extends _TodoTask {
       this.todoTaskStatus = TodoTaskStatus.not_yet})
       : super._();
 
-  factory _$_TodoTask.fromJson(Map<String, dynamic> json) =>
-      _$$_TodoTaskFromJson(json);
+  factory _$TodoTaskImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TodoTaskImplFromJson(json);
 
   @override
   final String id;
@@ -236,12 +237,12 @@ class _$_TodoTask extends _TodoTask {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TodoTaskCopyWith<_$_TodoTask> get copyWith =>
-      __$$_TodoTaskCopyWithImpl<_$_TodoTask>(this, _$identity);
+  _$$TodoTaskImplCopyWith<_$TodoTaskImpl> get copyWith =>
+      __$$TodoTaskImplCopyWithImpl<_$TodoTaskImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TodoTaskToJson(
+    return _$$TodoTaskImplToJson(
       this,
     );
   }
@@ -256,10 +257,11 @@ abstract class _TodoTask extends TodoTask {
       required String title,
       int? timeline,
       required TaskType taskType,
-      TodoTaskStatus todoTaskStatus}) = _$_TodoTask;
+      TodoTaskStatus todoTaskStatus}) = _$TodoTaskImpl;
   _TodoTask._() : super._();
 
-  factory _TodoTask.fromJson(Map<String, dynamic> json) = _$_TodoTask.fromJson;
+  factory _TodoTask.fromJson(Map<String, dynamic> json) =
+      _$TodoTaskImpl.fromJson;
 
   @override
   String get id;
@@ -285,6 +287,6 @@ abstract class _TodoTask extends TodoTask {
   set todoTaskStatus(TodoTaskStatus value);
   @override
   @JsonKey(ignore: true)
-  _$$_TodoTaskCopyWith<_$_TodoTask> get copyWith =>
+  _$$TodoTaskImplCopyWith<_$TodoTaskImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
