@@ -66,7 +66,7 @@ class _MessageDialogState extends DialogState<MessageDialog> {
                 Line(color: context.appColors.divider),
                 Tap(
                   onTap: () {
-                    widget.hide(SimpleResult.success());
+                    Navigator.pop(context);
                   },
                   child: Container(
                       height: 50,

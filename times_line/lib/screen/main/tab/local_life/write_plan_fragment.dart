@@ -7,6 +7,7 @@ import 'package:times_line/screen/main/tab/local_life/write_plan_item.dart';
 
 import '../../../../common/widget/w_line.dart';
 import '../../fab/w_floating_daangn_button.dart';
+import '../../w_menu_drawer.dart';
 
 class WritePlanFragment extends ConsumerStatefulWidget {
   const WritePlanFragment({super.key});
@@ -37,6 +38,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      drawer: const MenuDrawer(),
       appBar: AppBar(
         title: '일일계획'.text.make(),
       ),

@@ -1,4 +1,5 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:times_line/screen/opensource/s_opensource.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
           _MenuWidget(
             'opensource'.tr(),
             onTap: () async {
-              Nav.push(const OpensourceScreen());
+
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const  OpensourceScreen()));
+              //context.go("/opensource");
             },
           ),
           const Line(),
@@ -101,7 +104,10 @@ class _MenuDrawerState extends State<MenuDrawer> {
               final manager = DefaultCacheManager();
               await manager.emptyCache();
               if (mounted) {
-                MessageDialog('clear_cache_done'.tr()).show();
+                showAdaptiveDialog(
+                  context: context,
+                  builder: (context) => MessageDialog('clear_cache_done'.tr())
+                );
               }
             },
           ),

@@ -4,6 +4,7 @@ import 'package:times_line/common/route/fade_trasition_page.dart';
 import 'package:times_line/common/theme/custom_theme_app.dart';
 import 'package:times_line/common/widget/w_round_button.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/dialog/d_message.dart';
 import 'package:times_line/screen/main/s_main.dart';
 import 'package:times_line/screen/main/tab/home/d_dialog_page.dart';
 import 'package:times_line/screen/main/tab/home/d_write_task.dart';
@@ -11,6 +12,7 @@ import 'package:times_line/screen/main/tab/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:times_line/screen/opensource/s_opensource.dart';
 
 import 'common/theme/custom_theme.dart';
 
@@ -19,7 +21,7 @@ class App extends ConsumerStatefulWidget {
   static const defaultTheme = CustomTheme.dark;
   static bool isForeground = true;
   static final GlobalKey<ScaffoldMessengerState> scaffoldNavigationKey =
-      GlobalKey();
+  GlobalKey();
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   const App({super.key});
@@ -89,7 +91,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
 
   final tabs = TabItem.values;
   late final List<GlobalKey<NavigatorState>> navigatorKeys =
-      TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
+  TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
 
   bool get extendBody => true;
 
@@ -103,11 +105,12 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
     final currentIndex = tabs.indexOf(currentTab);
     return tabs
         .mapIndexed(
-          (tab, index) => tab.toNavigationBarItem(
+          (tab, index) =>
+          tab.toNavigationBarItem(
             context,
             isActivated: currentIndex == index,
           ),
-        )
+    )
         .toList();
   }
 
@@ -125,8 +128,9 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       GoRoute(
         path: '/writeTask',
         name: 'writeTask',
-        pageBuilder:  (context, state)  {
-          return DialogPage(builder: (_) => WriteTaskDialog(todoTask: state.extra as TodoTask));
+        pageBuilder: (context, state) {
+          return DialogPage(builder: (_) =>
+              WriteTaskDialog(todoTask: state.extra as TodoTask));
         },
       ),
       GoRoute(
@@ -143,36 +147,38 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       GoRoute(
         path: '/signin',
         name: 'signin',
-        pageBuilder: (context, state) => FadeTransitionPage(
-          key: state.pageKey,
-          child: Container(
-            color: Colors.green,
-            child: Center(
-                child: RoundButton(
-              text: '로그인',
-              onTap: () {
-                print('로그인');
-                _auth.signIn('mermer', '1234');
-                print(_auth.signedIn);
-              },
-            )),
-          ),
-        ),
+        pageBuilder: (context, state) =>
+            FadeTransitionPage(
+              key: state.pageKey,
+              child: Container(
+                color: Colors.green,
+                child: Center(
+                    child: RoundButton(
+                      text: '로그인',
+                      onTap: () {
+                        print('로그인');
+                        _auth.signIn('mermer', '1234');
+                        print(_auth.signedIn);
+                      },
+                    )),
+              ),
+            ),
       ),
       GoRoute(
         path: '/productPost/:postId',
         redirect: (BuildContext context, GoRouterState state) =>
-            '/main/home/${state.pathParameters['postId']}',
+        '/main/home/${state.pathParameters['postId']}',
       ),
       GoRoute(
         path: '/main/:kind(home|localLife|nearMe|chat|my)',
         name: 'path',
-        pageBuilder: (context, state) => FadeTransitionPage(
-          key: _scaffoldKey,
-          child: MainScreen(
-            firstTab: TabItem.find(state.pathParameters['kind']),
-          ),
-        ),
+        pageBuilder: (context, state) =>
+            FadeTransitionPage(
+              key: _scaffoldKey,
+              child: MainScreen(
+                firstTab: TabItem.find(state.pathParameters['kind']),
+              ),
+            ),
 
       ),
     ],
