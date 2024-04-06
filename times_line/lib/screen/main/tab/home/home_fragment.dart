@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +18,7 @@ import 'package:times_line/screen/main/tab/home/vo_write_todo.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
 import 'package:times_line/screen/notification/s_notification.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:times_line/common/dropdown/todo_tasktype_dropdown.dart';
 import '../../../../data/network/todo_api.dart';
 
 class HomeFragment extends ConsumerStatefulWidget {
@@ -31,7 +30,7 @@ class HomeFragment extends ConsumerStatefulWidget {
 
 class _HomeFragmentState extends ConsumerState<HomeFragment> {
   final scrollController = ScrollController();
-  String title = "상일동";
+  String title = "오늘";
   bool isSelected = false;
   double turns = 0.0;
   final uuid = const Uuid();
@@ -114,6 +113,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 if (snapshot.hasData) {
                   final taskMap = snapshot.data;
                   final List<TodoTask> todoTaskList = taskMap!["todo"];
+                  print("todoTaskList :: $todoTaskList");
                   final List<TodoTask> doneTaskList = taskMap["done"];
 
                   return ListView.separated(
@@ -201,28 +201,35 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   }
 
   Future<Map<String, dynamic>> todoListStream() async {
-    final writtenTodoTasks = await TodoApi.instance.getTodoList().then(
-          (e) => e.successData,
+    final todayTask = ref.watch(todolistProvider);
+    if(todayTask.isEmpty){
+      final writtenTodoTasks = await TodoApi.instance.getTodoList().then(
+            (e) => e.successData,
+      );
+      List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
+          ? await RangeStream(1, 24).map((i) {
+        return TodoTask(
+          id: uuid.v1(),
+          timeline: i,
+          workDate: DateUtils.dateOnly(DateTime.now()),
+          createdTime: DateTime.now(),
+          title: '',
+          taskType: TaskType.nill,
         );
+      }).toList()
+          : writtenTodoTasks.docs.map((ele) {
+        TodoTask item = TodoTask.fromJson(ele.data());
+        return item.copyWith();
+      }).toList();
+      for (var ele in todoTasks) {
+        ref.readTodoHolder.addTodo(ele);
+      }
+    }
+
     final writtenDoneTasks = await TodoApi.instance.getDoneTodoList().then(
           (e) => e.successData,
         );
 
-    List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
-        ? await RangeStream(1, 24).map((i) {
-            return TodoTask(
-              id: uuid.v1(),
-              timeline: i,
-              workDate: DateUtils.dateOnly(DateTime.now()),
-              createdTime: DateTime.now(),
-              title: '',
-              taskType: TaskType.nill,
-            );
-          }).toList()
-        : writtenTodoTasks.docs.map((ele) {
-            TodoTask item = TodoTask.fromJson(ele.data());
-            return item.copyWith();
-          }).toList();
 
     final List<TodoTask> tempList = [];
     if (writtenDoneTasks.docs.isNotEmpty) {
@@ -248,7 +255,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     }).toList();
 
     final Map<String, dynamic> returnMap = {
-      "todo": todoTasks,
+      "todo": todayTask,
       "done": doneTasks
     };
 
@@ -265,23 +272,14 @@ class _DropDownWidgetConsumer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentType = ref.watch(currentTaskTypeProvider).currentType;
     return DropdownButton(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       value: currentType,
-      items: _dropDownTaskType,
+      items: dropDownTaskType,
       onChanged: (value) {
         ref.watch(currentTaskTypeProvider.notifier).currentTypeOnChange(value);
       },
     );
   }
 
-  List<DropdownMenuItem> get _dropDownTaskType {
-    return TaskType.values
-        .map(
-          (e) => DropdownMenuItem(
-            value: e,
-            child: e.name.text.make(),
-          ),
-        )
-        .toList();
-  }
+
 }

@@ -47,7 +47,8 @@ class TodoApi implements TodoRepository {
       getTodoList() async {
     final ref = db.collection("todoTask");
     final result = await ref
-        .where('workDate', isEqualTo: DateUtils.dateOnly(DateTime.now()))
+        .where('workDate',
+        isEqualTo: DateUtils.dateOnly(DateTime.now()).formattedDate)
         .orderBy('timeline')
         .get();
 
@@ -77,7 +78,7 @@ class TodoApi implements TodoRepository {
         .orderBy('timeline')
         .get();
 
-    print("doneTask: ${result.docs}");
+    print("doneTask: ${result.docs.length}");
     return SimpleResult.success(result);
   }
 

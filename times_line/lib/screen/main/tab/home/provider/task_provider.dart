@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:times_line/common/common.dart';
@@ -13,6 +14,36 @@ final todoDataProvider =
           (e) => e.successData,
         ));
 
+final todolistProvider = StateNotifierProvider<TodoDataHolder, List<TodoTask>>((ref) {
+  final userID = ref.watch(userProvider);
+  debugPrint(userID.value!);
+  return TodoDataHolder();
+});
+
+class TodoDataHolder extends StateNotifier<List<TodoTask>>{
+  TodoDataHolder() : super([]);
+
+  void changeTodoStatus(TodoTask todo) async {
+    state = List.of(state);
+  }
+
+  void addTodo(TodoTask todo) async {
+    state.add(todo);
+    state = List.of(state);
+  }
+
+  void editTodo(TodoTask todo) async {
+    state = List.of(state);
+  }
+
+  void removeTodo(TodoTask todo) {
+    state.remove(todo);
+    state = List.of(state);
+  }
+}
+
+
+
 final currentTaskTypeProvider =
     ChangeNotifierProvider<TaskTypeProvider>((ref) => TaskTypeProvider());
 
@@ -26,4 +57,8 @@ class TaskTypeProvider extends ChangeNotifier {
     print(_currentType);
     return notifyListeners();
   }
+}
+
+extension TodoListHolderProvider on WidgetRef {
+  TodoDataHolder get readTodoHolder => read(todolistProvider.notifier);
 }

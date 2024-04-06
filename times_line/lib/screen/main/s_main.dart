@@ -1,11 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/cli_common.dart';
+import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/main/tab/local_life/plan_add_screen.dart';
 import 'package:times_line/screen/main/tab/tab_item.dart';
 import 'package:times_line/screen/main/tab/tab_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../common/common.dart';
+import '../../entity/todo_task/task_type.dart';
+import '../login/provider/login_provider.dart';
 import 'fab/w_floating_daangn_button.dart';
 import 'w_menu_drawer.dart';
 
@@ -41,6 +48,8 @@ class MainScreenState extends ConsumerState<MainScreen>
 
   bool isFabExpanded = false;
 
+  final uuid = const Uuid();
+
   @override
   void initState() {
     super.initState();
@@ -48,10 +57,10 @@ class MainScreenState extends ConsumerState<MainScreen>
 
   @override
   void didUpdateWidget(covariant MainScreen oldWidget) {
-
-
     delay(() {
-      ref.read(currentTabProvider.notifier).state = oldWidget.firstTab;
+      ref
+          .read(currentTabProvider.notifier)
+          .state = oldWidget.firstTab;
     });
 
     super.didUpdateWidget(oldWidget);
@@ -65,7 +74,8 @@ class MainScreenState extends ConsumerState<MainScreen>
         child: Stack(
           children: [
             Scaffold(
-              extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
+              extendBody: extendBody,
+              //bottomNavigationBar 아래 영역 까지 그림
               drawer: const MenuDrawer(),
               body: Container(
                 padding: EdgeInsets.only(
@@ -77,6 +87,58 @@ class MainScreenState extends ConsumerState<MainScreen>
                 ),
               ),
               bottomNavigationBar: _buildBottomNavigationBar(context),
+              floatingActionButton: switch (_currentIndex) {
+                2 =>
+                    Consumer(
+                        builder: (context, ref, child) {
+                          final user = ref.watch(userCredentialProvider);
+                          return FloatingActionButton(
+                            child: const Icon(Icons.note_add_outlined),
+                            onPressed: () {
+                              final uid = user?.user?.uid;
+                              print('uid: $uid');
+                              if (uid == null) {
+                                return;
+                              }
+                              context.go("/cart/$uid");
+                            },
+                          );
+                        }
+                    ),
+                0 =>
+                    FloatingActionButton(
+                      child: const Icon(Icons.save),
+                      onPressed: () async {
+                        // Navigator.of(context).push(
+                        //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
+                        // );
+
+                        final ref = FirebaseFirestore.instance.collection("todoTask");
+                        final tmp = await ref.get();
+
+                        for(var ele in tmp.docs) {
+                          await ele.reference.delete();
+                        }
+
+                        await RangeStream(1, 24)
+                            .map((i) {
+                          TodoTask todoTask = TodoTask(
+                            id: uuid.v1(),
+                            timeline: i,
+                            workDate: DateUtils.dateOnly(DateTime.now()),
+                            createdTime: DateTime.now(),
+                            title: 'test + $i',
+                            taskType: TaskType.nill,
+                          );
+                          ref.add(todoTask.toJson());
+                          return todoTask;
+                        }).forEach((ele) {
+
+                        });
+                      },
+                    ),
+                int() => null,
+              },
             ),
 
           ],
@@ -85,17 +147,19 @@ class MainScreenState extends ConsumerState<MainScreen>
     );
   }
 
-  IndexedStack get pages => IndexedStack(
-      index: _currentIndex,
-      children: tabs
-          .mapIndexed((tab, index) => Offstage(
-        offstage: _currentTab != tab,
-        child: TabNavigator(
-          navigatorKey: navigatorKeys[index],
-          tabItem: tab,
-        ),
-      ))
-          .toList());
+  IndexedStack get pages =>
+      IndexedStack(
+          index: _currentIndex,
+          children: tabs
+              .mapIndexed((tab, index) =>
+              Offstage(
+                offstage: _currentTab != tab,
+                child: TabNavigator(
+                  navigatorKey: navigatorKeys[index],
+                  tabItem: tab,
+                ),
+              ))
+              .toList());
 
   Future<bool> _handleBackPressed() async {
     final isFirstRouteInCurrentTab =
@@ -145,16 +209,19 @@ class MainScreenState extends ConsumerState<MainScreen>
     final currentIndex = tabs.indexOf(currentTab);
     return tabs
         .mapIndexed(
-          (tab, index) => tab.toNavigationBarItem(
-        context,
-        isActivated: currentIndex == index,
-      ),
+          (tab, index) =>
+          tab.toNavigationBarItem(
+            context,
+            isActivated: currentIndex == index,
+          ),
     )
         .toList();
   }
 
   void _changeTab(int index) {
-    ref.read(currentTabProvider.notifier).state = tabs[index];
+    ref
+        .read(currentTabProvider.notifier)
+        .state = tabs[index];
   }
 
   BottomNavigationBarItem bottomItem(bool activate, IconData iconData,
