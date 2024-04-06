@@ -1,7 +1,7 @@
 import 'package:times_line/common/common.dart';
 import 'package:times_line/screen/main/tab/chat/f_chat.dart';
 import 'package:times_line/screen/main/tab/home/home_fragment.dart';
-import 'package:times_line/screen/main/tab/local_life/write_plan_fragment.dart';
+import 'package:times_line/screen/main/tab/plan_template/write_plan_fragment.dart';
 import 'package:times_line/screen/main/tab/my/f_my.dart';
 import 'package:times_line/screen/main/tab/diary/f_three_line_diary.dart';
 import 'package:flutter/material.dart';

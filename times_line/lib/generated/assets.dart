@@ -32,8 +32,8 @@ class Assets {
   static const String libAuth = 'lib/auth.dart';
   static const String libFirebaseOptions = 'lib/firebase_options.dart';
   static const String libMain = 'lib/main.dart';
-  static const String localLifeWritePlanFragment = 'lib/screen/main/tab/local_life/write_plan_fragment.dart';
-  static const String localLifeWritePlanItem = 'lib/screen/main/tab/local_life/write_plan_item.dart';
+  static const String localLifeWritePlanFragment = 'lib/screen/main/tab/plan_template/write_plan_fragment.dart';
+  static const String localLifeWritePlanItem = 'lib/screen/main/tab/plan_template/write_plan_item.dart';
   static const String localLocalDb = 'lib/data/local/local_db.dart';
   static const String mainSMain = 'lib/screen/main/s_main.dart';
   static const String mainWMenuDrawer = 'lib/screen/main/w_menu_drawer.dart';
