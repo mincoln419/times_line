@@ -32,7 +32,11 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
     state = List.of(state);
   }
 
-  void editTodo(TodoTask todo) async {
+  void changeType(int index, TaskType taskType) async {
+    TodoTask tmp = state[index].copyWith();
+    tmp.taskType = taskType;
+    state[index] = tmp;
+    print('state:: ${state[index]}');
     state = List.of(state);
   }
 

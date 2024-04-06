@@ -50,9 +50,7 @@ class _WritePlanItemState extends ConsumerState<WritePlanItem> with SingleTicker
                 value: todoList[widget.index].taskType,
                 items: dropDownTaskType,
                 onChanged: (value) {
-                  setState(() {
-                    todoList[widget.index].taskType = value;
-                  });
+                  ref.readTodoHolder.changeType(widget.index, value);
                 },
               ),
             ),

@@ -117,10 +117,21 @@ class MainScreenState extends ConsumerState<MainScreen>
                       for (var ele in tmp.docs) {
                         await ele.reference.delete();
                       }
-                      List<TextEditingController> tecList =  ref.read(tecListProvider);
+                      List<TextEditingController> tecList =  ref.watch(tecListProvider);
+                      List<TodoTask> tmpTodos = [];
+                      tmpTodos.addAll( ref.watch(todolistProvider));
                       ref.readTodoHolder.clear();
                       await RangeStream(0, 23).map((i) {
-                        TodoTask todoTask = todayTask[i].copyWith();
+                        TodoTask todoTask = tmpTodos.length > i ? tmpTodos[i].copyWith():
+                        TodoTask(
+                          id: uuid.v1(),
+                          timeline: i,
+                          workDate: DateUtils.dateOnly(DateTime.now()),
+                          createdTime: DateTime.now(),
+                          title: '',
+                          taskType: TaskType.nill,
+                        );
+
                         todoTask.title = tecList[i].text;
                         todoModel.add(todoTask.toJson());
                         ref.readTodoHolder.addTodo(todoTask);
@@ -128,6 +139,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                       }).forEach((ele) {
                         print(ele);
                       });
+                      FocusManager.instance.primaryFocus?.unfocus();
                     },
                   ),
                 int() => null,
