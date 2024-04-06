@@ -40,6 +40,11 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
     state.remove(todo);
     state = List.of(state);
   }
+
+  void clear(){
+    print("clear!!!");
+    state.clear();
+  }
 }
 
 

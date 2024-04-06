@@ -112,16 +112,16 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final taskMap = snapshot.data;
-                  final List<TodoTask> todoTaskList = taskMap!["todo"];
-                  print("todoTaskList :: $todoTaskList");
-                  final List<TodoTask> doneTaskList = taskMap["done"];
+                  final List<TodoTask> todoTaskList = ref.watch(todolistProvider);
+                  print("todoTaskList :: ${todoTaskList.length}");
+                  final List<TodoTask> doneTaskList = taskMap!["done"];
 
                   return ListView.separated(
                     padding: const EdgeInsets.only(
                         bottom: FloatingDaangnButton.height),
                     controller: scrollController,
                     itemBuilder: (context, index) => TimesLineItem(
-                      todoTaskList[index],
+                      ref.watch(todolistProvider)[index],
                       doneTaskList[index],
                       onTap: () async {
                         //처리한 업무 다이얼로그 호출
@@ -210,7 +210,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           ? await RangeStream(1, 24).map((i) {
         return TodoTask(
           id: uuid.v1(),
-          timeline: i,
+          timeline: i+1,
           workDate: DateUtils.dateOnly(DateTime.now()),
           createdTime: DateTime.now(),
           title: '',
@@ -221,6 +221,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
         TodoTask item = TodoTask.fromJson(ele.data());
         return item.copyWith();
       }).toList();
+      ref.readTodoHolder.clear();
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
       }
@@ -245,7 +246,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
       return matchedTask.isEmpty
           ? TodoTask(
               id: uuid.v1(),
-              timeline: i,
+              timeline: i + 1,
               workDate: DateUtils.dateOnly(DateTime.now()),
               createdTime: DateTime.now(),
               title: '',

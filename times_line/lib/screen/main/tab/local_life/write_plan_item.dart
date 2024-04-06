@@ -8,15 +8,13 @@ import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/tab/home/provider/task_provider.dart';
 
 import '../../../../common/dropdown/todo_tasktype_dropdown.dart';
+import '../home/provider/todo_task_editor_provider.dart';
 
 class WritePlanItem extends ConsumerStatefulWidget {
   final int index;
-  final TextEditingController tec;
-
 
   const WritePlanItem(
       {super.key,
-      required this.tec,
       required this.index});
 
   @override
@@ -26,9 +24,9 @@ class WritePlanItem extends ConsumerStatefulWidget {
 class _WritePlanItemState extends ConsumerState<WritePlanItem> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-
+    TextEditingController tec =  ref.read(tecListProvider)[widget.index];
     List<TodoTask> todoList =  ref.watch(todolistProvider);
-    widget.tec.text = todoList[widget.index].title;
+    tec.text = todoList[widget.index].title;
     return Container(
       height: 80,
       decoration: BoxDecoration(
@@ -60,7 +58,7 @@ class _WritePlanItemState extends ConsumerState<WritePlanItem> with SingleTicker
             ),
             Expanded(
               child: TextField(
-                controller: widget.tec,
+                controller: tec,
               ),
             ),
           ],

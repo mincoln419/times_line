@@ -14,6 +14,7 @@ import '../../../../entity/todo_task/task_type.dart';
 import '../../../../entity/todo_task/vo_todo_task.dart';
 import '../../fab/w_floating_daangn_button.dart';
 import '../../w_menu_drawer.dart';
+import '../home/provider/todo_task_editor_provider.dart';
 
 class WritePlanFragment extends ConsumerStatefulWidget {
   const WritePlanFragment({super.key});
@@ -24,13 +25,12 @@ class WritePlanFragment extends ConsumerStatefulWidget {
 
 class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> with SingleTickerProviderStateMixin {
   final scrollController = ScrollController();
-  List<TextEditingController> tecList = [];
-  List<TodoTask> todoTaskList = [];
 
   double turns = 0.0;
   bool isSelected = false;
 
   String title = "오늘";
+
 
   @override
   void initState() {
@@ -98,36 +98,31 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> with Sing
           ],
         ),
       ),
-      body: FutureBuilder(
-          future: dailyTodoList(ref.readTodoHolder),
-          builder: (context, snapshot) {
-            List<int> list = snapshot.data ?? [];
-            if (list.isNotEmpty) {
-              return ListView.separated(
-                padding:
-                    const EdgeInsets.only(bottom: FloatingDaangnButton.height),
-                controller: scrollController,
-                itemBuilder: (BuildContext context, int index) {
-                  return WritePlanItem(index: index, tec: tecList[index]);
-                },
-                separatorBuilder: (context, index) =>
-                    const Line().pSymmetric(h: 15),
-                itemCount: list.length,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+        child: FutureBuilder(
+            future: dailyTodoList(ref.readTodoHolder),
+            builder: (context, snapshot) {
+              List<int> list = snapshot.data ?? [];
+              if (list.isNotEmpty) {
+                return ListView.separated(
+                  padding:
+                      const EdgeInsets.only(bottom: FloatingDaangnButton.height),
+                  controller: scrollController,
+                  itemBuilder: (BuildContext context, int index) {
+                    return WritePlanItem(index: index);
+                  },
+                  separatorBuilder: (context, index) =>
+                      const Line().pSymmetric(h: 15),
+                  itemCount: list.length,
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+            }),
+      ),
     );
-  }
-
-  Future<List<int>> intList() async {
-    return await RangeStream(1, 24).map((i) {
-      TextEditingController tec = TextEditingController();
-      tecList.add(tec);
-      return i;
-    }).toList();
   }
 
   Future<List<int>> dailyTodoList(TodoDataHolder readTodoHolder) async {
@@ -157,11 +152,9 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment> with Sing
       }
     }
 
-    print('empty?>?${todayTask.isEmpty}');
-
+    final textTecList = ref.watch(tecListProvider.notifier);
     return await RangeStream(1, 24).map((i) {
-      TextEditingController tec = TextEditingController();
-      tecList.add( tec);
+      textTecList.add();
       return i;
     }).toList();
   }
