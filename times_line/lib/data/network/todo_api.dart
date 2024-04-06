@@ -71,7 +71,6 @@ class TodoApi implements TodoRepository {
   Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>>
       getDoneTodoList() async {
     final ref = db.collection("doneTask");
-    print("${DateUtils.dateOnly(DateTime.now()).formattedDate}");
     final result = await ref
         .where('workDate',
             isEqualTo: DateUtils.dateOnly(DateTime.now()).formattedDate)

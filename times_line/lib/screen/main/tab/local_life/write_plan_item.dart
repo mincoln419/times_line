@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
-import 'package:times_line/screen/main/tab/home/provider/task_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 
 import '../../../../common/dropdown/todo_tasktype_dropdown.dart';
 import '../home/provider/todo_task_editor_provider.dart';

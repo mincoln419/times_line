@@ -35,8 +35,11 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
   void changeType(int index, TaskType taskType) async {
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;
+
+    if(taskType == TaskType.sleep){
+      tmp.title = 'sleep';
+    }
     state[index] = tmp;
-    print('state:: ${state[index]}');
     state = List.of(state);
   }
 
@@ -46,25 +49,8 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
   }
 
   void clear(){
-    print("clear!!!");
+    print("todo clear!!!");
     state.clear();
-  }
-}
-
-
-
-final currentTaskTypeProvider =
-    ChangeNotifierProvider<TaskTypeProvider>((ref) => TaskTypeProvider());
-
-class TaskTypeProvider extends ChangeNotifier {
-  TaskType _currentType = TaskType.nill;
-
-  TaskType get currentType => _currentType;
-
-  currentTypeOnChange(TaskType value) {
-    _currentType = value;
-    print(_currentType);
-    return notifyListeners();
   }
 }
 

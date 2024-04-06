@@ -13,7 +13,8 @@ import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
-import 'package:times_line/screen/main/tab/home/provider/task_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/vo_write_todo.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
 import 'package:times_line/screen/notification/s_notification.dart';
@@ -113,8 +114,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 if (snapshot.hasData) {
                   final taskMap = snapshot.data;
                   final List<TodoTask> todoTaskList = ref.watch(todolistProvider);
-                  print("todoTaskList :: ${todoTaskList.length}");
-                  final List<TodoTask> doneTaskList = taskMap!["done"];
+                  final List<TodoTask> doneTaskList = ref.watch(doneListProvider);
 
                   return ListView.separated(
                     padding: const EdgeInsets.only(
@@ -122,7 +122,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                     controller: scrollController,
                     itemBuilder: (context, index) => TimesLineItem(
                       ref.watch(todolistProvider)[index],
-                      doneTaskList[index],
+                      ref.watch(doneListProvider)[index],
                       onTap: () async {
                         //처리한 업무 다이얼로그 호출
                         TextEditingController tec = TextEditingController(
@@ -227,37 +227,46 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
       }
     }
 
-    final writtenDoneTasks = await TodoApi.instance.getDoneTodoList().then(
-          (e) => e.successData,
-        );
+    final todayDoneTask = ref.watch(doneListProvider);
+
+    if(todayDoneTask.isEmpty){
+
+      final writtenDoneTasks = await TodoApi.instance.getDoneTodoList().then(
+            (e) => e.successData,
+      );
 
 
-    final List<TodoTask> tempList = [];
-    if (writtenDoneTasks.docs.isNotEmpty) {
-      tempList.addAll(writtenDoneTasks.docs.map((ele) {
-        TodoTask item = TodoTask.fromJson(ele.data());
-        return item.copyWith();
-      }).toList());
+      final List<TodoTask> tempList = [];
+      if (writtenDoneTasks.docs.isNotEmpty) {
+        tempList.addAll(writtenDoneTasks.docs.map((ele) {
+          TodoTask item = TodoTask.fromJson(ele.data());
+          return item.copyWith();
+        }).toList());
+      }
+
+      List<TodoTask> doneTasks = await RangeStream(1, 24).map((i) {
+        final matchedTask = tempList.filter((tmp) => tmp.timeline == i).toList();
+        return matchedTask.isEmpty
+            ? TodoTask(
+          id: uuid.v1(),
+          timeline: i + 1,
+          workDate: DateUtils.dateOnly(DateTime.now()),
+          createdTime: DateTime.now(),
+          title: '',
+          taskType: TaskType.nill,
+        )
+            : matchedTask[0];
+      }).toList();
+      print("doneTasks:::$doneTasks");
+      ref.readDoneHolder.clear();
+      for (var ele in doneTasks) {
+        ref.readDoneHolder.addTodo(ele);
+      }
     }
-
-    List<TodoTask> doneTasks = await RangeStream(1, 24).map((i) {
-      final matchedTask = tempList.filter((tmp) => tmp.timeline == i).toList();
-
-      return matchedTask.isEmpty
-          ? TodoTask(
-              id: uuid.v1(),
-              timeline: i + 1,
-              workDate: DateUtils.dateOnly(DateTime.now()),
-              createdTime: DateTime.now(),
-              title: '',
-              taskType: TaskType.nill,
-            )
-          : matchedTask[0];
-    }).toList();
 
     final Map<String, dynamic> returnMap = {
       "todo": todayTask,
-      "done": doneTasks
+      "done": todayDoneTask,
     };
 
     return returnMap;
