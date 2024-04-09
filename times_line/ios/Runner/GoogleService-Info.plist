@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD4GkVe5lOsf4fyXvpPq_EvlpXRvcaVirM</string>
+	<string>AIzaSyAdkakjPMomZzh5sLoVVV9jXGePb5P_wOY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>865047079487</string>
+	<string>260196666467</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.fastAppBase</string>
 	<key>PROJECT_ID</key>
-	<string>dangn-app</string>
+	<string>time-line-mermer</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dangn-app.appspot.com</string>
+	<string>time-line-mermer.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:865047079487:ios:b0bf1ec730bdd887d5268a</string>
+	<string>1:260196666467:ios:0cd45ed355b9052be73c56</string>
+	<key>DATABASE_URL</key>
+	<string>https://time-line-mermer-default-rtdb.asia-southeast1.firebasedatabase.app</string>
 </dict>
 </plist>

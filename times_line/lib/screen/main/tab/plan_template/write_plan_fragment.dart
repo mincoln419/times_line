@@ -155,16 +155,17 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   Future<List<int>> dailyTodoList(TodoDataHolder readTodoHolder) async {
     const uuid = Uuid();
     final todayTask = ref.watch(todolistProvider);
+    final selectedDate =  ref.watch(selectedDateProvider).value;
     if (todayTask.isEmpty) {
-      final writtenTodoTasks = await TodoApi.instance.getTodoList().then(
+      final writtenTodoTasks = await TodoApi.instance.getTodoList(selectedDate).then(
             (e) => e.successData,
           );
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
-          ? await RangeStream(1, 24).map((i) {
+          ? await RangeStream(0, 23).map((i) {
               return TodoTask(
                 id: uuid.v1(),
                 timeline: i,
-                workDate: DateUtils.dateOnly(DateTime.now()),
+                workDate: selectedDate!,
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
@@ -180,7 +181,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
     }
 
     final textTecList = ref.watch(tecListProvider.notifier);
-    return await RangeStream(1, 24).map((i) {
+    return await RangeStream(0, 23).map((i) {
       textTecList.add();
       return i;
     }).toList();

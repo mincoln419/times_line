@@ -203,14 +203,14 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   Future<Map<String, dynamic>> todoListStream() async {
     final todayTask = ref.watch(todolistProvider);
     if(todayTask.isEmpty){
-      final writtenTodoTasks = await TodoApi.instance.getTodoList().then(
+      final writtenTodoTasks = await TodoApi.instance.getTodoList(ref.watch(selectedDateProvider).value).then(
             (e) => e.successData,
       );
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
-          ? await RangeStream(1, 24).map((i) {
+          ? await RangeStream(0, 23).map((i) {
         return TodoTask(
           id: uuid.v1(),
-          timeline: i+1,
+          timeline: i,
           workDate: DateUtils.dateOnly(DateTime.now()),
           createdTime: DateTime.now(),
           title: '',
@@ -244,12 +244,12 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
         }).toList());
       }
 
-      List<TodoTask> doneTasks = await RangeStream(1, 24).map((i) {
+      List<TodoTask> doneTasks = await RangeStream(0, 23).map((i) {
         final matchedTask = tempList.filter((tmp) => tmp.timeline == i).toList();
         return matchedTask.isEmpty
             ? TodoTask(
           id: uuid.v1(),
-          timeline: i + 1,
+          timeline: i,
           workDate: DateUtils.dateOnly(DateTime.now()),
           createdTime: DateTime.now(),
           title: '',

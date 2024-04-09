@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:isar/isar.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
@@ -106,31 +108,37 @@ class MainScreenState extends ConsumerState<MainScreen>
                       // Navigator.of(context).push(
                       //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
                       // )
-                      List<TodoTask> todayTask =  ref.watch(todolistProvider);
+                      List<TodoTask> todayTask = ref.watch(todolistProvider);
+                      CollectionReference<Map<String, dynamic>> db = FirebaseFirestore.instance
+                          .collection("todoTask");
                       final todoModel =
-                          FirebaseFirestore.instance.collection("todoTask");
+                          db.where('workDate',
+                              isEqualTo: DateUtils.dateOnly(DateTime.now())
+                                  .formattedDate);
                       final tmp = await todoModel.get();
 
                       for (var ele in tmp.docs) {
                         await ele.reference.delete();
                       }
-                      List<TextEditingController> tecList =  ref.watch(tecListProvider);
+                      List<TextEditingController> tecList =
+                          ref.watch(tecListProvider);
                       List<TodoTask> tmpTodos = [];
-                      tmpTodos.addAll( ref.watch(todolistProvider));
+                      tmpTodos.addAll(ref.watch(todolistProvider));
                       ref.readTodoHolder.clear();
                       await RangeStream(0, 23).map((i) {
-                        TodoTask todoTask = tmpTodos.length > i ? tmpTodos[i].copyWith():
-                        TodoTask(
-                          id: uuid.v1(),
-                          timeline: i,
-                          workDate: DateUtils.dateOnly(DateTime.now()),
-                          createdTime: DateTime.now(),
-                          title: '',
-                          taskType: TaskType.nill,
-                        );
+                        TodoTask todoTask = tmpTodos.length > i
+                            ? tmpTodos[i].copyWith()
+                            : TodoTask(
+                                id: uuid.v1(),
+                                timeline: i,
+                                workDate: DateUtils.dateOnly(DateTime.now()),
+                                createdTime: DateTime.now(),
+                                title: '',
+                                taskType: TaskType.nill,
+                              );
 
                         todoTask.title = tecList[i].text;
-                        todoModel.add(todoTask.toJson());
+                        db.add(todoTask.toJson());
                         ref.readTodoHolder.addTodo(todoTask);
                         return todoTask;
                       }).forEach((ele) {
@@ -175,7 +183,7 @@ class MainScreenState extends ConsumerState<MainScreen>
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return SizedBox(
-      height: 85,
+      height: bottomNavigationBarHeight - 3,
       child: Container(
         height: bottomNavigationBarHeight,
         decoration: const BoxDecoration(
