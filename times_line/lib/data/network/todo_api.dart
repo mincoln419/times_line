@@ -69,11 +69,11 @@ class TodoApi implements TodoRepository {
 
   @override
   Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>>
-      getDoneTodoList() async {
+      getDoneTodoList(DateTime? selectedDate) async {
     final ref = db.collection("doneTask");
     final result = await ref
         .where('workDate',
-            isEqualTo: DateTime.now().formattedDateOnly)
+            isEqualTo: (selectedDate ?? DateTime.now()).formattedDateOnly)
         .orderBy('timeline')
         .get();
 

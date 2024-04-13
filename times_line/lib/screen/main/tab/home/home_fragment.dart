@@ -213,7 +213,8 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     final todayDoneTask = ref.watch(doneListProvider);
 
     if (todayDoneTask.isEmpty) {
-      final writtenDoneTasks = await TodoApi.instance.getDoneTodoList().then(
+
+      final writtenDoneTasks = await TodoApi.instance.getDoneTodoList(selectedDate).then(
             (e) => e.successData,
           );
 
@@ -232,7 +233,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
             ? TodoTask(
                 id: uuid.v1(),
                 timeline: i,
-                workDate: DateTime.now().formattedDateOnly,
+                workDate: selectedDate.formattedDateOnly,
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
@@ -254,6 +255,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   }
 
   Future addDoneTask(TodoTask todoTask) async {
+    ref.readDoneHolder.updateTodo(todoTask);
     TodoApi.instance.addDoneTask(todoTask);
   }
 
@@ -268,6 +270,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     );
     if (date != null) {
       ref.readTodoHomeHolder.clear();
+      ref.readDoneHolder.clear();
       selectedDate.changeDate(DateUtils.dateOnly(date));
     }
   }

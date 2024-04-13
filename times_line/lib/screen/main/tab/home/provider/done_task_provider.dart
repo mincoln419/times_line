@@ -26,6 +26,11 @@ class DoneDataHolder extends StateNotifier<List<TodoTask>>{
     state = List.of(state);
   }
 
+  void updateTodo(TodoTask todo) async {
+    state[todo.timeline!] = todo.copyWith();
+    state = List.of(state);
+  }
+
   void changeType(int index, TaskType taskType) async {
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;

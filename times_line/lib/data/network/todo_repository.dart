@@ -5,7 +5,7 @@ import '../simple_result.dart';
 
 abstract interface class TodoRepository {
   Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>> getTodoList(DateTime dateTime);
-  Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>> getDoneTodoList();
+  Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>> getDoneTodoList(DateTime dateTime);
 
   Future<SimpleResult<void, Error>> addDoneTask(TodoTask todo);
   Future<SimpleResult<void, Error>> addTodoTask(TodoTask todo);
