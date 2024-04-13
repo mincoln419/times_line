@@ -10,10 +10,10 @@ import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 
 final userProvider = FutureProvider<String>((ref) => 'abc');
 
-final selectedDateProvider = FutureProvider<DateTime>((ref) => DateTime.now());
+final selectedDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
 final todoDataProvider =
-    FutureProvider((ref) => TodoApi.instance.getTodoList(ref.watch(selectedDateProvider).value).then(
+    FutureProvider((ref) => TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
           (e) => e.successData,
         ));
 

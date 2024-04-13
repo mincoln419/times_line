@@ -203,7 +203,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   Future<Map<String, dynamic>> todoListStream() async {
     final todayTask = ref.watch(todolistProvider);
     if(todayTask.isEmpty){
-      final writtenTodoTasks = await TodoApi.instance.getTodoList(ref.watch(selectedDateProvider).value).then(
+      final writtenTodoTasks = await TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
             (e) => e.successData,
       );
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty

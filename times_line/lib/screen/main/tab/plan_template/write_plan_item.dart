@@ -13,6 +13,8 @@ import '../home/provider/todo_task_editor_provider.dart';
 class WritePlanItem extends ConsumerStatefulWidget {
   final int index;
 
+
+
   const WritePlanItem(
       {super.key,
       required this.index});
@@ -24,13 +26,15 @@ class WritePlanItem extends ConsumerStatefulWidget {
 class _WritePlanItemState extends ConsumerState<WritePlanItem> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TextEditingController tec =  ref.read(tecListProvider)[widget.index];
     List<TodoTask> todoList =  ref.watch(todolistProvider);
-    tec.text = todoList[widget.index].title;
+    final  tecList  = ref.watch(tecListProvider);
+    final tec = tecList[widget.index];
+    tec.text = todoList.isEmpty ? "" : todoList[widget.index].title;
+    final taskType = todoList.isEmpty ? TaskType.nill : todoList[widget.index].taskType;
     return Container(
       height: 80,
       decoration: BoxDecoration(
-        color: getTaskColor(context, todoList[widget.index].taskType)
+        color: getTaskColor(context, taskType),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -47,7 +51,7 @@ class _WritePlanItemState extends ConsumerState<WritePlanItem> with SingleTicker
               alignment: Alignment.center,
               child: DropdownButton(
                 padding: EdgeInsets.all(5),
-                value: todoList[widget.index].taskType,
+                value: taskType,
                 items: dropDownTaskType,
                 onChanged: (value) {
                   ref.readTodoHolder.changeType(widget.index, value);

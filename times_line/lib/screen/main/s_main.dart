@@ -124,6 +124,8 @@ class MainScreenState extends ConsumerState<MainScreen>
                           ref.watch(tecListProvider);
                       List<TodoTask> tmpTodos = [];
                       tmpTodos.addAll(ref.watch(todolistProvider));
+                      final selectedDate = ref.watch(selectedDateProvider);
+                      print('selectedDate :: $selectedDate');
                       ref.readTodoHolder.clear();
                       await RangeStream(0, 23).map((i) {
                         TodoTask todoTask = tmpTodos.length > i
@@ -131,7 +133,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             : TodoTask(
                                 id: uuid.v1(),
                                 timeline: i,
-                                workDate: DateUtils.dateOnly(DateTime.now()),
+                                workDate: DateUtils.dateOnly(selectedDate),
                                 createdTime: DateTime.now(),
                                 title: '',
                                 taskType: TaskType.nill,
