@@ -21,7 +21,8 @@ TodoTask _$TodoTaskFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TodoTask {
   String get id => throw _privateConstructorUsedError;
-  DateTime get workDate => throw _privateConstructorUsedError;
+  String get workDate => throw _privateConstructorUsedError;
+  set workDate(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_time')
   DateTime get createdTime => throw _privateConstructorUsedError;
   DateTime? get modifyTime => throw _privateConstructorUsedError;
@@ -49,7 +50,7 @@ abstract class $TodoTaskCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      DateTime workDate,
+      String workDate,
       @JsonKey(name: 'created_time') DateTime createdTime,
       DateTime? modifyTime,
       String title,
@@ -88,7 +89,7 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
       workDate: null == workDate
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -127,7 +128,7 @@ abstract class _$$TodoTaskImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      DateTime workDate,
+      String workDate,
       @JsonKey(name: 'created_time') DateTime createdTime,
       DateTime? modifyTime,
       String title,
@@ -164,7 +165,7 @@ class __$$TodoTaskImplCopyWithImpl<$Res>
       workDate: null == workDate
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
@@ -213,7 +214,7 @@ class _$TodoTaskImpl extends _TodoTask {
   @override
   final String id;
   @override
-  final DateTime workDate;
+  String workDate;
   @override
   @JsonKey(name: 'created_time')
   final DateTime createdTime;
@@ -251,7 +252,7 @@ class _$TodoTaskImpl extends _TodoTask {
 abstract class _TodoTask extends TodoTask {
   factory _TodoTask(
       {required final String id,
-      required final DateTime workDate,
+      required String workDate,
       @JsonKey(name: 'created_time') required final DateTime createdTime,
       DateTime? modifyTime,
       required String title,
@@ -266,7 +267,8 @@ abstract class _TodoTask extends TodoTask {
   @override
   String get id;
   @override
-  DateTime get workDate;
+  String get workDate;
+  set workDate(String value);
   @override
   @JsonKey(name: 'created_time')
   DateTime get createdTime;

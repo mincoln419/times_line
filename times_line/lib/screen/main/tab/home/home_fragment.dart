@@ -8,12 +8,14 @@ import 'package:go_router/go_router.dart';
 import 'package:rxdart/streams.dart';
 import 'package:times_line/app.dart';
 import 'package:times_line/common/common.dart';
+import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/common/widget/animated_arrow_up_down.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/vo_write_todo.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
@@ -57,46 +59,24 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     BuildContext context,
   ) {
     final taskList = ref.watch(todoDataProvider);
+    String selectedDate = ref.watch(selectedHomeDateProvider).formattedDateOnly;
     return Column(
       children: [
         AppBar(
-          title: PopupMenuButton<String>(
-            position: PopupMenuPosition.under,
-            onOpened: () {
-              _changeRotation();
-              setState(() {
-                isSelected = true;
-              });
-            },
-            onCanceled: () {
-              _changeRotation();
-              setState(() {
-                isSelected = false;
-              });
-            },
-            onSelected: (value) {
-              _changeRotation();
-              setState(() {
-                isSelected = false;
-                title = value;
-              });
-            },
-            itemBuilder: (BuildContext context) => ["어제", "오늘", "내일"]
-                .map((e) => PopupMenuItem(
-                      value: e,
-                      child: Text(e, style: TextStyle(fontSize: 20)),
-                    ))
-                .toList(),
-            child: SizedBox(
-                width: 100,
-                child: Row(
-                  children: [
-                    Text(
-                      title,
-                    ),
-                    AnimatedArrowUpDown(isSelected, turns),
-                  ],
-                )),
+          title: Row(
+            children: [
+              Row(
+                children: [
+                  selectedDate.text.size(15).make(),
+                  IconButton(
+                    onPressed: () {
+                      _selectDate();
+                    },
+                    icon: const Icon(Icons.calendar_month),
+                  ),
+                ],
+              ),
+            ],
           ),
           actions: [
             IconButton(
@@ -113,16 +93,17 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final taskMap = snapshot.data;
-                  final List<TodoTask> todoTaskList = ref.watch(todolistProvider);
-                  final List<TodoTask> doneTaskList = ref.watch(doneListProvider);
+                  final List<TodoTask> todoTaskList =
+                      ref.watch(todoHomeListProvider);
+                  final List<TodoTask> doneTaskList =
+                      ref.watch(doneListProvider);
 
                   return ListView.separated(
                     padding: const EdgeInsets.only(
                         bottom: FloatingDaangnButton.height),
                     controller: scrollController,
                     itemBuilder: (context, index) => TimesLineItem(
-                      ref.watch(todolistProvider)[index],
-                      ref.watch(doneListProvider)[index],
+                      index: index,
                       onTap: () async {
                         //처리한 업무 다이얼로그 호출
                         TextEditingController tec = TextEditingController(
@@ -172,8 +153,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                    Navigator.of(context).pop();
-
+                                  Navigator.of(context).pop();
                                 },
                                 child: const Text("취소"),
                               ),
@@ -201,40 +181,41 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   }
 
   Future<Map<String, dynamic>> todoListStream() async {
-    final todayTask = ref.watch(todolistProvider);
-    if(todayTask.isEmpty){
-      final writtenTodoTasks = await TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
+    final todayTask = ref.watch(todoHomeListProvider);
+    final selectedDate = ref.watch(selectedHomeDateProvider);
+    if (todayTask.isEmpty) {
+      final writtenTodoTasks = await TodoApi.instance
+          .getTodoList(selectedDate)
+          .then(
             (e) => e.successData,
-      );
+          );
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
-        return TodoTask(
-          id: uuid.v1(),
-          timeline: i,
-          workDate: DateUtils.dateOnly(DateTime.now()),
-          createdTime: DateTime.now(),
-          title: '',
-          taskType: TaskType.nill,
-        );
-      }).toList()
+              return TodoTask(
+                id: uuid.v1(),
+                timeline: i,
+                workDate: selectedDate.formattedDateOnly,
+                createdTime: DateTime.now(),
+                title: '',
+                taskType: TaskType.nill,
+              );
+            }).toList()
           : writtenTodoTasks.docs.map((ele) {
-        TodoTask item = TodoTask.fromJson(ele.data());
-        return item.copyWith();
-      }).toList();
-      ref.readTodoHolder.clear();
+              TodoTask item = TodoTask.fromJson(ele.data());
+              return item.copyWith();
+            }).toList();
+      ref.readTodoHomeHolder.clear();
       for (var ele in todoTasks) {
-        ref.readTodoHolder.addTodo(ele);
+        ref.readTodoHomeHolder.addTodo(ele);
       }
     }
 
     final todayDoneTask = ref.watch(doneListProvider);
 
-    if(todayDoneTask.isEmpty){
-
+    if (todayDoneTask.isEmpty) {
       final writtenDoneTasks = await TodoApi.instance.getDoneTodoList().then(
             (e) => e.successData,
-      );
-
+          );
 
       final List<TodoTask> tempList = [];
       if (writtenDoneTasks.docs.isNotEmpty) {
@@ -245,19 +226,19 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
       }
 
       List<TodoTask> doneTasks = await RangeStream(0, 23).map((i) {
-        final matchedTask = tempList.filter((tmp) => tmp.timeline == i).toList();
+        final matchedTask =
+            tempList.filter((tmp) => tmp.timeline == i).toList();
         return matchedTask.isEmpty
             ? TodoTask(
-          id: uuid.v1(),
-          timeline: i,
-          workDate: DateUtils.dateOnly(DateTime.now()),
-          createdTime: DateTime.now(),
-          title: '',
-          taskType: TaskType.nill,
-        )
+                id: uuid.v1(),
+                timeline: i,
+                workDate: DateTime.now().formattedDateOnly,
+                createdTime: DateTime.now(),
+                title: '',
+                taskType: TaskType.nill,
+              )
             : matchedTask[0];
       }).toList();
-      print("doneTasks:::$doneTasks");
       ref.readDoneHolder.clear();
       for (var ele in doneTasks) {
         ref.readDoneHolder.addTodo(ele);
@@ -275,6 +256,21 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   Future addDoneTask(TodoTask todoTask) async {
     TodoApi.instance.addDoneTask(todoTask);
   }
+
+  void _selectDate() async {
+    final selectedDate = ref.watch(selectedHomeDateProvider.notifier);
+
+    final date = await showDatePicker(
+      context: context,
+      initialDate: ref.watch(selectedDateProvider),
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
+    );
+    if (date != null) {
+      ref.readTodoHomeHolder.clear();
+      selectedDate.changeDate(DateUtils.dateOnly(date));
+    }
+  }
 }
 
 class _DropDownWidgetConsumer extends ConsumerWidget {
@@ -290,6 +286,4 @@ class _DropDownWidgetConsumer extends ConsumerWidget {
       },
     );
   }
-
-
 }

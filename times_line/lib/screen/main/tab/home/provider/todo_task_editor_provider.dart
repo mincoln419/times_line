@@ -15,7 +15,9 @@ class ControllerList extends StateNotifier<List<TextEditingController>> {
   }
 
   void add({String? text}) {
-    state = [...state, TextEditingController(text: text)];
+    if(state.length < 24){
+      state = [...state, TextEditingController(text: text)];
+    }
   }
 
   void remove(int index) {
@@ -26,6 +28,12 @@ class ControllerList extends StateNotifier<List<TextEditingController>> {
     _disposedList.add(target);
     state.remove(target);
     state = [...state];
+  }
+
+  void clear() {
+    for (var element in state) {
+      element.text = '';
+    }
   }
 }
 

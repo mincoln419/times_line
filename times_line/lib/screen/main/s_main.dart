@@ -108,13 +108,13 @@ class MainScreenState extends ConsumerState<MainScreen>
                       // Navigator.of(context).push(
                       //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
                       // )
+                      final selectedDate = ref.watch(selectedDateProvider);
                       List<TodoTask> todayTask = ref.watch(todolistProvider);
-                      CollectionReference<Map<String, dynamic>> db = FirebaseFirestore.instance
-                          .collection("todoTask");
-                      final todoModel =
-                          db.where('workDate',
-                              isEqualTo: DateUtils.dateOnly(DateTime.now())
-                                  .formattedDate);
+                      CollectionReference<Map<String, dynamic>> db =
+                          FirebaseFirestore.instance.collection("todoTask");
+                      final todoModel = db.where('workDate',
+                          isEqualTo:
+                          selectedDate.formattedDateOnly);
                       final tmp = await todoModel.get();
 
                       for (var ele in tmp.docs) {
@@ -124,28 +124,31 @@ class MainScreenState extends ConsumerState<MainScreen>
                           ref.watch(tecListProvider);
                       List<TodoTask> tmpTodos = [];
                       tmpTodos.addAll(ref.watch(todolistProvider));
-                      final selectedDate = ref.watch(selectedDateProvider);
-                      print('selectedDate :: $selectedDate');
-                      ref.readTodoHolder.clear();
-                      await RangeStream(0, 23).map((i) {
-                        TodoTask todoTask = tmpTodos.length > i
-                            ? tmpTodos[i].copyWith()
-                            : TodoTask(
-                                id: uuid.v1(),
-                                timeline: i,
-                                workDate: DateUtils.dateOnly(selectedDate),
-                                createdTime: DateTime.now(),
-                                title: '',
-                                taskType: TaskType.nill,
-                              );
 
-                        todoTask.title = tecList[i].text;
-                        db.add(todoTask.toJson());
-                        ref.readTodoHolder.addTodo(todoTask);
-                        return todoTask;
-                      }).forEach((ele) {
-                        print(ele);
-                      });
+                      print('tmpTodos :: ${tmpTodos.length}');
+                      print('tec:: ${tecList.length}');
+                      ref.readTodoHolder.clear();
+                      RangeStream(0, 23).map(
+                        (i) {
+                          TodoTask todoTask = tmpTodos.length > i
+                              ? tmpTodos[i].copyWith()
+                              : TodoTask(
+                                  id: uuid.v1(),
+                                  timeline: i,
+                                  workDate: selectedDate.formattedDateOnly,
+                                  createdTime: DateTime.now(),
+                                  title: '',
+                                  taskType: TaskType.nill,
+                                );
+
+                          todoTask.title = tecList[i].text;
+                          print("insert data : ${todoTask.toJson()}");
+                          db.add(todoTask.toJson());
+
+                          ref.readTodoHolder.addTodo(todoTask);
+                          return todoTask;
+                        },
+                      ).forEach((element) { });
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                   ),

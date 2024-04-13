@@ -20,8 +20,8 @@ import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_editor_provider.dart';
 
 class WritePlanFragment extends ConsumerStatefulWidget {
-
   final String? selectedData;
+
   const WritePlanFragment({super.key, this.selectedData});
 
   @override
@@ -37,7 +37,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
 
   TemplateType templateType =
       DateTime.now().weekday >= 6 ? TemplateType.holiday : TemplateType.normal;
-
 
   @override
   void initState() {
@@ -56,7 +55,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
 
   @override
   Widget build(BuildContext context) {
-
     final selectedDate = ref.watch(selectedDateProvider).formattedDateOnly;
 
     return Scaffold(
@@ -69,13 +67,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
               children: [
                 selectedDate.text.size(15).make(),
                 IconButton(
-                  onPressed: (){
+                  onPressed: () {
                     _selectDate();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) =>
-                          WritePlanFragment(selectedData: selectedDate,)
-                      ),
-                    );
                   },
                   icon: const Icon(Icons.calendar_month),
                 ),
@@ -124,7 +117,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 ),
                 IconButton(
                     onPressed: () {
-
                       //TODO 신규 템플릿 생성 다이얼로그 구현 필요
 
                       showAdaptiveDialog(
@@ -140,36 +132,37 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6.0),
         child: FutureBuilder(
-            future: dailyTodoList(ref.readTodoHolder),
-            builder: (context, snapshot) {
-              List<int> list = snapshot.data ?? [];
-              final textTecList = ref.watch(tecListProvider);
-              if (snapshot.hasData) {
-                return ListView.separated(
-                  padding: const EdgeInsets.only(
-                      bottom: FloatingDaangnButton.height),
-                  controller: scrollController,
-                  itemBuilder: (BuildContext context, int index) {
-                    return WritePlanItem(index: index);
-                  },
-                  separatorBuilder: (context, index) =>
-                      const Line().pSymmetric(h: 15),
-                  itemCount: list.length,
-                );
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
+          future: dailyTodoList(ref.readTodoHolder),
+          builder: (context, snapshot) {
+            List<int> list = snapshot.data ?? [];
+            //final textTecList = ref.watch(tecListProvider);
+            if (snapshot.hasData) {
+              return ListView.separated(
+                padding:
+                    const EdgeInsets.only(bottom: FloatingDaangnButton.height),
+                controller: scrollController,
+                itemBuilder: (BuildContext context, int index) {
+                  return WritePlanItem(index: index);
+                },
+                separatorBuilder: (context, index) =>
+                    const Line().pSymmetric(h: 15),
+                itemCount: list.length,
               );
-            }),
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
     );
   }
 
   Future<List<int>> dailyTodoList(TodoDataHolder readTodoHolder) async {
-
     await selectedDateTaskList();
 
     final textTecList = ref.watch(tecListProvider.notifier);
+    textTecList.clear();
     return await RangeStream(0, 23).map((i) {
       textTecList.add();
       return i;
@@ -177,19 +170,21 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   Future<void> selectedDateTaskList() async {
-    final todayTask = ref.watch(todolistProvider);
+
     const uuid = Uuid();
-    final selectedDate =  ref.watch(selectedDateProvider);
+    final selectedDate = ref.watch(selectedDateProvider);
+    final todayTask = ref.watch(todolistProvider);
     if (todayTask.isEmpty) {
-      final writtenTodoTasks = await TodoApi.instance.getTodoList(selectedDate).then(
-            (e) => e.successData,
-          );
+      final writtenTodoTasks =
+          await TodoApi.instance.getTodoList(selectedDate).then(
+                (e) => e.successData,
+              );
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
               return TodoTask(
                 id: uuid.v1(),
                 timeline: i,
-                workDate: selectedDate,
+                workDate: selectedDate.formattedDateOnly,
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
@@ -202,6 +197,9 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
       }
+    }else{
+      //todo task 일자 변경
+      ref.readTodoHolder.changeWorkDate(selectedDate);
     }
   }
 
@@ -210,19 +208,18 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   void _selectDate() async {
-
     final selectedDate = ref.watch(selectedDateProvider.notifier);
 
     final date = await showDatePicker(
       context: context,
-      initialDate: selectedDate.state,
+      initialDate: ref.watch(selectedDateProvider),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
     );
     if (date != null) {
       ref.readTodoHolder.clear();
+      selectedDate.changeDate(DateUtils.dateOnly(date));
       selectedDateTaskList();
-      selectedDate.state = date;
     }
   }
 }

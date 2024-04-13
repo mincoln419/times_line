@@ -48,7 +48,7 @@ class TodoApi implements TodoRepository {
     final ref = db.collection("todoTask");
     final result = await ref
         .where('workDate',
-        isEqualTo: DateUtils.dateOnly(selectedDate ?? DateTime.now()).formattedDate )
+        isEqualTo: (selectedDate ?? DateTime.now()).formattedDateOnly)
         .orderBy('timeline')
         .get();
 

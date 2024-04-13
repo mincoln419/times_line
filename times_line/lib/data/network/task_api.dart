@@ -1,4 +1,5 @@
 import 'package:times_line/common/cli_common.dart';
+import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/data/network/result/api_error.dart';
 import 'package:times_line/data/simple_result.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
@@ -16,6 +17,6 @@ class TaskApi {
 
   static Future<TodoTask> getPost(String id) async {
     await sleepAsync(100.ms);
-    return TodoTask(id: id, timeline: 1, createdTime: DateTime.now(), title: '', taskType: TaskType.etc, workDate: DateTime.now());
+    return TodoTask(id: id, timeline: 1, createdTime: DateTime.now(), title: '', taskType: TaskType.etc, workDate: DateTime.now().formattedDateOnly);
   }
 }
