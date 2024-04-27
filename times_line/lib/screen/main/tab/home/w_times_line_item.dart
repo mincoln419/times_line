@@ -80,7 +80,7 @@ class _TimesLineItemState extends ConsumerState<TimesLineItem>
   }
 
   Future<TodoTask> _todoListFuture() async {
-    final todoTask = ref.watch(todolistProvider)[widget.index];
+    final todoTask = ref.watch(todoHomeListProvider)[widget.index];
     final doneTask = ref.watch(doneListProvider)[widget.index];
     return todoTask;
   }

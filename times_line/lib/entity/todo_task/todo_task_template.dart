@@ -18,10 +18,9 @@ class TodoTaskTemplate with _$TodoTaskTemplate{
     String? docId,
     String? uid,
     required String workDate,
-    DateTime? createdTime,
+    @JsonKey(name: 'createdTime')required final DateTime createdTime,
     DateTime? modifyTime,
-    @Default([])
-    List<TodoContent> taskContents,
+    required List taskContents,
 
   }) = _TodoTaskTemplate;
 

@@ -26,13 +26,12 @@ mixin _$TodoTaskTemplate {
   set uid(String? value) => throw _privateConstructorUsedError;
   String get workDate => throw _privateConstructorUsedError;
   set workDate(String value) => throw _privateConstructorUsedError;
-  DateTime? get createdTime => throw _privateConstructorUsedError;
-  set createdTime(DateTime? value) => throw _privateConstructorUsedError;
+  @JsonKey(name: 'createdTime')
+  DateTime get createdTime => throw _privateConstructorUsedError;
   DateTime? get modifyTime => throw _privateConstructorUsedError;
   set modifyTime(DateTime? value) => throw _privateConstructorUsedError;
-  List<TodoContent> get taskContents => throw _privateConstructorUsedError;
-  set taskContents(List<TodoContent> value) =>
-      throw _privateConstructorUsedError;
+  List<dynamic> get taskContents => throw _privateConstructorUsedError;
+  set taskContents(List<dynamic> value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,9 +49,9 @@ abstract class $TodoTaskTemplateCopyWith<$Res> {
       {String? docId,
       String? uid,
       String workDate,
-      DateTime? createdTime,
+      @JsonKey(name: 'createdTime') DateTime createdTime,
       DateTime? modifyTime,
-      List<TodoContent> taskContents});
+      List<dynamic> taskContents});
 }
 
 /// @nodoc
@@ -71,7 +70,7 @@ class _$TodoTaskTemplateCopyWithImpl<$Res, $Val extends TodoTaskTemplate>
     Object? docId = freezed,
     Object? uid = freezed,
     Object? workDate = null,
-    Object? createdTime = freezed,
+    Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? taskContents = null,
   }) {
@@ -88,10 +87,10 @@ class _$TodoTaskTemplateCopyWithImpl<$Res, $Val extends TodoTaskTemplate>
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: freezed == createdTime
+      createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       modifyTime: freezed == modifyTime
           ? _value.modifyTime
           : modifyTime // ignore: cast_nullable_to_non_nullable
@@ -99,7 +98,7 @@ class _$TodoTaskTemplateCopyWithImpl<$Res, $Val extends TodoTaskTemplate>
       taskContents: null == taskContents
           ? _value.taskContents
           : taskContents // ignore: cast_nullable_to_non_nullable
-              as List<TodoContent>,
+              as List<dynamic>,
     ) as $Val);
   }
 }
@@ -116,9 +115,9 @@ abstract class _$$TodoTaskTemplateImplCopyWith<$Res>
       {String? docId,
       String? uid,
       String workDate,
-      DateTime? createdTime,
+      @JsonKey(name: 'createdTime') DateTime createdTime,
       DateTime? modifyTime,
-      List<TodoContent> taskContents});
+      List<dynamic> taskContents});
 }
 
 /// @nodoc
@@ -135,7 +134,7 @@ class __$$TodoTaskTemplateImplCopyWithImpl<$Res>
     Object? docId = freezed,
     Object? uid = freezed,
     Object? workDate = null,
-    Object? createdTime = freezed,
+    Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? taskContents = null,
   }) {
@@ -152,10 +151,10 @@ class __$$TodoTaskTemplateImplCopyWithImpl<$Res>
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: freezed == createdTime
+      createdTime: null == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       modifyTime: freezed == modifyTime
           ? _value.modifyTime
           : modifyTime // ignore: cast_nullable_to_non_nullable
@@ -163,7 +162,7 @@ class __$$TodoTaskTemplateImplCopyWithImpl<$Res>
       taskContents: null == taskContents
           ? _value.taskContents
           : taskContents // ignore: cast_nullable_to_non_nullable
-              as List<TodoContent>,
+              as List<dynamic>,
     ));
   }
 }
@@ -175,9 +174,9 @@ class _$TodoTaskTemplateImpl extends _TodoTaskTemplate {
       {this.docId,
       this.uid,
       required this.workDate,
-      this.createdTime,
+      @JsonKey(name: 'createdTime') required this.createdTime,
       this.modifyTime,
-      this.taskContents = const []})
+      required this.taskContents})
       : super._();
 
   factory _$TodoTaskTemplateImpl.fromJson(Map<String, dynamic> json) =>
@@ -190,12 +189,12 @@ class _$TodoTaskTemplateImpl extends _TodoTaskTemplate {
   @override
   String workDate;
   @override
-  DateTime? createdTime;
+  @JsonKey(name: 'createdTime')
+  final DateTime createdTime;
   @override
   DateTime? modifyTime;
   @override
-  @JsonKey()
-  List<TodoContent> taskContents;
+  List<dynamic> taskContents;
 
   @override
   String toString() {
@@ -222,9 +221,9 @@ abstract class _TodoTaskTemplate extends TodoTaskTemplate {
       {String? docId,
       String? uid,
       required String workDate,
-      DateTime? createdTime,
+      @JsonKey(name: 'createdTime') required final DateTime createdTime,
       DateTime? modifyTime,
-      List<TodoContent> taskContents}) = _$TodoTaskTemplateImpl;
+      required List<dynamic> taskContents}) = _$TodoTaskTemplateImpl;
   _TodoTaskTemplate._() : super._();
 
   factory _TodoTaskTemplate.fromJson(Map<String, dynamic> json) =
@@ -240,14 +239,14 @@ abstract class _TodoTaskTemplate extends TodoTaskTemplate {
   String get workDate;
   set workDate(String value);
   @override
-  DateTime? get createdTime;
-  set createdTime(DateTime? value);
+  @JsonKey(name: 'createdTime')
+  DateTime get createdTime;
   @override
   DateTime? get modifyTime;
   set modifyTime(DateTime? value);
   @override
-  List<TodoContent> get taskContents;
-  set taskContents(List<TodoContent> value);
+  List<dynamic> get taskContents;
+  set taskContents(List<dynamic> value);
   @override
   @JsonKey(ignore: true)
   _$$TodoTaskTemplateImplCopyWith<_$TodoTaskTemplateImpl> get copyWith =>

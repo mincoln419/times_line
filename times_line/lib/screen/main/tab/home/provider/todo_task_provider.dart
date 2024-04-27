@@ -22,6 +22,9 @@ class SelectDateDataHolder extends StateNotifier<DateTime> {
     state = dateTime;
   }
 }
+extension SelectDateDataHolderProvider on WidgetRef {
+  SelectDateDataHolder get readSelectDateHolder => read(selectedDateProvider.notifier);
+}
 
 final todoDataProvider = FutureProvider(
     (ref) => TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
@@ -42,12 +45,8 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
     state = List.of(state);
   }
 
-  void addTodo(TodoContent todo, String workDate) async {
-    state.add(TodoTask(
-        workDate: workDate,
-        timeline: todo.timeline,
-        title: todo.title,
-        taskType: todo.taskType));
+  void addTodo(TodoTask todo) async {
+    state.add(todo);
     state = List.of(state);
   }
 
@@ -81,3 +80,4 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
 extension TodoListHolderProvider on WidgetRef {
   TodoDataHolder get readTodoHolder => read(todolistProvider.notifier);
 }
+

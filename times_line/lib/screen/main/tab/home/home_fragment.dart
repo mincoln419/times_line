@@ -60,7 +60,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   Widget build(
     BuildContext context,
   ) {
-    final taskList = ref.watch(todoDataProvider);
     String selectedDate = ref.watch(selectedHomeDateProvider).formattedDateOnly;
     return Column(
       children: [
@@ -93,13 +92,14 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           child: FutureBuilder(
               future: todoListStream(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && context.mounted) {
                   final taskMap = snapshot.data;
                   final List<TodoTask> todoTaskList =
                       ref.watch(todoHomeListProvider);
                   final List<TodoTask> doneTaskList =
                       ref.watch(doneListProvider);
 
+                  //print('stream todolist:: ${todoTaskList}');
                   return ListView.separated(
                     padding: const EdgeInsets.only(
                         bottom: FloatingDaangnButton.height),
@@ -192,9 +192,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           return e.successData;
         },
       );
-      final contentsJson = writtenTodoTasks.docs.first.data();
-
-      print("들어오는가 ${TodoTaskTemplate.fromJson(contentsJson)}");
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
               return TodoTask(
@@ -205,23 +202,21 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 taskType: TaskType.nill,
               );
             }).toList()
-          : TodoTaskTemplate.fromJson(contentsJson)
-              .taskContents
-              .map((e) {
-                print('e:: $e');
+          : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data()).taskContents.map((ele) {
+              final e = TodoContent.fromJson(ele);
+              //print('e:: $e');
               return TodoTask(
                   workDate: selectedDate.formattedDateOnly,
                   timeline: e.timeline,
+                  createdTime: DateTime.now(),
                   title: e.title,
                   taskType: e.taskType);
             }).toList();
 
-      print("todoTasks : $todoTasks");
+      //print("todoTasks : $todoTasks");
       ref.readTodoHomeHolder.clear();
       for (var ele in todoTasks) {
-        ref.readTodoHomeHolder.addTodo(
-            TodoContent(title: ele.title, taskType: ele.taskType),
-            ele.workDate);
+        ref.readTodoHomeHolder.addTodo(ele.copyWith());
       }
     }
 
@@ -274,18 +269,17 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
   }
 
   void _selectDate() async {
-    final selectedDate = ref.watch(selectedHomeDateProvider.notifier);
-
     final date = await showDatePicker(
       context: context,
-      initialDate: ref.watch(selectedDateProvider),
+      initialDate: ref.watch(selectedHomeDateProvider),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
     );
     if (date != null) {
+      ref.readSelectHomeDateHolder.changeDate(DateUtils.dateOnly(date));
       ref.readTodoHomeHolder.clear();
       ref.readDoneHolder.clear();
-      selectedDate.changeDate(DateUtils.dateOnly(date));
+      todoListStream();
     }
   }
 }

@@ -180,26 +180,30 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           await TodoApi.instance.getTodoList(selectedDate).then(
                 (e) => e.successData,
               );
-      List<TodoContent> todoTasks = writtenTodoTasks.docs.isEmpty
+      List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
-              return TodoContent(
+              return TodoTask(
                 timeline: i,
+                workDate: selectedDate.formattedDateOnly,
+                createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
               );
             }).toList()
-          : TodoTaskTemplate.fromJson(writtenTodoTasks.docs[0].data())
+          : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data())
               .taskContents
-              .map((e) {
-              TodoContent item = TodoContent(
-                timeline: e.timeline,
-                title: e.title,
-                taskType: e.taskType,
-              );
-              return item;
+              .map((ele) {
+              final e = TodoContent.fromJson(ele);
+              print('e:: $e');
+              return TodoTask(
+                  workDate: selectedDate.formattedDateOnly,
+                  timeline: e.timeline,
+                  createdTime: DateTime.now(),
+                  title: e.title,
+                  taskType: e.taskType);
             }).toList();
       for (var ele in todoTasks) {
-        ref.readTodoHolder.addTodo(ele, selectedDate.formattedDateOnly);
+        ref.readTodoHolder.addTodo(ele);
       }
     } else {
       //todo task 일자 변경

@@ -22,6 +22,14 @@ class SelectHomeDateDataHolder extends StateNotifier<DateTime> {
   }
 }
 
+extension SelectHomeDateHolderProvider on WidgetRef {
+  SelectHomeDateDataHolder get readSelectHomeDateHolder =>
+      read(selectedHomeDateProvider.notifier);
+}
+
+
+
+
 final todoHomeListProvider =
     StateNotifierProvider<TodoHomeDataHolder, List<TodoTask>>((ref) {
   final userID = ref.watch(userProvider);
@@ -36,10 +44,8 @@ class TodoHomeDataHolder extends StateNotifier<List<TodoTask>> {
     state = List.of(state);
   }
 
-  void addTodo(TodoContent todo, String workDate) async {
-    state.add(TodoTask(
-      timeline: todo.timeline,
-        workDate: workDate, title: todo.title, taskType: todo.taskType));
+  void addTodo(TodoTask todo) async {
+    state.add(todo);
     state = List.of(state);
   }
 
