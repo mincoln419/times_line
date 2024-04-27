@@ -11,6 +11,8 @@ import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/common/widget/animated_arrow_up_down.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
+import 'package:times_line/entity/todo_task/todo_task_template.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
@@ -184,15 +186,18 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     final todayTask = ref.watch(todoHomeListProvider);
     final selectedDate = ref.watch(selectedHomeDateProvider);
     if (todayTask.isEmpty) {
-      final writtenTodoTasks = await TodoApi.instance
-          .getTodoList(selectedDate)
-          .then(
-            (e) => e.successData,
-          );
+      final writtenTodoTasks =
+          await TodoApi.instance.getTodoList(selectedDate).then(
+        (e) {
+          return e.successData;
+        },
+      );
+      final contentsJson = writtenTodoTasks.docs.first.data();
+
+      print("들어오는가 ${TodoTaskTemplate.fromJson(contentsJson)}");
       List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
               return TodoTask(
-                id: uuid.v1(),
                 timeline: i,
                 workDate: selectedDate.formattedDateOnly,
                 createdTime: DateTime.now(),
@@ -200,29 +205,39 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 taskType: TaskType.nill,
               );
             }).toList()
-          : writtenTodoTasks.docs.map((ele) {
-              TodoTask item = TodoTask.fromJson(ele.data());
-              return item.copyWith();
+          : TodoTaskTemplate.fromJson(contentsJson)
+              .taskContents
+              .map((e) {
+                print('e:: $e');
+              return TodoTask(
+                  workDate: selectedDate.formattedDateOnly,
+                  timeline: e.timeline,
+                  title: e.title,
+                  taskType: e.taskType);
             }).toList();
+
+      print("todoTasks : $todoTasks");
       ref.readTodoHomeHolder.clear();
       for (var ele in todoTasks) {
-        ref.readTodoHomeHolder.addTodo(ele);
+        ref.readTodoHomeHolder.addTodo(
+            TodoContent(title: ele.title, taskType: ele.taskType),
+            ele.workDate);
       }
     }
 
     final todayDoneTask = ref.watch(doneListProvider);
 
     if (todayDoneTask.isEmpty) {
-
-      final writtenDoneTasks = await TodoApi.instance.getDoneTodoList(selectedDate).then(
-            (e) => e.successData,
-          );
+      final writtenDoneTasks =
+          await TodoApi.instance.getDoneTodoList(selectedDate).then(
+                (e) => e.successData,
+              );
 
       final List<TodoTask> tempList = [];
       if (writtenDoneTasks.docs.isNotEmpty) {
         tempList.addAll(writtenDoneTasks.docs.map((ele) {
           TodoTask item = TodoTask.fromJson(ele.data());
-          return item.copyWith();
+          return item.copyWith(docId: ele.id);
         }).toList());
       }
 
@@ -231,7 +246,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
             tempList.filter((tmp) => tmp.timeline == i).toList();
         return matchedTask.isEmpty
             ? TodoTask(
-                id: uuid.v1(),
                 timeline: i,
                 workDate: selectedDate.formattedDateOnly,
                 createdTime: DateTime.now(),

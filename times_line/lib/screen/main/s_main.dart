@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:isar/isar.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
+import 'package:times_line/entity/todo_task/todo_task_template.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
 import 'package:times_line/screen/main/tab/tab_item.dart';
@@ -36,7 +39,7 @@ class MainScreenState extends ConsumerState<MainScreen>
   TabItem get _currentTab => ref.read(currentTabProvider);
   final tabs = TabItem.values;
   late final List<GlobalKey<NavigatorState>> navigatorKeys =
-      TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
+  TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
 
   int get _currentIndex => tabs.indexOf(_currentTab);
 
@@ -60,7 +63,9 @@ class MainScreenState extends ConsumerState<MainScreen>
   @override
   void didUpdateWidget(covariant MainScreen oldWidget) {
     delay(() {
-      ref.read(currentTabProvider.notifier).state = oldWidget.firstTab;
+      ref
+          .read(currentTabProvider.notifier)
+          .state = oldWidget.firstTab;
     });
 
     super.didUpdateWidget(oldWidget);
@@ -80,7 +85,7 @@ class MainScreenState extends ConsumerState<MainScreen>
               body: Container(
                 padding: EdgeInsets.only(
                     bottom:
-                        extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
+                    extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
                 child: SafeArea(
                   bottom: !extendBody,
                   child: pages,
@@ -88,70 +93,109 @@ class MainScreenState extends ConsumerState<MainScreen>
               ),
               bottomNavigationBar: _buildBottomNavigationBar(context),
               floatingActionButton: switch (_currentIndex) {
-                2 => Consumer(builder: (context, ref, child) {
-                    final user = ref.watch(userCredentialProvider);
-                    return FloatingActionButton(
-                      child: const Icon(Icons.note_add_outlined),
-                      onPressed: () {
-                        final uid = user?.user?.uid;
-                        print('uid: $uid');
-                        if (uid == null) {
-                          return;
-                        }
-                        context.go("/cart/$uid");
-                      },
-                    );
-                  }),
-                0 => FloatingActionButton(
-                    child: const Icon(Icons.save),
-                    onPressed: () async {
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
-                      // )
-                      final selectedDate = ref.watch(selectedDateProvider);
-                      List<TodoTask> todayTask = ref.watch(todolistProvider);
-                      CollectionReference<Map<String, dynamic>> db =
-                          FirebaseFirestore.instance.collection("todoTask");
-                      final todoModel = db.where('workDate',
-                          isEqualTo:
-                          selectedDate.formattedDateOnly);
-                      final tmp = await todoModel.get();
-
-                      for (var ele in tmp.docs) {
-                        await ele.reference.delete();
-                      }
-                      List<TextEditingController> tecList =
-                          ref.watch(tecListProvider);
-                      List<TodoTask> tmpTodos = [];
-                      tmpTodos.addAll(ref.watch(todolistProvider));
-
-                      print('tmpTodos :: ${tmpTodos.length}');
-                      print('tec:: ${tecList.length}');
-                      ref.readTodoHolder.clear();
-                      RangeStream(0, 23).map(
-                        (i) {
-                          TodoTask todoTask = tmpTodos.length > i
-                              ? tmpTodos[i].copyWith()
-                              : TodoTask(
-                                  id: uuid.v1(),
-                                  timeline: i,
-                                  workDate: selectedDate.formattedDateOnly,
-                                  createdTime: DateTime.now(),
-                                  title: '',
-                                  taskType: TaskType.nill,
-                                );
-
-                          todoTask.title = tecList[i].text;
-                          print("insert data : ${todoTask.toJson()}");
-                          db.add(todoTask.toJson());
-
-                          ref.readTodoHolder.addTodo(todoTask);
-                          return todoTask;
+                2 =>
+                    Consumer(builder: (context, ref, child) {
+                      final user = ref.watch(userCredentialProvider);
+                      return FloatingActionButton(
+                        child: const Icon(Icons.note_add_outlined),
+                        onPressed: () {
+                          final uid = user?.user?.uid;
+                          print('uid: $uid');
+                          if (uid == null) {
+                            return;
+                          }
+                          context.go("/cart/$uid");
                         },
-                      ).forEach((element) { });
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                  ),
+                      );
+                    }),
+                0 =>
+                    FloatingActionButton(
+                      child: const Icon(Icons.save),
+                      onPressed: () async {
+                        // Navigator.of(context).push(
+                        //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
+                        // )
+                        final selectedDate = ref.watch(selectedDateProvider);
+                        List<TodoTask> todayTask = ref.watch(todolistProvider);
+                        CollectionReference<Map<String, dynamic>> db =
+                        FirebaseFirestore.instance.collection("todoTask");
+                        final docId = await db
+                            .where('workDate',
+                            isEqualTo: selectedDate.formattedDateOnly)
+                            .get()
+                            .then((value) =>
+                        value.docs.isNotEmpty ? value.docs[0].id : null);
+
+                        List<TextEditingController> tecList =
+                        ref.watch(tecListProvider);
+                        List<TodoTask> tmpTodos = [];
+                        tmpTodos.addAll(ref.watch(todolistProvider));
+
+                        print('tmpTodos :: ${tmpTodos.length}');
+                        print('tec:: ${tecList.length}');
+                        ref.readTodoHolder.clear();
+                        ref.readTodoHomeHolder.clear();
+                        List<TodoContent> todoContents =
+                        await RangeStream(0, 23).map(
+                              (i) {
+                            TodoContent todoTask = tmpTodos.length > i
+                                ? TodoContent(
+                              title: tmpTodos[i]
+                                  .copyWith()
+                                  .title,
+                              timeline: tmpTodos[i]
+                                  .copyWith()
+                                  .timeline,
+                              taskType: tmpTodos[i]
+                                  .copyWith()
+                                  .taskType,
+                            )
+                                : TodoContent(
+                              timeline: i,
+                              title: '',
+                              taskType: TaskType.nill,
+                            );
+
+                            todoTask.title = tecList[i].text;
+                            print("insert data : ${todoTask.toJson()}");
+
+                            TodoContent todoContent = TodoContent(
+                                title: todoTask.title,
+                                timeline: todoTask.timeline,
+                                taskType: todoTask.taskType);
+                            ref.readTodoHolder.addTodo(todoContent,
+                                selectedDate.formattedDateOnly);
+                            ref.readTodoHomeHolder.addTodo(todoTask,
+                                selectedDate.formattedDateOnly);
+                            return todoTask;
+                          },
+                        ).toList();
+
+
+                        if (docId == null) {
+                          db.add({
+                            'uid': 'user',
+                            'workDate': selectedDate.formattedDateOnly,
+                            'modifyTime': DateTime
+                                .now()
+                                .millisecondsSinceEpoch,
+                            'createdTime': DateTime
+                                .now()
+                                .millisecondsSinceEpoch,
+                            'taskContents': todoContents.map((e)=> e.toJson()),
+                          });
+                        } else {
+                          db.doc(docId).update({
+                            'modifyAt': DateTime
+                                .now()
+                                .millisecondsSinceEpoch,
+                            'taskContents': todoContents,
+                          });
+                        }
+
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                    ),
                 int() => null,
               },
             ),
@@ -161,21 +205,23 @@ class MainScreenState extends ConsumerState<MainScreen>
     );
   }
 
-  IndexedStack get pages => IndexedStack(
-      index: _currentIndex,
-      children: tabs
-          .mapIndexed((tab, index) => Offstage(
+  IndexedStack get pages =>
+      IndexedStack(
+          index: _currentIndex,
+          children: tabs
+              .mapIndexed((tab, index) =>
+              Offstage(
                 offstage: _currentTab != tab,
                 child: TabNavigator(
                   navigatorKey: navigatorKeys[index],
                   tabItem: tab,
                 ),
               ))
-          .toList());
+              .toList());
 
   Future<bool> _handleBackPressed() async {
     final isFirstRouteInCurrentTab =
-        (await _currentTabNavigationKey.currentState?.maybePop() == false);
+    (await _currentTabNavigationKey.currentState?.maybePop() == false);
     if (isFirstRouteInCurrentTab) {
       if (_currentTab != TabItem.home) {
         _changeTab(tabs.indexOf(TabItem.home));
@@ -221,16 +267,19 @@ class MainScreenState extends ConsumerState<MainScreen>
     final currentIndex = tabs.indexOf(currentTab);
     return tabs
         .mapIndexed(
-          (tab, index) => tab.toNavigationBarItem(
+          (tab, index) =>
+          tab.toNavigationBarItem(
             context,
             isActivated: currentIndex == index,
           ),
-        )
+    )
         .toList();
   }
 
   void _changeTab(int index) {
-    ref.read(currentTabProvider.notifier).state = tabs[index];
+    ref
+        .read(currentTabProvider.notifier)
+        .state = tabs[index];
     FocusManager.instance.primaryFocus?.unfocus();
   }
 

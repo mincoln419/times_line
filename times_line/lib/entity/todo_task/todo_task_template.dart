@@ -3,29 +3,29 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_status.dart';
 
-part 'vo_todo_task.freezed.dart';
-part 'vo_todo_task.g.dart';
+part 'todo_task_template.freezed.dart';
+part 'todo_task_template.g.dart';
 
 @unfreezed
-class TodoTask with _$TodoTask{
+class TodoTaskTemplate with _$TodoTaskTemplate{
 
-  TodoTask._();
+  TodoTaskTemplate._();
 
-  factory TodoTask ({
+  factory TodoTaskTemplate ({
     String? docId,
+    String? uid,
     required String workDate,
-    @JsonKey(name: 'created_time')
     DateTime? createdTime,
     DateTime? modifyTime,
-    required String title,
-    int? timeline,
-    required TaskType taskType,
-    @Default(TodoTaskStatus.not_yet) TodoTaskStatus todoTaskStatus,
-  }) = _TodoTask;
+    @Default([])
+    List<TodoContent> taskContents,
 
-  factory TodoTask.fromJson(Map<String, Object?> json) => _$TodoTaskFromJson(json);
+  }) = _TodoTaskTemplate;
+
+  factory TodoTaskTemplate.fromJson(Map<String, Object?> json) => _$TodoTaskTemplateFromJson(json);
 
 }
 

@@ -5,40 +5,49 @@ import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/data/network/todo_api.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_status.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 
 final userProvider = FutureProvider<String>((ref) => 'abc');
 
-final selectedDateProvider = StateNotifierProvider<SelectDateDataHolder, DateTime>((ref) => SelectDateDataHolder());
-class SelectDateDataHolder extends StateNotifier<DateTime>{
+final selectedDateProvider =
+    StateNotifierProvider<SelectDateDataHolder, DateTime>(
+        (ref) => SelectDateDataHolder());
+
+class SelectDateDataHolder extends StateNotifier<DateTime> {
   SelectDateDataHolder() : super(DateUtils.dateOnly(DateTime.now()));
-  void changeDate(DateTime dateTime){
+
+  void changeDate(DateTime dateTime) {
     state = dateTime;
   }
 }
 
-
-final todoDataProvider =
-    FutureProvider((ref) => TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
+final todoDataProvider = FutureProvider(
+    (ref) => TodoApi.instance.getTodoList(ref.watch(selectedDateProvider)).then(
           (e) => e.successData,
         ));
 
-final todolistProvider = StateNotifierProvider<TodoDataHolder, List<TodoTask>>((ref) {
+final todolistProvider =
+    StateNotifierProvider<TodoDataHolder, List<TodoTask>>((ref) {
   final userID = ref.watch(userProvider);
   debugPrint(userID.value!);
   return TodoDataHolder();
 });
 
-class TodoDataHolder extends StateNotifier<List<TodoTask>>{
+class TodoDataHolder extends StateNotifier<List<TodoTask>> {
   TodoDataHolder() : super([]);
 
   void changeTodoStatus(TodoTask todo) async {
     state = List.of(state);
   }
 
-  void addTodo(TodoTask todo) async {
-    state.add(todo);
+  void addTodo(TodoContent todo, String workDate) async {
+    state.add(TodoTask(
+        workDate: workDate,
+        timeline: todo.timeline,
+        title: todo.title,
+        taskType: todo.taskType));
     state = List.of(state);
   }
 
@@ -46,7 +55,7 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;
 
-    if(taskType == TaskType.sleep){
+    if (taskType == TaskType.sleep) {
       tmp.title = 'sleep';
     }
     state[index] = tmp;
@@ -58,15 +67,15 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>>{
     state = List.of(state);
   }
 
-  void clear(){
+  void clear() {
     state.clear();
   }
 
   void changeWorkDate(DateTime date) {
     for (var element in state) {
       element.workDate = date.formattedDateOnly;
-    }}
-
+    }
+  }
 }
 
 extension TodoListHolderProvider on WidgetRef {

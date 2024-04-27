@@ -28,7 +28,7 @@ class TodoApi implements TodoRepository {
     final ref = db.collection("doneTask");
     todo.modifyTime = DateTime.now();
 
-    ref.where('id', isEqualTo: todo.id).get().then((e) {
+    ref.where('docId', isEqualTo: todo.docId).get().then((e) {
       if (e.size == 0) {
         print("insert");
         ref.add(todo.toJson());
@@ -49,7 +49,6 @@ class TodoApi implements TodoRepository {
     final result = await ref
         .where('workDate',
         isEqualTo: (selectedDate ?? DateTime.now()).formattedDateOnly)
-        .orderBy('timeline')
         .get();
 
     return SimpleResult.success(result);

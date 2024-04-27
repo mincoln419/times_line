@@ -8,9 +8,11 @@ part of 'vo_todo_task.dart';
 
 _$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
     _$TodoTaskImpl(
-      id: json['id'] as String,
+      docId: json['docId'] as String?,
       workDate: json['workDate'] as String,
-      createdTime: DateTime.parse(json['created_time'] as String),
+      createdTime: json['created_time'] == null
+          ? null
+          : DateTime.parse(json['created_time'] as String),
       modifyTime: json['modifyTime'] == null
           ? null
           : DateTime.parse(json['modifyTime'] as String),
@@ -24,9 +26,9 @@ _$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$TodoTaskImplToJson(_$TodoTaskImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'docId': instance.docId,
       'workDate': instance.workDate,
-      'created_time': instance.createdTime.toIso8601String(),
+      'created_time': instance.createdTime?.toIso8601String(),
       'modifyTime': instance.modifyTime?.toIso8601String(),
       'title': instance.title,
       'timeline': instance.timeline,

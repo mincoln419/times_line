@@ -32,7 +32,7 @@ class _WriteTaskDialogState extends DialogState<WriteTaskDialog> with AfterLayou
   @override
   void initState() {
     if(isEditMode){
-      _selectedDate = widget.todoTask!.createdTime;
+      _selectedDate = widget.todoTask!.createdTime ?? DateTime.now();
       textEditingController.text = widget.todoTask!.title;
     }
     super.initState();

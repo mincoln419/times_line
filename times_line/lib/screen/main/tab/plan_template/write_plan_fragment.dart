@@ -5,6 +5,8 @@ import 'package:get/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
+import 'package:times_line/entity/todo_task/todo_task_template.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/plan_template/template_type.dart';
@@ -170,7 +172,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   Future<void> selectedDateTaskList() async {
-
     const uuid = Uuid();
     final selectedDate = ref.watch(selectedDateProvider);
     final todayTask = ref.watch(todolistProvider);
@@ -179,25 +180,28 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           await TodoApi.instance.getTodoList(selectedDate).then(
                 (e) => e.successData,
               );
-      List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
+      List<TodoContent> todoTasks = writtenTodoTasks.docs.isEmpty
           ? await RangeStream(0, 23).map((i) {
-              return TodoTask(
-                id: uuid.v1(),
+              return TodoContent(
                 timeline: i,
-                workDate: selectedDate.formattedDateOnly,
-                createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
               );
             }).toList()
-          : writtenTodoTasks.docs.map((ele) {
-              TodoTask item = TodoTask.fromJson(ele.data());
-              return item.copyWith();
+          : TodoTaskTemplate.fromJson(writtenTodoTasks.docs[0].data())
+              .taskContents
+              .map((e) {
+              TodoContent item = TodoContent(
+                timeline: e.timeline,
+                title: e.title,
+                taskType: e.taskType,
+              );
+              return item;
             }).toList();
       for (var ele in todoTasks) {
-        ref.readTodoHolder.addTodo(ele);
+        ref.readTodoHolder.addTodo(ele, selectedDate.formattedDateOnly);
       }
-    }else{
+    } else {
       //todo task 일자 변경
       ref.readTodoHolder.changeWorkDate(selectedDate);
     }
