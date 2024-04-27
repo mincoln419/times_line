@@ -25,7 +25,6 @@ class App extends ConsumerStatefulWidget {
   static final GlobalKey<ScaffoldMessengerState> scaffoldNavigationKey =
       GlobalKey();
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
-
   const App({super.key});
 
   @override

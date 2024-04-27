@@ -1,9 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/utils.dart';
-import 'package:isar/isar.dart';
-import 'package:nav/dialog/dialog.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
@@ -20,7 +15,9 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../common/common.dart';
+import '../../data/simple_result.dart';
 import '../../entity/todo_task/task_type.dart';
+import '../dialog/d_confirm.dart';
 import '../login/provider/login_provider.dart';
 import 'w_menu_drawer.dart';
 
@@ -116,28 +113,17 @@ class MainScreenState extends ConsumerState<MainScreen>
                             Alignment.bottomRight.y - 0.2),
                         child: FloatingActionButton(
                           onPressed: () async {
-                            showDialog<bool>(
+                            final result = await showDialog<SimpleResult>(
                                 context: context,
                                 builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('확인'),
-                                    content: Text('Todo 목록을 초기화 하시겠습니까?'),
-                                    actions: [
-                                      TextButton(
-                                          child: Text('Yes'), onPressed: () {
-                                            context.widget.hide();
-
-                                      }),
-
-                                      TextButton(
-                                        child: Text('No'),
-                                        onPressed: () {
-                                          context.widget.hide();
-                                        },
-                                      )
-                                    ],
+                                  return ConfirmDialog(
+                                    '초기화 하시겠습니까',
+                                    buttonText: 'Yes',
+                                    cancelButtonText: 'No',
                                   );
                                 });
+
+                            if(result!.isFailure) return ;
 
                             bothTodoListInit();
                             final selectedDate =

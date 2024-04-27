@@ -72,6 +72,7 @@ class _MessageDialogState extends DialogState<ConfirmDialog> {
                       child: Tap(
                         onTap: () {
                           widget.hide(SimpleResult.failure());
+                          Navigator.of(context).pop(SimpleResult.failure());
                         },
                         child: Container(
                             height: 50,
@@ -91,6 +92,7 @@ class _MessageDialogState extends DialogState<ConfirmDialog> {
                       child: Tap(
                         onTap: () {
                           widget.hide(SimpleResult.success());
+                          Navigator.of(context).pop(SimpleResult.success());
                         },
                         child: Container(
                             height: 50,
