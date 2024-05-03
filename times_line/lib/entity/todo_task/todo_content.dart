@@ -1,9 +1,6 @@
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
-import 'package:times_line/entity/todo_task/todo_task_status.dart';
 
 part 'todo_content.freezed.dart';
 part 'todo_content.g.dart';

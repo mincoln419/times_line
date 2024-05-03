@@ -42,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("회원가입ㄴ"),
+        title: const Text("회원가입ㄴ"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -108,14 +108,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       if (result && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('회원가입 성공'),
                           ),
                         );
                         context.go("/login");
                       }else{
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('회원가입 실패'),
                           ),
                         );

@@ -1,17 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:times_line/common/cli_common.dart';
 import 'package:times_line/common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
-import 'package:times_line/screen/main/tab/home/d_write_task.dart';
 import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
-import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 
 class TimesLineItem extends ConsumerStatefulWidget {
   final VoidCallback onTap;

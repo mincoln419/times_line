@@ -1,6 +1,4 @@
 import 'package:times_line/common/common.dart';
-import 'package:times_line/screen/main/s_main.dart';
-import 'package:times_line/screen/main/tab/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

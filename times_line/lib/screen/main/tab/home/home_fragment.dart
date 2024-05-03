@@ -1,15 +1,9 @@
-import 'dart:collection';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rxdart/streams.dart';
-import 'package:times_line/app.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
-import 'package:times_line/common/widget/animated_arrow_up_down.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_template.dart';
@@ -18,8 +12,6 @@ import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
-import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
-import 'package:times_line/screen/main/tab/home/vo_write_todo.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
 import 'package:times_line/screen/notification/s_notification.dart';
 import 'package:uuid/uuid.dart';
@@ -82,7 +74,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           actions: [
             IconButton(
               onPressed: () {
-                Nav.push(NotificationScreen());
+                Nav.push(const NotificationScreen());
               },
               icon: const Icon(Icons.notifications_none_rounded),
             )
@@ -139,7 +131,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                                 ],
                               ),
                               TextButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   if (tec.text.isNotEmpty) {
                                     final TodoTask copyItem =
                                         doneTaskList[index];
@@ -147,7 +139,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                                     copyItem.taskType = ref
                                         .watch(currentTaskTypeProvider)
                                         .currentType;
-                                    await addDoneTask(copyItem);
+                                    addDoneTask(copyItem);
                                     Navigator.of(context).pop();
                                   }
                                 },

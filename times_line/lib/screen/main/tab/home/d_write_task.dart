@@ -2,7 +2,6 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nav/dialog/dialog.dart';
-import 'package:times_line/app.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/util/app_keyboard_util.dart';
 import 'package:times_line/common/widget/rounded_container.dart';
@@ -69,7 +68,7 @@ class _WriteTaskDialogState extends DialogState<WriteTaskDialog> with AfterLayou
               )
             ],
           ),
-        ));;
+        ));
   }
 
   @override

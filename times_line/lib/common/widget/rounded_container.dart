@@ -1,4 +1,3 @@
-import 'package:times_line/common/common.dart';
 import 'package:flutter/material.dart';
 
 class RoundedContainer extends StatelessWidget {
@@ -22,13 +21,13 @@ class RoundedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: child,
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
         color: color,
         borderRadius: radius ?? BorderRadius.circular(radiusValue),
       ),
+      child: child,
     );
   }
 }

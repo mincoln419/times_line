@@ -163,7 +163,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             ).toList();
                           },
                           tooltip: '초기화',
-                          child: Icon(Icons.refresh_sharp),
+                          child: const Icon(Icons.refresh_sharp),
                         ),
                       ),
                       Align(

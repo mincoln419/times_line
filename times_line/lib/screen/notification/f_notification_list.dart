@@ -1,6 +1,4 @@
-import 'package:times_line/common/common.dart';
 import 'package:times_line/screen/notification/provider/notification_provider.dart';
-import 'package:times_line/screen/notification/vo/notification_dummy.dart';
 import 'package:times_line/screen/notification/w_notification_item.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

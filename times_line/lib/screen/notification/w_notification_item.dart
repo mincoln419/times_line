@@ -27,7 +27,7 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
     final isEditMode = ref.watch(notificationEditModeProvider);
     return Tap(
       onTap: () {
-        print('${widget.notification.title}');
+        print(widget.notification.title);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),

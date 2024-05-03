@@ -1,11 +1,9 @@
 import 'package:times_line/auth.dart';
 import 'package:times_line/common/common.dart';
-import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/common/route/fade_trasition_page.dart';
 import 'package:times_line/common/theme/custom_theme_app.dart';
 import 'package:times_line/common/widget/w_round_button.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
-import 'package:times_line/screen/dialog/d_message.dart';
 import 'package:times_line/screen/main/s_main.dart';
 import 'package:times_line/screen/main/tab/home/d_dialog_page.dart';
 import 'package:times_line/screen/main/tab/home/d_write_task.dart';
@@ -14,7 +12,6 @@ import 'package:times_line/screen/main/tab/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:times_line/screen/opensource/s_opensource.dart';
 
 import 'common/theme/custom_theme.dart';
 

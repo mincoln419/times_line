@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// A dialog page with Material entrance and exit animations, modal barrier color,

@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
@@ -20,6 +18,7 @@ import '../../../../entity/todo_task/vo_todo_task.dart';
 import '../../fab/w_floating_daangn_button.dart';
 import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_editor_provider.dart';
+import 'new_task_template.dart';
 
 class WritePlanFragment extends ConsumerStatefulWidget {
   final String? selectedData;
@@ -103,7 +102,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                   itemBuilder: (BuildContext context) => TemplateType.values
                       .map((e) => PopupMenuItem(
                             value: e,
-                            child: Text(e.name, style: TextStyle(fontSize: 20)),
+                            child: Text(e.name, style: const TextStyle(fontSize: 20)),
                           ))
                       .toList(),
                   child: SizedBox(
@@ -123,7 +122,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
 
                       showAdaptiveDialog(
                           context: context,
-                          builder: (context) => Placeholder());
+                          builder: (context) => NewTaskTemplate(workDate: selectedDate));
                     },
                     icon: const Icon(Icons.add_circle)),
               ],
@@ -137,6 +136,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           future: dailyTodoList(ref.readTodoHolder),
           builder: (context, snapshot) {
             List<int> list = snapshot.data ?? [];
+            List<TextEditingController> tecList = ref.watch(tecListProvider);
+            List<TodoTask> todoList = ref.watch(todolistProvider);
             //final textTecList = ref.watch(tecListProvider);
             if (snapshot.hasData) {
               return ListView.separated(
@@ -144,7 +145,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                     const EdgeInsets.only(bottom: FloatingDaangnButton.height),
                 controller: scrollController,
                 itemBuilder: (BuildContext context, int index) {
-                  return WritePlanItem(index: index);
+                  return WritePlanItem(tec: tecList[index], todoTask: todoList[index]);
                 },
                 separatorBuilder: (context, index) =>
                     const Line().pSymmetric(h: 15),

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -124,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                   if (result == null && context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('로그인 실패')));
+                                        const SnackBar(content: Text('로그인 실패')));
                                     return;
                                   }
                                   ref.watch(userCredentialProvider.notifier).state = result;
@@ -146,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () => context.push("/sign_up"),
-                        child: Text("계정이 없나요? 회원가입"),
+                        child: const Text("계정이 없나요? 회원가입"),
                       ),
                       const Divider(),
                       Consumer(
@@ -156,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               final userCredential = await signInWithGoogle();
                               if (userCredential == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('로그인 실패-google'),
                                   ),
                                 );
