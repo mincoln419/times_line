@@ -1,8 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
+import 'package:times_line/entity/todo_task/todo_task_template_sample.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 
 import '../../../../../entity/todo_task/task_type.dart';
+
+final todoTemplateSampleListProvider = StateProvider<List<TodoTaskTemplateSample>>((ref)
+ {
+
+  return [];
+}
+);
+
 
 final todoTemplateProvider =
 StateNotifierProvider<TodoTemplateDataHolder, List<TodoTask>>(

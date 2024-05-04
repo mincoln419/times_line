@@ -152,9 +152,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
                 child: RoundButton(
               text: '로그인',
               onTap: () {
-                print('로그인');
                 _auth.signIn('mermer', '1234');
-                print(_auth.signedIn);
               },
             )),
           ),
@@ -164,7 +162,6 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
         path: '/writePlan/:workDate',
           builder: (context, state) {
             final workDate = state.pathParameters['workDate']!;
-            print('workDate:: $workDate');
             return WritePlanFragment(selectedData: workDate);
           }
       ),

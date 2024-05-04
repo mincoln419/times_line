@@ -30,7 +30,6 @@ final todoDataProvider = FutureProvider(
 final todolistProvider =
     StateNotifierProvider<TodoDataHolder, List<TodoTask>>((ref) {
   final userID = ref.watch(userProvider);
-  debugPrint(userID.value!);
   return TodoDataHolder();
 });
 
@@ -71,6 +70,10 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
     for (var element in state) {
       element.workDate = date.formattedDateOnly;
     }
+  }
+
+  void changeAll(List<TodoTask> taskContents) {
+    state = taskContents;
   }
 }
 

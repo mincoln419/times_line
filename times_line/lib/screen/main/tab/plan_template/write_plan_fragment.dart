@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
@@ -5,6 +6,7 @@ import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_template.dart';
+import 'package:times_line/entity/todo_task/todo_task_template_sample.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/plan_template/template_type.dart';
@@ -18,6 +20,7 @@ import '../../../../entity/todo_task/vo_todo_task.dart';
 import '../../fab/w_floating_daangn_button.dart';
 import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_editor_provider.dart';
+import '../home/provider/todo_template_provider.dart';
 import 'new_task_template.dart';
 
 class WritePlanFragment extends ConsumerStatefulWidget {
@@ -35,9 +38,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
 
   double turns = 0.0;
   bool isSelected = false;
-
-  TemplateType templateType =
-      DateTime.now().weekday >= 6 ? TemplateType.holiday : TemplateType.normal;
+  TodoTaskTemplateSample? nowTemplate;
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
         ref.read(floatingButtonStateProvider.notifier).changeButtonSize(false);
       }
     });
+
     super.initState();
   }
 
@@ -76,9 +78,9 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                PopupMenuButton<TemplateType>(
+                PopupMenuButton<TodoTaskTemplateSample>(
                   position: PopupMenuPosition.under,
                   onOpened: () {
                     _changeRotation();
@@ -96,33 +98,51 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                     _changeRotation();
                     setState(() {
                       isSelected = false;
-                      templateType = value;
+                      nowTemplate = value;
                     });
+                    ref.readTodoHolder.changeAll(value.taskContents.map((e) {
+                      return TodoTask.fromJson(e);
+                    }).toList());
                   },
-                  itemBuilder: (BuildContext context) => TemplateType.values
-                      .map((e) => PopupMenuItem(
-                            value: e,
-                            child: Text(e.name, style: const TextStyle(fontSize: 20)),
-                          ))
-                      .toList(),
+                  itemBuilder: (BuildContext context) {
+                    final List<TodoTaskTemplateSample> templateListNew = [];
+                    final nowTodos = ref.watch(todolistProvider);
+                    templateListNew.add(TodoTaskTemplateSample(
+                        templateName: "now",
+                        uid: "abc",
+                        createdTime: nowTodos.first.createdTime!,
+                        taskContents:
+                            nowTodos.map((e) => e.toJson()).toList()));
+                    final templateList =
+                        ref.watch(todoTemplateSampleListProvider);
+                    templateListNew
+                        .addAll(templateList.map((e) => e.copyWith()).toList());
+
+                    return templateListNew
+                        .map((e) => PopupMenuItem(
+                              value: e,
+                              child: Text(e.templateName!,
+                                  style: const TextStyle(fontSize: 20)),
+                            ))
+                        .toList();
+                  },
                   child: SizedBox(
                       width: 100,
                       child: Row(
                         children: [
                           Text(
-                            templateType.name,
+                            nowTemplate == null ? "now" : nowTemplate!.templateName!.length > 5 ? nowTemplate!.templateName!.substring(0, 6): nowTemplate!.templateName!
                           ),
                           AnimatedArrowUpDown(isSelected, turns),
                         ],
                       )),
                 ),
                 IconButton(
-                    onPressed: () {
-                      //TODO 신규 템플릿 생성 다이얼로그 구현 필요
-
-                      showAdaptiveDialog(
+                    onPressed: () async {
+                      await showAdaptiveDialog(
                           context: context,
-                          builder: (context) => NewTaskTemplate(workDate: selectedDate));
+                          builder: (context) =>
+                              NewTaskTemplate(workDate: selectedDate));
                     },
                     icon: const Icon(Icons.add_circle)),
               ],
@@ -144,11 +164,13 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                     const EdgeInsets.only(bottom: FloatingDaangnButton.height),
                 controller: scrollController,
                 itemBuilder: (BuildContext context, int index) {
-                  return WritePlanItem(tec: tecList[index], todoTask: todoList[index],
+                  return WritePlanItem(
+                      tec: tecList[index],
+                      todoTask: todoList[index],
                       onChanged: (value) {
                         ref.readTodoHolder
                             .changeType(todoList[index].timeline, value);
-                  });
+                      });
                 },
                 separatorBuilder: (context, index) =>
                     const Line().pSymmetric(h: 15),
@@ -165,7 +187,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   Future<List<TodoTask>> dailyTodoList(TodoDataHolder readTodoHolder) async {
-
     final ControllerList textTecList = ref.watch(tecListProvider.notifier);
     textTecList.clear();
     await RangeStream(0, 23).map((i) {
@@ -173,6 +194,16 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       return i;
     }).toList();
 
+    //template 세팅
+    final db = FirebaseFirestore.instance.collection("todoTemplate");
+    final uid = ref.watch(userProvider);
+    final result = await db.where('uid', isEqualTo: uid.value).get();
+    final templates = ref.watch(todoTemplateSampleListProvider);
+    templates.clear();
+    for (var element in result.docs) {
+      final sample = TodoTaskTemplateSample.fromJson(element.data());
+      templates.add(sample);
+    }
     return await selectedDateTaskList();
   }
 

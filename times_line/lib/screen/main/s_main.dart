@@ -149,10 +149,11 @@ class MainScreenState extends ConsumerState<MainScreen>
                                 .toList()
                                 .map((tc) => TodoTask(
                                     workDate: selectedDate.formattedDateOnly,
+                                    timeline: tc.timeline,
                                     title: tc.title,
                                     taskType: tc.taskType))
                                 .toList();
-
+                            print("dbList :: $dbList");
                             List<TodoContent> todoContents =
                                 await RangeStream(0, 23).map(
                               (i) {
@@ -192,8 +193,9 @@ class MainScreenState extends ConsumerState<MainScreen>
                             List<TextEditingController> tecList =
                                 ref.watch(tecListProvider);
                             List<TodoTask> tmpTodos = [];
-                            tmpTodos.addAll(ref.watch(todolistProvider));
+                            tmpTodos.addAll(ref.watch(todolistProvider).map((e) => e.copyWith()));
                             bothTodoListInit();
+
                             List<TodoContent> todoContents =
                                 await RangeStream(0, 23).map(
                               (i) {
@@ -260,8 +262,11 @@ class MainScreenState extends ConsumerState<MainScreen>
   }
 
   void todoListTemplateRefresh(DateTime selectedDate, TodoContent todoTask) {
+
     final addTodo = TodoTask(
         workDate: selectedDate.formattedDateOnly,
+        createdTime: DateTime.now(),
+        modifyTime: DateTime.now(),
         timeline: todoTask.timeline,
         title: todoTask.title,
         taskType: todoTask.taskType);

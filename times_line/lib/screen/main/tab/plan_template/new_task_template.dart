@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
@@ -10,6 +12,7 @@ import 'package:times_line/screen/main/tab/home/provider/todo_template_provider.
 import 'package:times_line/screen/main/tab/plan_template/write_plan_item.dart';
 
 import '../../../../data/network/todo_template_api.dart';
+import '../home/provider/todo_task_editor_provider.dart';
 
 class NewTaskTemplate extends ConsumerStatefulWidget {
   const NewTaskTemplate({super.key, required this.workDate});
@@ -40,12 +43,17 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
             const Text('신규 템플릿 추가'),
             IconButton(onPressed: (){
               final uid = ref.watch(userProvider);
-              
+              final tecList = ref.watch(tecListProvider);
+              final Queue<TextEditingController> queue = Queue();
+              queue.addAll(tecList);
               TodoTemplateApi.instance.addTodoTemplate(
               TodoTaskTemplateSample(
                   templateName: templateNameTec.text,
                   uid: ref.read(userProvider).value,
-                  taskContents: ref.watch(todoTemplateProvider).map((e)=>e.toJson()).toList(),
+                  taskContents: ref.watch(todoTemplateProvider).map((e){
+                    e.title = queue.removeFirst().text;
+                    return e;
+                  }).map((e)=>e.toJson()).toList(),
                   createdTime: DateTime.now(),
                 modifyTime: DateTime.now(),
               ));
@@ -87,8 +95,12 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
                       final todoTaskList = ref.read(todoTemplateProvider);
                       return ListView.separated(
                           itemBuilder: (context, index) {
+                            List<TextEditingController> tecList = ref.watch(tecListProvider);
+                            tecList[index].addListener(() {
+
+                            });
                             return WritePlanItem(
-                              tec: TextEditingController(),
+                              tec: tecList[index],
                               todoTask: todoTaskList[index],
                               onChanged: (value) {
                                 ref.readTodoTemplateHolder
@@ -111,19 +123,30 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
   }
 
   Future<List<TodoTask>> templateTodoList() async {
+
+
+    await RangeStream(0, 23).map((i) {
+
+      return i;
+    }).toList();
+
     List<TodoTask> todoList = ref.watch(todoTemplateProvider);
     print('$todoList');
     if(todoList.length > 23) return todoList;
-
+    final textTecList = ref.watch(tecListProvider.notifier);
+    textTecList.clear();
     return await RangeStream(0, 23).map((i) {
       final todoTask =
            TodoTask(
+             createdTime: DateTime.now(),
+              modifyTime: DateTime.now(),
               workDate: widget.workDate,
               title: '',
               taskType: TaskType.nill,
               timeline: i,
             );
       ref.readTodoTemplateHolder.addTodo(todoTask);
+      textTecList.add();
       return todoTask;
     }).toList();
   }
