@@ -14,10 +14,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../app.dart';
 import '../../common/common.dart';
 import '../../data/simple_result.dart';
 import '../../entity/todo_task/task_type.dart';
 import '../dialog/d_confirm.dart';
+import '../dialog/d_message.dart';
 import '../login/provider/login_provider.dart';
 import 'w_menu_drawer.dart';
 
@@ -224,6 +226,19 @@ class MainScreenState extends ConsumerState<MainScreen>
                                   ).toJson());
                             }
 
+                            showDialog<SimpleResult>(
+                                builder: (context) {
+                                  if(context.mounted){
+                                  return MessageDialog(
+                                     '저장되었습니다',
+                                      buttonText: '확인'
+                                  );
+                                  }
+                                  return
+                                      const CircularProgressIndicator();
+                                }, context: App.navigatorKey.currentContext ?? context);
+
+
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                         ),
@@ -247,6 +262,7 @@ class MainScreenState extends ConsumerState<MainScreen>
   void todoListTemplateRefresh(DateTime selectedDate, TodoContent todoTask) {
     final addTodo = TodoTask(
         workDate: selectedDate.formattedDateOnly,
+        timeline: todoTask.timeline,
         title: todoTask.title,
         taskType: todoTask.taskType);
     ref.readTodoHolder.addTodo(addTodo);

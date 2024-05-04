@@ -135,9 +135,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
         child: FutureBuilder(
           future: dailyTodoList(ref.readTodoHolder),
           builder: (context, snapshot) {
-            List<int> list = snapshot.data ?? [];
+            List<TodoTask> todoList = snapshot.data ?? [];
             List<TextEditingController> tecList = ref.watch(tecListProvider);
-            List<TodoTask> todoList = ref.watch(todolistProvider);
             //final textTecList = ref.watch(tecListProvider);
             if (snapshot.hasData) {
               return ListView.separated(
@@ -145,11 +144,15 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                     const EdgeInsets.only(bottom: FloatingDaangnButton.height),
                 controller: scrollController,
                 itemBuilder: (BuildContext context, int index) {
-                  return WritePlanItem(tec: tecList[index], todoTask: todoList[index]);
+                  return WritePlanItem(tec: tecList[index], todoTask: todoList[index],
+                      onChanged: (value) {
+                        ref.readTodoHolder
+                            .changeType(todoList[index].timeline, value);
+                  });
                 },
                 separatorBuilder: (context, index) =>
                     const Line().pSymmetric(h: 15),
-                itemCount: list.length,
+                itemCount: todoList.length,
               );
             }
             return const Center(
@@ -161,18 +164,19 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
     );
   }
 
-  Future<List<int>> dailyTodoList(TodoDataHolder readTodoHolder) async {
-    await selectedDateTaskList();
+  Future<List<TodoTask>> dailyTodoList(TodoDataHolder readTodoHolder) async {
 
-    final textTecList = ref.watch(tecListProvider.notifier);
+    final ControllerList textTecList = ref.watch(tecListProvider.notifier);
     textTecList.clear();
-    return await RangeStream(0, 23).map((i) {
+    await RangeStream(0, 23).map((i) {
       textTecList.add();
       return i;
     }).toList();
+
+    return await selectedDateTaskList();
   }
 
-  Future<void> selectedDateTaskList() async {
+  Future<List<TodoTask>> selectedDateTaskList() async {
     const uuid = Uuid();
     final selectedDate = ref.watch(selectedDateProvider);
     final todayTask = ref.watch(todolistProvider);
@@ -210,6 +214,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       //todo task 일자 변경
       ref.readTodoHolder.changeWorkDate(selectedDate);
     }
+    return todayTask;
   }
 
   void _changeRotation() {

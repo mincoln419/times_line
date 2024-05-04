@@ -23,7 +23,7 @@ class TodoApi implements TodoRepository {
           : 'http://localhost:9000/')));
 
   @override
-  Future<SimpleResult<void, Error>> addDoneTask(TodoTask todo) async {
+  Future<SimpleResult<TodoTask, Error>> addDoneTask(TodoTask todo) async {
     final ref = db.collection("doneTask");
     todo.modifyTime = DateTime.now();
 

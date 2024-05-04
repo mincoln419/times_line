@@ -6,6 +6,10 @@ class ControllerList extends StateNotifier<List<TextEditingController>> {
 
   ControllerList({String? text}) : super([TextEditingController(text: text)]);
 
+  int size(){
+    return _disposedList.length;
+  }
+
   @override
   void dispose() {
     super.dispose();

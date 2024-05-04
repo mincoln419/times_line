@@ -46,7 +46,8 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
     state = List.of(state);
   }
 
-  void changeType(int index, TaskType taskType) async {
+  void changeType(int? index, TaskType taskType) async {
+    if(index == null)return ;
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;
 
