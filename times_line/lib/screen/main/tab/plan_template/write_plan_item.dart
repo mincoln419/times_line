@@ -58,7 +58,6 @@ class _WritePlanItemState extends ConsumerState<WritePlanItem>
               Expanded(
                 child: TextField(
                   controller: widget.tec,
-                  onChanged: (value)=> widget.todoTask.title = value,
                 ),
               ),
             ],

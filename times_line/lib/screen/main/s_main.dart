@@ -192,6 +192,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             // 상태관리 처리
                             List<TextEditingController> tecList =
                                 ref.watch(tecListProvider);
+                            print("tecList: ${tecList.length}");
                             List<TodoTask> tmpTodos = [];
                             tmpTodos.addAll(ref.watch(todolistProvider).map((e) => e.copyWith()));
                             bothTodoListInit();

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,6 +21,7 @@ import '../../../../entity/todo_task/vo_todo_task.dart';
 import '../../fab/w_floating_daangn_button.dart';
 import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_editor_provider.dart';
+import '../home/provider/todo_template_editor_provider.dart';
 import '../home/provider/todo_template_provider.dart';
 import 'new_task_template.dart';
 
@@ -80,62 +82,62 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                PopupMenuButton<TodoTaskTemplateSample>(
-                  position: PopupMenuPosition.under,
-                  onOpened: () {
-                    _changeRotation();
-                    setState(() {
-                      isSelected = true;
-                    });
+                FutureBuilder(
+                  future: _futureTemplateList(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final templateListNew = snapshot.data;
+                      return PopupMenuButton<TodoTaskTemplateSample>(
+                        position: PopupMenuPosition.under,
+                        onOpened: () {
+                          _changeRotation();
+                          setState(() {
+                            isSelected = true;
+                          });
+                        },
+                        onCanceled: () {
+                          _changeRotation();
+                          setState(() {
+                            isSelected = false;
+                          });
+                        },
+                        onSelected: (value) {
+                          _changeRotation();
+                          setState(() {
+                            isSelected = false;
+                            nowTemplate = value;
+                          });
+                          ref.readTodoHolder
+                              .changeAll(value.taskContents.map((e) {
+                            return TodoTask.fromJson(e);
+                          }).toList());
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return templateListNew!
+                              .map((e) => PopupMenuItem(
+                                    value: e,
+                                    child: Text(e.templateName!,
+                                        style: const TextStyle(fontSize: 20)),
+                                  ))
+                              .toList();
+                        },
+                        child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                Text(nowTemplate == null
+                                    ? "now"
+                                    : nowTemplate!.templateName!.length > 5
+                                        ? nowTemplate!.templateName!
+                                            .substring(0, 5)
+                                        : nowTemplate!.templateName!),
+                                AnimatedArrowUpDown(isSelected, turns),
+                              ],
+                            )),
+                      );
+                    }
+                    return const Center(child: CircularProgressIndicator());
                   },
-                  onCanceled: () {
-                    _changeRotation();
-                    setState(() {
-                      isSelected = false;
-                    });
-                  },
-                  onSelected: (value) {
-                    _changeRotation();
-                    setState(() {
-                      isSelected = false;
-                      nowTemplate = value;
-                    });
-                    ref.readTodoHolder.changeAll(value.taskContents.map((e) {
-                      return TodoTask.fromJson(e);
-                    }).toList());
-                  },
-                  itemBuilder: (BuildContext context) {
-                    final List<TodoTaskTemplateSample> templateListNew = [];
-                    final nowTodos = ref.watch(todolistProvider);
-                    templateListNew.add(TodoTaskTemplateSample(
-                        templateName: "now",
-                        uid: "abc",
-                        createdTime: nowTodos.first.createdTime!,
-                        taskContents:
-                            nowTodos.map((e) => e.toJson()).toList()));
-                    final templateList =
-                        ref.watch(todoTemplateSampleListProvider);
-                    templateListNew
-                        .addAll(templateList.map((e) => e.copyWith()).toList());
-
-                    return templateListNew
-                        .map((e) => PopupMenuItem(
-                              value: e,
-                              child: Text(e.templateName!,
-                                  style: const TextStyle(fontSize: 20)),
-                            ))
-                        .toList();
-                  },
-                  child: SizedBox(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          Text(
-                            nowTemplate == null ? "now" : nowTemplate!.templateName!.length > 5 ? nowTemplate!.templateName!.substring(0, 6): nowTemplate!.templateName!
-                          ),
-                          AnimatedArrowUpDown(isSelected, turns),
-                        ],
-                      )),
                 ),
                 IconButton(
                     onPressed: () async {
@@ -156,8 +158,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           future: dailyTodoList(ref.readTodoHolder),
           builder: (context, snapshot) {
             List<TodoTask> todoList = snapshot.data ?? [];
-            List<TextEditingController> tecList = ref.watch(tecListProvider);
-            //final textTecList = ref.watch(tecListProvider);
+
+            final textTecList = ref.watch(tecListProvider);
             if (snapshot.hasData) {
               return ListView.separated(
                 padding:
@@ -165,7 +167,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 controller: scrollController,
                 itemBuilder: (BuildContext context, int index) {
                   return WritePlanItem(
-                      tec: tecList[index],
+                      tec: textTecList[index],
                       todoTask: todoList[index],
                       onChanged: (value) {
                         ref.readTodoHolder
@@ -187,7 +189,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   Future<List<TodoTask>> dailyTodoList(TodoDataHolder readTodoHolder) async {
-    final ControllerList textTecList = ref.watch(tecListProvider.notifier);
+    final ControllerList textTecList =
+        ref.watch(tecListProvider.notifier);
     textTecList.clear();
     await RangeStream(0, 23).map((i) {
       textTecList.add();
@@ -230,7 +233,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
               .taskContents
               .map((ele) {
               final e = TodoContent.fromJson(ele);
-              print('e:: $e');
               return TodoTask(
                   workDate: selectedDate.formattedDateOnly,
                   timeline: e.timeline,
@@ -266,5 +268,20 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       selectedDate.changeDate(DateUtils.dateOnly(date));
       selectedDateTaskList();
     }
+  }
+
+  Future<List<TodoTaskTemplateSample>> _futureTemplateList() async {
+    final List<TodoTaskTemplateSample> templateListNew = [];
+    final nowTodos = ref.watch(todolistProvider);
+    final templateList = ref.watch(todoTemplateSampleListProvider);
+    final template = TodoTaskTemplateSample(
+        templateName: "now",
+        uid: "abc",
+        createdTime: nowTodos.first.createdTime!,
+        taskContents: nowTodos.map((e) => e.toJson()).toList());
+
+    templateList.add(template);
+
+    return templateList;
   }
 }

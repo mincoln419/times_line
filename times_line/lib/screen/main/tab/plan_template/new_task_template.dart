@@ -8,6 +8,7 @@ import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/todo_task_template_sample.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_template_editor_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_template_provider.dart';
 import 'package:times_line/screen/main/tab/plan_template/write_plan_item.dart';
 
@@ -43,20 +44,23 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
             const Text('신규 템플릿 추가'),
             IconButton(onPressed: (){
               final uid = ref.watch(userProvider);
-              final tecList = ref.watch(tecListProvider);
+              final tecList = ref.watch(tecTemplateListProvider);
               final Queue<TextEditingController> queue = Queue();
               queue.addAll(tecList);
-              TodoTemplateApi.instance.addTodoTemplate(
-              TodoTaskTemplateSample(
-                  templateName: templateNameTec.text,
-                  uid: ref.read(userProvider).value,
-                  taskContents: ref.watch(todoTemplateProvider).map((e){
-                    e.title = queue.removeFirst().text;
-                    return e;
-                  }).map((e)=>e.toJson()).toList(),
-                  createdTime: DateTime.now(),
+              final template = TodoTaskTemplateSample(
+                templateName: templateNameTec.text,
+                uid: ref.read(userProvider).value,
+                taskContents: ref.watch(todoTemplateProvider).map((e){
+                  e.title = queue.removeFirst().text;
+                  return e;
+                }).map((e)=>e.toJson()).toList(),
+                createdTime: DateTime.now(),
                 modifyTime: DateTime.now(),
-              ));
+              );
+              TodoTemplateApi.instance.addTodoTemplate(template
+              );
+              ref.readTemplateSampleHolder.addTodo(template);
+              Navigator.of(context).pop();
             }, icon: Icon(Icons.save_outlined))
           ],
         ),
@@ -95,7 +99,7 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
                       final todoTaskList = ref.read(todoTemplateProvider);
                       return ListView.separated(
                           itemBuilder: (context, index) {
-                            List<TextEditingController> tecList = ref.watch(tecListProvider);
+                            List<TextEditingController> tecList = ref.watch(tecTemplateListProvider);
                             tecList[index].addListener(() {
 
                             });
@@ -133,7 +137,7 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
     List<TodoTask> todoList = ref.watch(todoTemplateProvider);
     print('$todoList');
     if(todoList.length > 23) return todoList;
-    final textTecList = ref.watch(tecListProvider.notifier);
+    final textTecList = ref.watch(tecTemplateListProvider.notifier);
     textTecList.clear();
     return await RangeStream(0, 23).map((i) {
       final todoTask =

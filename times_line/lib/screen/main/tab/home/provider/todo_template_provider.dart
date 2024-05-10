@@ -7,17 +7,32 @@ import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart
 
 import '../../../../../entity/todo_task/task_type.dart';
 
-final todoTemplateSampleListProvider = StateProvider<List<TodoTaskTemplateSample>>((ref)
- {
+final todoTemplateSampleListProvider =
+StateNotifierProvider<TodoTemplateSampleHolder, List<TodoTaskTemplateSample>>((ref) => TodoTemplateSampleHolder());
 
-  return [];
+class TodoTemplateSampleHolder extends StateNotifier<List<TodoTaskTemplateSample>> {
+  TodoTemplateSampleHolder() : super([]);
+
+  void addTodo(TodoTaskTemplateSample todo) async {
+    state.add(todo);
+    state = List.of(state);
+  }
+
+  void clear() async{
+    state.clear();
+  }
 }
-);
+
+extension TodoTemplateSampleHolderProvider on WidgetRef {
+  TodoTemplateSampleHolder get readTemplateSampleHolder =>
+      read(todoTemplateSampleListProvider.notifier);
+}
 
 
 final todoTemplateProvider =
-StateNotifierProvider<TodoTemplateDataHolder, List<TodoTask>>(
+    StateNotifierProvider<TodoTemplateDataHolder, List<TodoTask>>(
         (ref) => TodoTemplateDataHolder());
+
 class TodoTemplateDataHolder extends StateNotifier<List<TodoTask>> {
   TodoTemplateDataHolder() : super([]);
 
@@ -57,6 +72,8 @@ class TodoTemplateDataHolder extends StateNotifier<List<TodoTask>> {
     }
   }
 }
+
 extension TodoTemplateDataHolderProvider on WidgetRef {
-  TodoTemplateDataHolder get readTodoTemplateHolder => read(todoTemplateProvider.notifier);
+  TodoTemplateDataHolder get readTodoTemplateHolder =>
+      read(todoTemplateProvider.notifier);
 }
