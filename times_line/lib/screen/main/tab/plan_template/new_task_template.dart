@@ -12,7 +12,10 @@ import 'package:times_line/screen/main/tab/home/provider/todo_template_editor_pr
 import 'package:times_line/screen/main/tab/home/provider/todo_template_provider.dart';
 import 'package:times_line/screen/main/tab/plan_template/write_plan_item.dart';
 
+import '../../../../app.dart';
 import '../../../../data/network/todo_template_api.dart';
+import '../../../../data/simple_result.dart';
+import '../../../dialog/d_message.dart';
 import '../home/provider/todo_task_editor_provider.dart';
 
 class NewTaskTemplate extends ConsumerStatefulWidget {
@@ -43,6 +46,39 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
           children: [
             const Text('신규 템플릿 추가'),
             IconButton(onPressed: (){
+
+              if(templateNameTec.text.isEmpty){
+                showDialog<SimpleResult>(
+                    builder: (context) {
+                      if(context.mounted){
+                        return MessageDialog(
+                            '템플릿이름을 입력하세요',
+                            buttonText: '확인'
+                        );
+                      }
+                      return
+                        const CircularProgressIndicator();
+                    }, context: App.navigatorKey.currentContext ?? context);
+
+                return ;
+              }
+
+              if(ref.watch(todoTemplateSampleListProvider).map((e) => e.templateName).toList().contains(templateNameTec.text)){
+                showDialog<SimpleResult>(
+                    builder: (context) {
+                      if(context.mounted){
+                        return MessageDialog(
+                            '이미 입력한 템플릿 이름입니다.',
+                            buttonText: '확인'
+                        );
+                      }
+                      return
+                        const CircularProgressIndicator();
+                    }, context: App.navigatorKey.currentContext ?? context);
+
+                return ;
+              }
+
               final uid = ref.watch(userProvider);
               final tecList = ref.watch(tecTemplateListProvider);
               final Queue<TextEditingController> queue = Queue();

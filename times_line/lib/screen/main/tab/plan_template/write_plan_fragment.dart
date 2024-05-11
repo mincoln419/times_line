@@ -14,10 +14,13 @@ import 'package:times_line/screen/main/tab/plan_template/template_type.dart';
 import 'package:times_line/screen/main/tab/plan_template/write_plan_item.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../app.dart';
 import '../../../../common/widget/animated_arrow_up_down.dart';
 import '../../../../data/network/todo_api.dart';
+import '../../../../data/simple_result.dart';
 import '../../../../entity/todo_task/task_type.dart';
 import '../../../../entity/todo_task/vo_todo_task.dart';
+import '../../../dialog/d_message.dart';
 import '../../fab/w_floating_daangn_button.dart';
 import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_editor_provider.dart';
@@ -141,6 +144,23 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 ),
                 IconButton(
                     onPressed: () async {
+
+                      if(ref.watch(todoTemplateSampleListProvider).length > 10){
+                        showDialog<SimpleResult>(
+                            builder: (context) {
+                              if(context.mounted){
+                                return MessageDialog(
+                                    '템플릿 수는 최대 10개 입니다',
+                                    buttonText: '확인'
+                                );
+                              }
+                              return
+                                const CircularProgressIndicator();
+                            }, context: App.navigatorKey.currentContext ?? context);
+
+                        return ;
+                      }
+
                       await showAdaptiveDialog(
                           context: context,
                           builder: (context) =>
