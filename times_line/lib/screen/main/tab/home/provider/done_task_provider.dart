@@ -44,7 +44,6 @@ class DoneDataHolder extends StateNotifier<List<TodoTask>>{
   }
 
   void clear(){
-    print("done clear!!!");
     state.clear();
   }
 }

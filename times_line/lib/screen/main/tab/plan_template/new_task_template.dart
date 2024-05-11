@@ -185,6 +185,7 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
               title: '',
               taskType: TaskType.nill,
               timeline: i,
+             uid: ref.watch(userProvider).value!,
             );
       ref.readTodoTemplateHolder.addTodo(todoTask);
       textTecList.add();

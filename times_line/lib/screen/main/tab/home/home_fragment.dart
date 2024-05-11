@@ -12,6 +12,7 @@ import 'package:times_line/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:times_line/screen/main/fab/w_floating_daangn_button.riverpod.dart';
 import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
 import 'package:times_line/screen/notification/s_notification.dart';
 import 'package:uuid/uuid.dart';
@@ -91,7 +92,6 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                   final List<TodoTask> doneTaskList =
                       ref.watch(doneListProvider);
 
-                  //print('stream todolist:: ${todoTaskList}');
                   return ListView.separated(
                     padding: const EdgeInsets.only(
                         bottom: FloatingDaangnButton.height),
@@ -136,9 +136,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                                     final TodoTask copyItem =
                                         doneTaskList[index];
                                     copyItem.title = tec.text.trim();
-                                    copyItem.taskType = ref
-                                        .watch(currentTaskTypeProvider)
-                                        .currentType;
+
                                     addDoneTask(copyItem);
                                     Navigator.of(context).pop();
                                   }
@@ -192,20 +190,21 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
+                uid: ref.watch(userProvider).value!,
               );
             }).toList()
           : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data()).taskContents.map((ele) {
               final e = TodoContent.fromJson(ele);
-              //print('e:: $e');
               return TodoTask(
                   workDate: selectedDate.formattedDateOnly,
                   timeline: e.timeline,
                   createdTime: DateTime.now(),
                   title: e.title,
-                  taskType: e.taskType);
+                  taskType: e.taskType,
+                uid: ref.watch(userProvider).value!,
+              );
             }).toList();
 
-      //print("todoTasks : $todoTasks");
       ref.readTodoHomeHolder.clear();
       for (var ele in todoTasks) {
         ref.readTodoHomeHolder.addTodo(ele.copyWith());
@@ -238,6 +237,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
+          uid: ref.watch(userProvider).value!,
               )
             : matchedTask[0];
       }).toList();

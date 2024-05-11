@@ -95,11 +95,11 @@ class MainScreenState extends ConsumerState<MainScreen>
               bottomNavigationBar: _buildBottomNavigationBar(context),
               floatingActionButton: switch (_currentIndex) {
                 2 => Consumer(builder: (context, ref, child) {
-                    final user = ref.watch(userCredentialProvider);
+                    final user = ref.watch(userProvider);
                     return FloatingActionButton(
                       child: const Icon(Icons.note_add_outlined),
                       onPressed: () {
-                        final uid = user?.user?.uid;
+                        final uid = user.value;
                         print('uid: $uid');
                         if (uid == null) {
                           return;
@@ -151,7 +151,9 @@ class MainScreenState extends ConsumerState<MainScreen>
                                     workDate: selectedDate.formattedDateOnly,
                                     timeline: tc.timeline,
                                     title: tc.title,
-                                    taskType: tc.taskType))
+                                    taskType: tc.taskType,
+                              uid: ref.watch(userProvider).value!,
+                            ),)
                                 .toList();
                             print("dbList :: $dbList");
                             List<TodoContent> todoContents =
@@ -270,7 +272,9 @@ class MainScreenState extends ConsumerState<MainScreen>
         modifyTime: DateTime.now(),
         timeline: todoTask.timeline,
         title: todoTask.title,
-        taskType: todoTask.taskType);
+        taskType: todoTask.taskType,
+      uid: ref.watch(userProvider).value!,
+    );
     ref.readTodoHolder.addTodo(addTodo);
     ref.readTodoHomeHolder.addTodo(addTodo);
   }

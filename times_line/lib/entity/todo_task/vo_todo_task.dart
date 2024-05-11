@@ -13,6 +13,7 @@ class TodoTask with _$TodoTask{
 
   factory TodoTask ({
     String? docId,
+    required String uid,
     required String workDate,
     @JsonKey(name: 'created_time')
     DateTime? createdTime,

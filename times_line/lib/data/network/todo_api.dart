@@ -27,13 +27,14 @@ class TodoApi implements TodoRepository {
     final ref = db.collection("doneTask");
     todo.modifyTime = DateTime.now();
 
-    ref.where('docId', isEqualTo: todo.docId).get().then((e) {
+    ref.where('uid', isEqualTo: todo.uid)
+    .where('workDate', isEqualTo: todo.workDate)
+    .where('timeline', isEqualTo: todo.timeline)
+        .get()
+        .then((e) {
       if (e.size == 0) {
-        print("insert");
         ref.add(todo.toJson());
       } else {
-        print("update ${e.docs[0].id}");
-        print("${todo.toJson()}");
         ref.doc(e.docs[0].id).update(todo.toJson());
       }
     });
@@ -75,7 +76,6 @@ class TodoApi implements TodoRepository {
         .orderBy('timeline')
         .get();
 
-    print("doneTask: ${result.docs.length}");
     return SimpleResult.success(result);
   }
 

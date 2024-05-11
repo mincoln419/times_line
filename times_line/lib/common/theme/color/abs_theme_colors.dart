@@ -68,6 +68,8 @@ abstract class AbstractThemeColors {
 
   Color get wasteColor => const Color.fromARGB(255, 117, 110, 87);
 
+  Color get checkBoxColor => const Color.fromARGB(255, 6, 29, 68);
+
 
 
 

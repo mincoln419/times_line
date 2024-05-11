@@ -9,6 +9,7 @@ part of 'vo_todo_task.dart';
 _$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
     _$TodoTaskImpl(
       docId: json['docId'] as String?,
+      uid: json['uid'] as String,
       workDate: json['workDate'] as String,
       createdTime: json['created_time'] == null
           ? null
@@ -27,6 +28,7 @@ _$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$TodoTaskImplToJson(_$TodoTaskImpl instance) =>
     <String, dynamic>{
       'docId': instance.docId,
+      'uid': instance.uid,
       'workDate': instance.workDate,
       'created_time': instance.createdTime?.toIso8601String(),
       'modifyTime': instance.modifyTime?.toIso8601String(),

@@ -22,6 +22,8 @@ TodoTask _$TodoTaskFromJson(Map<String, dynamic> json) {
 mixin _$TodoTask {
   String? get docId => throw _privateConstructorUsedError;
   set docId(String? value) => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
+  set uid(String value) => throw _privateConstructorUsedError;
   String get workDate => throw _privateConstructorUsedError;
   set workDate(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_time')
@@ -53,6 +55,7 @@ abstract class $TodoTaskCopyWith<$Res> {
   @useResult
   $Res call(
       {String? docId,
+      String uid,
       String workDate,
       @JsonKey(name: 'created_time') DateTime? createdTime,
       DateTime? modifyTime,
@@ -76,6 +79,7 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
   @override
   $Res call({
     Object? docId = freezed,
+    Object? uid = null,
     Object? workDate = null,
     Object? createdTime = freezed,
     Object? modifyTime = freezed,
@@ -89,6 +93,10 @@ class _$TodoTaskCopyWithImpl<$Res, $Val extends TodoTask>
           ? _value.docId
           : docId // ignore: cast_nullable_to_non_nullable
               as String?,
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       workDate: null == workDate
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
@@ -131,6 +139,7 @@ abstract class _$$TodoTaskImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? docId,
+      String uid,
       String workDate,
       @JsonKey(name: 'created_time') DateTime? createdTime,
       DateTime? modifyTime,
@@ -152,6 +161,7 @@ class __$$TodoTaskImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? docId = freezed,
+    Object? uid = null,
     Object? workDate = null,
     Object? createdTime = freezed,
     Object? modifyTime = freezed,
@@ -165,6 +175,10 @@ class __$$TodoTaskImplCopyWithImpl<$Res>
           ? _value.docId
           : docId // ignore: cast_nullable_to_non_nullable
               as String?,
+      uid: null == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String,
       workDate: null == workDate
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
@@ -202,6 +216,7 @@ class __$$TodoTaskImplCopyWithImpl<$Res>
 class _$TodoTaskImpl extends _TodoTask {
   _$TodoTaskImpl(
       {this.docId,
+      required this.uid,
       required this.workDate,
       @JsonKey(name: 'created_time') this.createdTime,
       this.modifyTime,
@@ -216,6 +231,8 @@ class _$TodoTaskImpl extends _TodoTask {
 
   @override
   String? docId;
+  @override
+  String uid;
   @override
   String workDate;
   @override
@@ -235,7 +252,7 @@ class _$TodoTaskImpl extends _TodoTask {
 
   @override
   String toString() {
-    return 'TodoTask(docId: $docId, workDate: $workDate, createdTime: $createdTime, modifyTime: $modifyTime, title: $title, timeline: $timeline, taskType: $taskType, todoTaskStatus: $todoTaskStatus)';
+    return 'TodoTask(docId: $docId, uid: $uid, workDate: $workDate, createdTime: $createdTime, modifyTime: $modifyTime, title: $title, timeline: $timeline, taskType: $taskType, todoTaskStatus: $todoTaskStatus)';
   }
 
   @JsonKey(ignore: true)
@@ -255,6 +272,7 @@ class _$TodoTaskImpl extends _TodoTask {
 abstract class _TodoTask extends TodoTask {
   factory _TodoTask(
       {String? docId,
+      required String uid,
       required String workDate,
       @JsonKey(name: 'created_time') DateTime? createdTime,
       DateTime? modifyTime,
@@ -270,6 +288,9 @@ abstract class _TodoTask extends TodoTask {
   @override
   String? get docId;
   set docId(String? value);
+  @override
+  String get uid;
+  set uid(String value);
   @override
   String get workDate;
   set workDate(String value);

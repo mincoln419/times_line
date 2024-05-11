@@ -9,13 +9,8 @@ import 'package:times_line/screen/notification/vo/vo_notification.dart';
 
 class TaskApi {
   static Future<SimpleResult<List<DangnNotification>, ApiError>>
-      getNotification() async {
+  getNotification() async {
     await sleepAsync(300.ms);
     return SimpleResult.success(notificationList);
-  }
-
-  static Future<TodoTask> getPost(String id) async {
-    await sleepAsync(100.ms);
-    return TodoTask(docId: id, timeline: 1, createdTime: DateTime.now(), title: '', taskType: TaskType.etc, workDate: DateTime.now().formattedDateOnly);
   }
 }

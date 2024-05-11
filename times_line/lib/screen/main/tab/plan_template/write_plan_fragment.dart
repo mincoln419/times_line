@@ -59,8 +59,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       }
     });
 
-
-
     super.initState();
   }
 
@@ -147,21 +145,20 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 ),
                 IconButton(
                     onPressed: () async {
-
-                      if(ref.watch(todoTemplateSampleListProvider).length > 10){
+                      if (ref.watch(todoTemplateSampleListProvider).length >
+                          10) {
                         showDialog<SimpleResult>(
                             builder: (context) {
-                              if(context.mounted){
-                                return MessageDialog(
-                                    '템플릿 수는 최대 10개 입니다',
-                                    buttonText: '확인'
-                                );
+                              if (context.mounted) {
+                                return MessageDialog('템플릿 수는 최대 10개 입니다',
+                                    buttonText: '확인');
                               }
-                              return
-                                const CircularProgressIndicator();
-                            }, context: App.navigatorKey.currentContext ?? context);
+                              return const CircularProgressIndicator();
+                            },
+                            context:
+                                App.navigatorKey.currentContext ?? context);
 
-                        return ;
+                        return;
                       }
 
                       await showAdaptiveDialog(
@@ -183,8 +180,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
             List<TodoTask> todoList = snapshot.data ?? [];
 
             final textTecList = ref.watch(tecListProvider);
-
-
 
             if (snapshot.hasData) {
               return ListView.separated(
@@ -215,8 +210,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
   }
 
   Future<List<TodoTask>> dailyTodoList(TodoDataHolder readTodoHolder) async {
-    final ControllerList textTecList =
-        ref.watch(tecListProvider.notifier);
+    final ControllerList textTecList = ref.watch(tecListProvider.notifier);
     textTecList.clear();
     await RangeStream(0, 23).map((i) {
       textTecList.add();
@@ -226,18 +220,15 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
     //template 세팅
     final db = FirebaseFirestore.instance.collection("todoTemplate");
     final uid = ref.watch(userProvider);
-    final result = await db.where('uid', isEqualTo: uid.value).orderBy("orderSort").get();
-
+    final result =
+        await db.where('uid', isEqualTo: uid.value).orderBy("orderSort").get();
 
     final templates = ref.watch(todoTemplateSampleListProvider);
     templates.clear();
     for (var element in result.docs) {
-      print("result: ${element.data()}");
       final sample = TodoTaskTemplateSample.fromJson(element.data());
       templates.add(sample);
     }
-
-
 
     return await selectedDateTaskList();
   }
@@ -259,6 +250,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
+                uid: ref.watch(userProvider).value!,
               );
             }).toList()
           : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data())
@@ -270,7 +262,9 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                   timeline: e.timeline,
                   createdTime: DateTime.now(),
                   title: e.title,
-                  taskType: e.taskType);
+                  taskType: e.taskType,
+                uid: ref.watch(userProvider).value!,
+              );
             }).toList();
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
@@ -284,11 +278,11 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           taskContents: todoTasks.map((e) => e.toJson()).toList());
 
       print("delete & insert");
-      final result = await TodoTemplateApi.instance.removeTemplateByName(template.templateName!);
-      if(result.isSuccess){
+      final result = await TodoTemplateApi.instance
+          .removeTemplateByName(template.templateName!);
+      if (result.isSuccess) {
         TodoTemplateApi.instance.addTodoTemplate(template);
       }
-
     } else {
       //todo task 일자 변경
       ref.readTodoHolder.changeWorkDate(selectedDate);
@@ -314,12 +308,10 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       ref.readTodoHolder.clear();
       selectedDate.changeDate(DateUtils.dateOnly(date));
       selectedDateTaskList();
-
     }
   }
 
   Future<List<TodoTaskTemplateSample>> _futureTemplateList() async {
-
     return ref.watch(todoTemplateSampleListProvider);
   }
 }
