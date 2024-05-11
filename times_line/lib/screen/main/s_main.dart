@@ -222,7 +222,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             } else {
                               db.doc(docId).update(TodoTaskTemplate(
                                     workDate: selectedDate.formattedDateOnly,
-                                    createdTime: DateTime.now(),
+                                    modifyTime: DateTime.now(),
                                     taskContents: todoContents
                                         .map((e) => e.toJson())
                                         .toList(),

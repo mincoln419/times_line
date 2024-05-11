@@ -17,6 +17,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../app.dart';
 import '../../../../common/widget/animated_arrow_up_down.dart';
 import '../../../../data/network/todo_api.dart';
+import '../../../../data/network/todo_template_api.dart';
 import '../../../../data/simple_result.dart';
 import '../../../../entity/todo_task/task_type.dart';
 import '../../../../entity/todo_task/vo_todo_task.dart';
@@ -57,6 +58,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
         ref.read(floatingButtonStateProvider.notifier).changeButtonSize(false);
       }
     });
+
+
 
     super.initState();
   }
@@ -180,6 +183,9 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
             List<TodoTask> todoList = snapshot.data ?? [];
 
             final textTecList = ref.watch(tecListProvider);
+
+
+
             if (snapshot.hasData) {
               return ListView.separated(
                 padding:
@@ -220,13 +226,19 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
     //template 세팅
     final db = FirebaseFirestore.instance.collection("todoTemplate");
     final uid = ref.watch(userProvider);
-    final result = await db.where('uid', isEqualTo: uid.value).get();
+    final result = await db.where('uid', isEqualTo: uid.value).orderBy("orderSort").get();
+
+
     final templates = ref.watch(todoTemplateSampleListProvider);
     templates.clear();
     for (var element in result.docs) {
+      print("result: ${element.data()}");
       final sample = TodoTaskTemplateSample.fromJson(element.data());
       templates.add(sample);
     }
+
+
+
     return await selectedDateTaskList();
   }
 
@@ -263,10 +275,25 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
       }
+
+      final template = TodoTaskTemplateSample(
+          templateName: "now",
+          uid: "abc",
+          createdTime: todoTasks.first.createdTime!,
+          orderSort: 0,
+          taskContents: todoTasks.map((e) => e.toJson()).toList());
+
+      print("delete & insert");
+      final result = await TodoTemplateApi.instance.removeTemplateByName(template.templateName!);
+      if(result.isSuccess){
+        TodoTemplateApi.instance.addTodoTemplate(template);
+      }
+
     } else {
       //todo task 일자 변경
       ref.readTodoHolder.changeWorkDate(selectedDate);
     }
+
     return todayTask;
   }
 
@@ -287,21 +314,12 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
       ref.readTodoHolder.clear();
       selectedDate.changeDate(DateUtils.dateOnly(date));
       selectedDateTaskList();
+
     }
   }
 
   Future<List<TodoTaskTemplateSample>> _futureTemplateList() async {
-    final List<TodoTaskTemplateSample> templateListNew = [];
-    final nowTodos = ref.watch(todolistProvider);
-    final templateList = ref.watch(todoTemplateSampleListProvider);
-    final template = TodoTaskTemplateSample(
-        templateName: "now",
-        uid: "abc",
-        createdTime: nowTodos.first.createdTime!,
-        taskContents: nowTodos.map((e) => e.toJson()).toList());
 
-    templateList.add(template);
-
-    return templateList;
+    return ref.watch(todoTemplateSampleListProvider);
   }
 }

@@ -12,7 +12,9 @@ _$TodoTaskTemplateImpl _$$TodoTaskTemplateImplFromJson(
       docId: json['docId'] as String?,
       uid: json['uid'] as String?,
       workDate: json['workDate'] as String,
-      createdTime: DateTime.parse(json['createdTime'] as String),
+      createdTime: json['createdTime'] == null
+          ? null
+          : DateTime.parse(json['createdTime'] as String),
       modifyTime: json['modifyTime'] == null
           ? null
           : DateTime.parse(json['modifyTime'] as String),
@@ -25,7 +27,7 @@ Map<String, dynamic> _$$TodoTaskTemplateImplToJson(
       'docId': instance.docId,
       'uid': instance.uid,
       'workDate': instance.workDate,
-      'createdTime': instance.createdTime.toIso8601String(),
+      'createdTime': instance.createdTime?.toIso8601String(),
       'modifyTime': instance.modifyTime?.toIso8601String(),
       'taskContents': instance.taskContents,
     };

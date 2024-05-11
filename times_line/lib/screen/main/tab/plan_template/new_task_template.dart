@@ -92,6 +92,7 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
                 }).map((e)=>e.toJson()).toList(),
                 createdTime: DateTime.now(),
                 modifyTime: DateTime.now(),
+                orderSort: ref.watch(todoTemplateSampleListProvider).length + 1,
               );
               TodoTemplateApi.instance.addTodoTemplate(template
               );

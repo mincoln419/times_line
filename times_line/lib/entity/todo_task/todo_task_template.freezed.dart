@@ -26,8 +26,8 @@ mixin _$TodoTaskTemplate {
   set uid(String? value) => throw _privateConstructorUsedError;
   String get workDate => throw _privateConstructorUsedError;
   set workDate(String value) => throw _privateConstructorUsedError;
-  @JsonKey(name: 'createdTime')
-  DateTime get createdTime => throw _privateConstructorUsedError;
+  DateTime? get createdTime => throw _privateConstructorUsedError;
+  set createdTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get modifyTime => throw _privateConstructorUsedError;
   set modifyTime(DateTime? value) => throw _privateConstructorUsedError;
   List<dynamic> get taskContents => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ abstract class $TodoTaskTemplateCopyWith<$Res> {
       {String? docId,
       String? uid,
       String workDate,
-      @JsonKey(name: 'createdTime') DateTime createdTime,
+      DateTime? createdTime,
       DateTime? modifyTime,
       List<dynamic> taskContents});
 }
@@ -70,7 +70,7 @@ class _$TodoTaskTemplateCopyWithImpl<$Res, $Val extends TodoTaskTemplate>
     Object? docId = freezed,
     Object? uid = freezed,
     Object? workDate = null,
-    Object? createdTime = null,
+    Object? createdTime = freezed,
     Object? modifyTime = freezed,
     Object? taskContents = null,
   }) {
@@ -87,10 +87,10 @@ class _$TodoTaskTemplateCopyWithImpl<$Res, $Val extends TodoTaskTemplate>
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: null == createdTime
+      createdTime: freezed == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       modifyTime: freezed == modifyTime
           ? _value.modifyTime
           : modifyTime // ignore: cast_nullable_to_non_nullable
@@ -115,7 +115,7 @@ abstract class _$$TodoTaskTemplateImplCopyWith<$Res>
       {String? docId,
       String? uid,
       String workDate,
-      @JsonKey(name: 'createdTime') DateTime createdTime,
+      DateTime? createdTime,
       DateTime? modifyTime,
       List<dynamic> taskContents});
 }
@@ -134,7 +134,7 @@ class __$$TodoTaskTemplateImplCopyWithImpl<$Res>
     Object? docId = freezed,
     Object? uid = freezed,
     Object? workDate = null,
-    Object? createdTime = null,
+    Object? createdTime = freezed,
     Object? modifyTime = freezed,
     Object? taskContents = null,
   }) {
@@ -151,10 +151,10 @@ class __$$TodoTaskTemplateImplCopyWithImpl<$Res>
           ? _value.workDate
           : workDate // ignore: cast_nullable_to_non_nullable
               as String,
-      createdTime: null == createdTime
+      createdTime: freezed == createdTime
           ? _value.createdTime
           : createdTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       modifyTime: freezed == modifyTime
           ? _value.modifyTime
           : modifyTime // ignore: cast_nullable_to_non_nullable
@@ -174,7 +174,7 @@ class _$TodoTaskTemplateImpl extends _TodoTaskTemplate {
       {this.docId,
       this.uid,
       required this.workDate,
-      @JsonKey(name: 'createdTime') required this.createdTime,
+      this.createdTime,
       this.modifyTime,
       required this.taskContents})
       : super._();
@@ -189,8 +189,7 @@ class _$TodoTaskTemplateImpl extends _TodoTaskTemplate {
   @override
   String workDate;
   @override
-  @JsonKey(name: 'createdTime')
-  final DateTime createdTime;
+  DateTime? createdTime;
   @override
   DateTime? modifyTime;
   @override
@@ -221,7 +220,7 @@ abstract class _TodoTaskTemplate extends TodoTaskTemplate {
       {String? docId,
       String? uid,
       required String workDate,
-      @JsonKey(name: 'createdTime') required final DateTime createdTime,
+      DateTime? createdTime,
       DateTime? modifyTime,
       required List<dynamic> taskContents}) = _$TodoTaskTemplateImpl;
   _TodoTaskTemplate._() : super._();
@@ -239,8 +238,8 @@ abstract class _TodoTaskTemplate extends TodoTaskTemplate {
   String get workDate;
   set workDate(String value);
   @override
-  @JsonKey(name: 'createdTime')
-  DateTime get createdTime;
+  DateTime? get createdTime;
+  set createdTime(DateTime? value);
   @override
   DateTime? get modifyTime;
   set modifyTime(DateTime? value);

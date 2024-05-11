@@ -13,7 +13,7 @@ class TodoTaskTemplate with _$TodoTaskTemplate{
     String? docId,
     String? uid,
     required String workDate,
-    @JsonKey(name: 'createdTime')required final DateTime createdTime,
+    DateTime? createdTime,
     DateTime? modifyTime,
     required List taskContents,
 

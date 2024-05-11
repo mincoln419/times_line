@@ -33,6 +33,8 @@ mixin _$TodoTaskTemplateSample {
   set modifyTime(DateTime? value) => throw _privateConstructorUsedError;
   List<dynamic> get taskContents => throw _privateConstructorUsedError;
   set taskContents(List<dynamic> value) => throw _privateConstructorUsedError;
+  int get orderSort => throw _privateConstructorUsedError;
+  set orderSort(int value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,7 +54,8 @@ abstract class $TodoTaskTemplateSampleCopyWith<$Res> {
       String? templateName,
       @JsonKey(name: 'createdTime') DateTime createdTime,
       DateTime? modifyTime,
-      List<dynamic> taskContents});
+      List<dynamic> taskContents,
+      int orderSort});
 }
 
 /// @nodoc
@@ -75,6 +78,7 @@ class _$TodoTaskTemplateSampleCopyWithImpl<$Res,
     Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? taskContents = null,
+    Object? orderSort = null,
   }) {
     return _then(_value.copyWith(
       docId: freezed == docId
@@ -101,6 +105,10 @@ class _$TodoTaskTemplateSampleCopyWithImpl<$Res,
           ? _value.taskContents
           : taskContents // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
+      orderSort: null == orderSort
+          ? _value.orderSort
+          : orderSort // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -120,7 +128,8 @@ abstract class _$$TodoTaskTemplateSampleImplCopyWith<$Res>
       String? templateName,
       @JsonKey(name: 'createdTime') DateTime createdTime,
       DateTime? modifyTime,
-      List<dynamic> taskContents});
+      List<dynamic> taskContents,
+      int orderSort});
 }
 
 /// @nodoc
@@ -142,6 +151,7 @@ class __$$TodoTaskTemplateSampleImplCopyWithImpl<$Res>
     Object? createdTime = null,
     Object? modifyTime = freezed,
     Object? taskContents = null,
+    Object? orderSort = null,
   }) {
     return _then(_$TodoTaskTemplateSampleImpl(
       docId: freezed == docId
@@ -168,6 +178,10 @@ class __$$TodoTaskTemplateSampleImplCopyWithImpl<$Res>
           ? _value.taskContents
           : taskContents // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
+      orderSort: null == orderSort
+          ? _value.orderSort
+          : orderSort // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -181,7 +195,8 @@ class _$TodoTaskTemplateSampleImpl extends _TodoTaskTemplateSample {
       this.templateName,
       @JsonKey(name: 'createdTime') required this.createdTime,
       this.modifyTime,
-      required this.taskContents})
+      required this.taskContents,
+      required this.orderSort})
       : super._();
 
   factory _$TodoTaskTemplateSampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -200,10 +215,12 @@ class _$TodoTaskTemplateSampleImpl extends _TodoTaskTemplateSample {
   DateTime? modifyTime;
   @override
   List<dynamic> taskContents;
+  @override
+  int orderSort;
 
   @override
   String toString() {
-    return 'TodoTaskTemplateSample(docId: $docId, uid: $uid, templateName: $templateName, createdTime: $createdTime, modifyTime: $modifyTime, taskContents: $taskContents)';
+    return 'TodoTaskTemplateSample(docId: $docId, uid: $uid, templateName: $templateName, createdTime: $createdTime, modifyTime: $modifyTime, taskContents: $taskContents, orderSort: $orderSort)';
   }
 
   @JsonKey(ignore: true)
@@ -228,7 +245,8 @@ abstract class _TodoTaskTemplateSample extends TodoTaskTemplateSample {
       String? templateName,
       @JsonKey(name: 'createdTime') required final DateTime createdTime,
       DateTime? modifyTime,
-      required List<dynamic> taskContents}) = _$TodoTaskTemplateSampleImpl;
+      required List<dynamic> taskContents,
+      required int orderSort}) = _$TodoTaskTemplateSampleImpl;
   _TodoTaskTemplateSample._() : super._();
 
   factory _TodoTaskTemplateSample.fromJson(Map<String, dynamic> json) =
@@ -252,6 +270,9 @@ abstract class _TodoTaskTemplateSample extends TodoTaskTemplateSample {
   @override
   List<dynamic> get taskContents;
   set taskContents(List<dynamic> value);
+  @override
+  int get orderSort;
+  set orderSort(int value);
   @override
   @JsonKey(ignore: true)
   _$$TodoTaskTemplateSampleImplCopyWith<_$TodoTaskTemplateSampleImpl>

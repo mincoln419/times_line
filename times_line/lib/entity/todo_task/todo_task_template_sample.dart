@@ -17,6 +17,7 @@ class TodoTaskTemplateSample with _$TodoTaskTemplateSample{
     @JsonKey(name: 'createdTime')required final DateTime createdTime,
     DateTime? modifyTime,
     required List taskContents,
+    required int orderSort,
 
   }) = _TodoTaskTemplateSample;
 
