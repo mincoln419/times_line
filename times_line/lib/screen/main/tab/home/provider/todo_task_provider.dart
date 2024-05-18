@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
@@ -45,15 +46,22 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
     state = List.of(state);
   }
 
-  void changeType(int? index, TaskType taskType) async {
+  void changeType(int? index, TaskType taskType, List<TextEditingController> tecList) async {
     if(index == null)return ;
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;
-
     if (taskType == TaskType.sleep) {
       tmp.title = 'sleep';
+    }else{
+      tmp.title= '';
     }
+
+    for(int i = 0 ; i < tecList.length; i++){
+      state[index].title = tecList[i].text;
+    }
+
     state[index] = tmp;
+
     state = List.of(state);
   }
 

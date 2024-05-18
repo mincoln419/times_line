@@ -7,6 +7,7 @@ import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_template_provider.dart';
 import 'package:times_line/screen/main/tab/tab_item.dart';
 import 'package:times_line/screen/main/tab/tab_navigator.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,10 @@ import 'package:uuid/uuid.dart';
 
 import '../../app.dart';
 import '../../common/common.dart';
+import '../../data/network/todo_template_api.dart';
 import '../../data/simple_result.dart';
 import '../../entity/todo_task/task_type.dart';
+import '../../entity/todo_task/todo_task_template_sample.dart';
 import '../dialog/d_confirm.dart';
 import '../dialog/d_message.dart';
 import '../login/provider/login_provider.dart';
@@ -125,7 +128,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                                   );
                                 });
 
-                            if(result!.isFailure) return ;
+                            if (result!.isFailure) return;
 
                             bothTodoListInit();
                             final selectedDate =
@@ -147,15 +150,16 @@ class MainScreenState extends ConsumerState<MainScreen>
                                 .taskContents
                                 .map((e) => TodoContent.fromJson(e))
                                 .toList()
-                                .map((tc) => TodoTask(
+                                .map(
+                                  (tc) => TodoTask(
                                     workDate: selectedDate.formattedDateOnly,
                                     timeline: tc.timeline,
                                     title: tc.title,
                                     taskType: tc.taskType,
-                              uid: ref.watch(userProvider).value!,
-                            ),)
+                                    uid: ref.watch(userProvider).value!,
+                                  ),
+                                )
                                 .toList();
-                            print("dbList :: $dbList");
                             List<TodoContent> todoContents =
                                 await RangeStream(0, 23).map(
                               (i) {
@@ -196,7 +200,9 @@ class MainScreenState extends ConsumerState<MainScreen>
                                 ref.watch(tecListProvider);
                             print("tecList: ${tecList.length}");
                             List<TodoTask> tmpTodos = [];
-                            tmpTodos.addAll(ref.watch(todolistProvider).map((e) => e.copyWith()));
+                            tmpTodos.addAll(ref
+                                .watch(todolistProvider)
+                                .map((e) => e.copyWith()));
                             bothTodoListInit();
 
                             List<TodoContent> todoContents =
@@ -214,7 +220,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             if (docId == null) {
                               db.add(TodoTaskTemplate(
                                 workDate: selectedDate.formattedDateOnly,
-                                uid: 'user',
+                                uid: 'abc',
                                 modifyTime: DateTime.now(),
                                 createdTime: DateTime.now(),
                                 taskContents: todoContents
@@ -231,18 +237,58 @@ class MainScreenState extends ConsumerState<MainScreen>
                                   ).toJson());
                             }
 
+                            /* TODO 샘플 템플릿 리스트 최신화 -> 공통 모듈로 refactoring 필요*/
+                            // now 데이터 db 갱신
+                            final template = TodoTaskTemplateSample(
+                                templateName: "now",
+                                uid: "abc",
+                                createdTime: DateTime.now(),
+                                orderSort: 0,
+                                taskContents: todoContents
+                                    .map((e) => TodoTask(
+                                        uid: 'abc',
+                                        workDate: selectedDate.formattedDateOnly,
+                                        title: e.title,
+                                        taskType: e.taskType).toJson())
+                                    .toList());
+
+                            final result = await TodoTemplateApi.instance
+                                .removeTemplateByName(template.templateName!);
+                            if (result.isSuccess) {
+                              TodoTemplateApi.instance
+                                  .addTodoTemplate(template);
+                            }
+                            print(
+                                "template저장?:: + ${template.taskContents[0]}");
+
+                            final tdb = FirebaseFirestore.instance
+                                .collection("todoTemplate");
+                            final uid = ref.watch(userProvider);
+                            final tresult = await tdb
+                                .where('uid', isEqualTo: uid.value)
+                                .orderBy("orderSort")
+                                .get();
+
+                            final templates = ref.readTemplateSampleHolder;
+                            templates.clear();
+                            for (var element in tresult.docs) {
+                              final sample = TodoTaskTemplateSample.fromJson(
+                                  element.data());
+                              templates.addTodo(sample);
+                            }
+                            print(
+                                "templates:: + ${templates.state[0].taskContents[0]}");
+
                             showDialog<SimpleResult>(
                                 builder: (context) {
-                                  if(context.mounted){
-                                  return MessageDialog(
-                                     '저장되었습니다',
-                                      buttonText: '확인'
-                                  );
+                                  if (context.mounted) {
+                                    return MessageDialog('저장되었습니다',
+                                        buttonText: '확인');
                                   }
-                                  return
-                                      const CircularProgressIndicator();
-                                }, context: App.navigatorKey.currentContext ?? context);
-
+                                  return const CircularProgressIndicator();
+                                },
+                                context:
+                                    App.navigatorKey.currentContext ?? context);
 
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -265,14 +311,13 @@ class MainScreenState extends ConsumerState<MainScreen>
   }
 
   void todoListTemplateRefresh(DateTime selectedDate, TodoContent todoTask) {
-
     final addTodo = TodoTask(
-        workDate: selectedDate.formattedDateOnly,
-        createdTime: DateTime.now(),
-        modifyTime: DateTime.now(),
-        timeline: todoTask.timeline,
-        title: todoTask.title,
-        taskType: todoTask.taskType,
+      workDate: selectedDate.formattedDateOnly,
+      createdTime: DateTime.now(),
+      modifyTime: DateTime.now(),
+      timeline: todoTask.timeline,
+      title: todoTask.title,
+      taskType: todoTask.taskType,
       uid: ref.watch(userProvider).value!,
     );
     ref.readTodoHolder.addTodo(addTodo);

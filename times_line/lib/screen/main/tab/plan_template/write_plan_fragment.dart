@@ -90,7 +90,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                   future: _futureTemplateList(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      final templateListNew = snapshot.data;
+                      final templateListNew = ref.watch(todoTemplateSampleListProvider);
                       return PopupMenuButton<TodoTaskTemplateSample>(
                         position: PopupMenuPosition.under,
                         onOpened: () {
@@ -117,6 +117,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                           }).toList());
                         },
                         itemBuilder: (BuildContext context) {
+                          print("templateListNew:: + ${templateListNew![0].taskContents[0]}");
                           return templateListNew!
                               .map((e) => PopupMenuItem(
                                     value: e,
@@ -192,7 +193,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                       todoTask: todoList[index],
                       onChanged: (value) {
                         ref.readTodoHolder
-                            .changeType(todoList[index].timeline, value);
+                            .changeType(todoList[index].timeline, value, textTecList);
                       });
                 },
                 separatorBuilder: (context, index) =>
@@ -277,7 +278,6 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
           orderSort: 0,
           taskContents: todoTasks.map((e) => e.toJson()).toList());
 
-      print("delete & insert");
       final result = await TodoTemplateApi.instance
           .removeTemplateByName(template.templateName!);
       if (result.isSuccess) {

@@ -136,6 +136,8 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                                     final TodoTask copyItem =
                                         doneTaskList[index];
                                     copyItem.title = tec.text.trim();
+                                    copyItem.taskType = ref
+                                        .watch(currentTaskTypeProvider).currentType;
 
                                     addDoneTask(copyItem);
                                     Navigator.of(context).pop();

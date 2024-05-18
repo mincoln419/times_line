@@ -134,18 +134,16 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
                   builder: (context, snapshot) {
                     if (context.mounted && snapshot.hasData) {
                       final todoTaskList = ref.read(todoTemplateProvider);
+
                       return ListView.separated(
                           itemBuilder: (context, index) {
                             List<TextEditingController> tecList = ref.watch(tecTemplateListProvider);
-                            tecList[index].addListener(() {
-
-                            });
                             return WritePlanItem(
                               tec: tecList[index],
                               todoTask: todoTaskList[index],
                               onChanged: (value) {
                                 ref.readTodoTemplateHolder
-                                    .changeType(index, value);
+                                    .changeType(index, value, tecList);
                               },
                             );
                           },
@@ -172,7 +170,8 @@ class _NewTaskTemplateState extends ConsumerState<NewTaskTemplate> {
     }).toList();
 
     List<TodoTask> todoList = ref.watch(todoTemplateProvider);
-    print('$todoList');
+    print('change after tec reset');
+    print('${todoList.length}');
     if(todoList.length > 23) return todoList;
     final textTecList = ref.watch(tecTemplateListProvider.notifier);
     textTecList.clear();

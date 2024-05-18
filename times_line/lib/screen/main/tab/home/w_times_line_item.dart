@@ -66,10 +66,11 @@ class _TimesLineItemState extends ConsumerState<TimesLineItem>
                                 modifyTime: DateTime.now(),
                                 taskType: todoTask.taskType,
                                 timeline: todoTask.timeline,
-                                todoTaskStatus: TodoTaskStatus.matched,
+                                todoTaskStatus: doneTask.todoTaskStatus,
                                 workDate: todoTask.workDate,
                                 uid: ref.watch(userProvider).value!,
                               ),
+                              todo: todoTask,
                             ),
 
                             GestureDetector(

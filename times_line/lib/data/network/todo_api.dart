@@ -35,7 +35,7 @@ class TodoApi implements TodoRepository {
       if (e.size == 0) {
         ref.add(todo.toJson());
       } else {
-        ref.doc(e.docs[0].id).update(todo.toJson());
+        ref.doc(e.docs.first.id).update(todo.toJson());
       }
     });
 
