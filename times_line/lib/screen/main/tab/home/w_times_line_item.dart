@@ -30,8 +30,8 @@ class _TimesLineItemState extends ConsumerState<TimesLineItem>
         future: _todoListFuture(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final todoTask = ref.watch(todoHomeListProvider)[widget.index];
-            final doneTask = ref.watch(doneListProvider)[widget.index];
+            final TodoTask todoTask = snapshot.data!['todoList'];
+            final TodoTask doneTask = snapshot.data!['doneList'];
             return Flex(
               direction: Axis.horizontal,
               children: [
@@ -99,9 +99,12 @@ class _TimesLineItemState extends ConsumerState<TimesLineItem>
         });
   }
 
-  Future<TodoTask> _todoListFuture() async {
+  Future<Map> _todoListFuture() async {
     final todoTask = ref.watch(todoHomeListProvider)[widget.index];
     final doneTask = ref.watch(doneListProvider)[widget.index];
-    return todoTask;
+    final todoTaskMap = Map();
+    todoTaskMap.putIfAbsent("todoList", () => todoTask);
+    todoTaskMap.putIfAbsent("doneList", () => doneTask);
+    return todoTaskMap;
   }
 }

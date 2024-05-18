@@ -47,7 +47,10 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
   }
 
   void changeType(int? index, TaskType taskType, List<TextEditingController> tecList) async {
-    if(index == null)return ;
+    if(index == null){
+      print('index 가 Null');
+      return ;
+    }
     TodoTask tmp = state[index].copyWith();
     tmp.taskType = taskType;
     if (taskType == TaskType.sleep) {

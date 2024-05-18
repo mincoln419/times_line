@@ -248,6 +248,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                                     .map((e) => TodoTask(
                                         uid: 'abc',
                                         workDate: selectedDate.formattedDateOnly,
+                                        timeline: e.timeline,
                                         title: e.title,
                                         taskType: e.taskType).toJson())
                                     .toList());
@@ -258,8 +259,6 @@ class MainScreenState extends ConsumerState<MainScreen>
                               TodoTemplateApi.instance
                                   .addTodoTemplate(template);
                             }
-                            print(
-                                "template저장?:: + ${template.taskContents[0]}");
 
                             final tdb = FirebaseFirestore.instance
                                 .collection("todoTemplate");
@@ -276,8 +275,6 @@ class MainScreenState extends ConsumerState<MainScreen>
                                   element.data());
                               templates.addTodo(sample);
                             }
-                            print(
-                                "templates:: + ${templates.state[0].taskContents[0]}");
 
                             showDialog<SimpleResult>(
                                 builder: (context) {

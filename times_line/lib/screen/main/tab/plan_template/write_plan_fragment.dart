@@ -117,7 +117,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                           }).toList());
                         },
                         itemBuilder: (BuildContext context) {
-                          print("templateListNew:: + ${templateListNew![0].taskContents[0]}");
+                          if(templateListNew.isEmpty) return [];
                           return templateListNew!
                               .map((e) => PopupMenuItem(
                                     value: e,
