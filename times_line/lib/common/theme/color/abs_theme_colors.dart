@@ -70,6 +70,11 @@ abstract class AbstractThemeColors {
 
   Color get checkBoxColor => const Color.fromARGB(255, 159, 229, 83);
 
+  Color get feeling => const Color.fromARGB(255, 229, 83, 127);
+
+  Color get thanks => const Color.fromARGB(255, 70, 136, 190);
+
+  Color get adapt => const Color.fromARGB(255, 210, 189, 146);
 
 
 
