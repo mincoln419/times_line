@@ -9,7 +9,7 @@ abstract interface class TodoRepository {
   Future<SimpleResult<QuerySnapshot<Map<String, dynamic>>, Error>> getDoneTodoList(DateTime dateTime);
 
   Future<SimpleResult<void, Error>> addDoneTask(TodoTask todo);
-  Future<SimpleResult<List<TodoContent>, Error>> addTodoTask(List<TodoContent> todoTasks, String workDate);
+  Future<SimpleResult<List<TodoContent>, Error>> addTodoTask(List<TodoContent> todoTasks, String workDate, String uid);
   Future<SimpleResult<void, Error>> updateTodo(TodoTask todo);
   Future<SimpleResult<void, Error>> removeTodo(int id);
 }

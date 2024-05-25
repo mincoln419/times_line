@@ -8,6 +8,7 @@ import 'package:times_line/data/network/todo_repository.dart';
 import 'package:times_line/data/simple_result.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 
 import '../../entity/todo_task/todo_task_template.dart';
 import 'client/todo_client.dart';
@@ -84,7 +85,7 @@ class TodoApi implements TodoRepository {
   void save(TodoTask todoTask) {}
 
   @override
-  Future<SimpleResult<List<TodoContent>, Error>> addTodoTask(List<TodoContent> todoTasks, String workDate) async {
+  Future<SimpleResult<List<TodoContent>, Error>> addTodoTask(List<TodoContent> todoTasks, String workDate, String uid) async {
 
     CollectionReference<Map<String, dynamic>> db = FirebaseFirestore.instance
         .collection("todoTask");
@@ -92,7 +93,7 @@ class TodoApi implements TodoRepository {
     final docId = await db
         .where('workDate',
         isEqualTo: workDate)
-    .where('uid', isEqualTo: 'abc')
+    .where('uid', isEqualTo: uid)
         .get()
         .then((value) => value.docs.isNotEmpty
         ? value.docs[0].id
@@ -101,7 +102,7 @@ class TodoApi implements TodoRepository {
     if (docId == null) {
       db.add(TodoTaskTemplate(
         workDate: workDate,
-        uid: 'abc',
+        uid: uid,
         modifyTime: DateTime.now(),
         createdTime: DateTime.now(),
         taskContents: todoTasks

@@ -239,6 +239,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
     const uuid = Uuid();
     final selectedDate = ref.watch(selectedDateProvider);
     final todayTask = ref.watch(todolistProvider);
+    final uid = ref.watch(userProvider).value!;
     if (todayTask.isEmpty) {
       final writtenTodoTasks =
           await TodoApi.instance.getTodoList(selectedDate).then(
@@ -252,7 +253,7 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
-                uid: ref.watch(userProvider).value!,
+                uid: uid,
               );
             }).toList()
           : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data())
@@ -265,22 +266,21 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                 createdTime: DateTime.now(),
                 title: e.title,
                 taskType: e.taskType,
-                uid: 'abc',
+                uid: uid,
               );
             }).toList();
       List<TodoContent> todoContents = todoTasks
           .map((e) => TodoContent(
               title: e.title, timeline: e.timeline, taskType: e.taskType))
           .toList();
-      TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly);
+      TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly, uid);
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
       }
 
-      print(' ref.watch(userProvider).value! :: ${ ref.watch(userProvider).value!}');
       final template = TodoTaskTemplateSample(
           templateName: "now",
-          uid: "abc",
+          uid: uid,
           createdTime: todoTasks.first.createdTime!,
           orderSort: 0,
           taskContents: todoTasks.map((e) => e.toJson()).toList());

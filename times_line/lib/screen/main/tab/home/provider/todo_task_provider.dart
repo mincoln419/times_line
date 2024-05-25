@@ -6,7 +6,7 @@ import 'package:times_line/data/network/todo_api.dart';
 import 'package:times_line/entity/todo_task/task_type.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 
-final userProvider = FutureProvider<String>((ref) => 'abc');
+final userProvider =  FutureProvider<String>((ref) => 'abc');
 
 final selectedDateProvider =
     StateNotifierProvider<SelectDateDataHolder, DateTime>(
@@ -60,7 +60,7 @@ class TodoDataHolder extends StateNotifier<List<TodoTask>> {
     }
 
     for(int i = 0 ; i < tecList.length; i++){
-      state[index].title = tecList[i].text;
+      state[i].title = tecList[i].text;
     }
 
     state[index] = tmp;

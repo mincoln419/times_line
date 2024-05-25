@@ -181,9 +181,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                         child: FloatingActionButton(
                           child: const Icon(Icons.save),
                           onPressed: () async {
-                            // Navigator.of(context).push(
-                            //     MaterialPageRoute(builder: (context) => const PlanAddScreen())
-                            // )
+                            final uid = ref.watch(userProvider).value!;
                             final selectedDate =
                                 ref.watch(selectedDateProvider);
                             CollectionReference<Map<String, dynamic>> db =
@@ -211,18 +209,18 @@ class MainScreenState extends ConsumerState<MainScreen>
                             ).toList();
 
                             //데이터 적재처리
-                            TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly);
+                            TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly, uid);
 
                             /* TODO 샘플 템플릿 리스트 최신화 -> 공통 모듈로 refactoring 필요*/
                             // now 데이터 db 갱신
                             final template = TodoTaskTemplateSample(
                                 templateName: "now",
-                                uid: "abc",
+                                uid: uid,
                                 createdTime: DateTime.now(),
                                 orderSort: 0,
                                 taskContents: todoContents
                                     .map((e) => TodoTask(
-                                        uid: 'abc',
+                                        uid: uid,
                                         workDate: selectedDate.formattedDateOnly,
                                         timeline: e.timeline,
                                         title: e.title,
@@ -238,9 +236,8 @@ class MainScreenState extends ConsumerState<MainScreen>
 
                             final tdb = FirebaseFirestore.instance
                                 .collection("todoTemplate");
-                            final uid = ref.watch(userProvider);
                             final tresult = await tdb
-                                .where('uid', isEqualTo: uid.value)
+                                .where('uid', isEqualTo: uid)
                                 .orderBy("orderSort")
                                 .get();
 
