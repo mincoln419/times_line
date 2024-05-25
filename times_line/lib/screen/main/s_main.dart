@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
+import 'package:times_line/data/network/todo_api.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_template.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
@@ -188,17 +189,10 @@ class MainScreenState extends ConsumerState<MainScreen>
                             CollectionReference<Map<String, dynamic>> db =
                                 FirebaseFirestore.instance
                                     .collection("todoTask");
-                            final docId = await db
-                                .where('workDate',
-                                    isEqualTo: selectedDate.formattedDateOnly)
-                                .get()
-                                .then((value) => value.docs.isNotEmpty
-                                    ? value.docs[0].id
-                                    : null);
+
                             // 상태관리 처리
                             List<TextEditingController> tecList =
                                 ref.watch(tecListProvider);
-                            print("tecList: ${tecList.length}");
                             List<TodoTask> tmpTodos = [];
                             tmpTodos.addAll(ref
                                 .watch(todolistProvider)
@@ -217,25 +211,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                             ).toList();
 
                             //데이터 적재처리
-                            if (docId == null) {
-                              db.add(TodoTaskTemplate(
-                                workDate: selectedDate.formattedDateOnly,
-                                uid: 'abc',
-                                modifyTime: DateTime.now(),
-                                createdTime: DateTime.now(),
-                                taskContents: todoContents
-                                    .map((e) => e.toJson())
-                                    .toList(),
-                              ).toJson());
-                            } else {
-                              db.doc(docId).update(TodoTaskTemplate(
-                                    workDate: selectedDate.formattedDateOnly,
-                                    modifyTime: DateTime.now(),
-                                    taskContents: todoContents
-                                        .map((e) => e.toJson())
-                                        .toList(),
-                                  ).toJson());
-                            }
+                            TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly);
 
                             /* TODO 샘플 템플릿 리스트 최신화 -> 공통 모듈로 refactoring 필요*/
                             // now 데이터 db 갱신

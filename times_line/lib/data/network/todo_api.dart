@@ -6,8 +6,10 @@ import 'package:times_line/common/common.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
 import 'package:times_line/data/network/todo_repository.dart';
 import 'package:times_line/data/simple_result.dart';
+import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
 
+import '../../entity/todo_task/todo_task_template.dart';
 import 'client/todo_client.dart';
 
 class TodoApi implements TodoRepository {
@@ -82,8 +84,39 @@ class TodoApi implements TodoRepository {
   void save(TodoTask todoTask) {}
 
   @override
-  Future<SimpleResult<void, Error>> addTodoTask(TodoTask todo) {
-    // TODO: implement addTodoTask
-    throw UnimplementedError();
+  Future<SimpleResult<List<TodoContent>, Error>> addTodoTask(List<TodoContent> todoTasks, String workDate) async {
+
+    CollectionReference<Map<String, dynamic>> db = FirebaseFirestore.instance
+        .collection("todoTask");
+
+    final docId = await db
+        .where('workDate',
+        isEqualTo: workDate)
+    .where('uid', isEqualTo: 'abc')
+        .get()
+        .then((value) => value.docs.isNotEmpty
+        ? value.docs[0].id
+        : null);
+
+    if (docId == null) {
+      db.add(TodoTaskTemplate(
+        workDate: workDate,
+        uid: 'abc',
+        modifyTime: DateTime.now(),
+        createdTime: DateTime.now(),
+        taskContents: todoTasks
+            .map((e) => e.toJson())
+            .toList(),
+      ).toJson());
+    } else {
+      db.doc(docId).update(TodoTaskTemplate(
+        workDate: workDate,
+        modifyTime: DateTime.now(),
+        taskContents: todoTasks
+            .map((e) => e.toJson())
+            .toList(),
+      ).toJson());
+    }
+    return SimpleResult.success(todoTasks);
   }
 }

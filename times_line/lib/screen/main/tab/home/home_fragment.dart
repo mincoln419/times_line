@@ -14,7 +14,6 @@ import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/w_times_line_item.dart';
-import 'package:times_line/screen/notification/s_notification.dart';
 import 'package:uuid/uuid.dart';
 import 'package:times_line/common/dropdown/todo_tasktype_dropdown.dart';
 import '../../../../data/network/todo_api.dart';
@@ -75,7 +74,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           actions: [
             IconButton(
               onPressed: () {
-                Nav.push(const NotificationScreen());
+
               },
               icon: const Icon(Icons.notifications_none_rounded),
             )

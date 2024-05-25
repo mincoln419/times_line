@@ -90,7 +90,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                   future: _futureTemplateList(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      final templateListNew = ref.watch(todoTemplateSampleListProvider);
+                      final templateListNew =
+                          ref.watch(todoTemplateSampleListProvider);
                       return PopupMenuButton<TodoTaskTemplateSample>(
                         position: PopupMenuPosition.under,
                         onOpened: () {
@@ -117,8 +118,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                           }).toList());
                         },
                         itemBuilder: (BuildContext context) {
-                          if(templateListNew.isEmpty) return [];
-                          return templateListNew!
+                          if (templateListNew.isEmpty) return [];
+                          return templateListNew
                               .map((e) => PopupMenuItem(
                                     value: e,
                                     child: Text(e.templateName!,
@@ -192,8 +193,8 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
                       tec: textTecList[index],
                       todoTask: todoList[index],
                       onChanged: (value) {
-                        ref.readTodoHolder
-                            .changeType(todoList[index].timeline, value, textTecList);
+                        ref.readTodoHolder.changeType(
+                            todoList[index].timeline, value, textTecList);
                       });
                 },
                 separatorBuilder: (context, index) =>
@@ -259,18 +260,24 @@ class _LocalLifeFragmentState extends ConsumerState<WritePlanFragment>
               .map((ele) {
               final e = TodoContent.fromJson(ele);
               return TodoTask(
-                  workDate: selectedDate.formattedDateOnly,
-                  timeline: e.timeline,
-                  createdTime: DateTime.now(),
-                  title: e.title,
-                  taskType: e.taskType,
-                uid: ref.watch(userProvider).value!,
+                workDate: selectedDate.formattedDateOnly,
+                timeline: e.timeline,
+                createdTime: DateTime.now(),
+                title: e.title,
+                taskType: e.taskType,
+                uid: 'abc',
               );
             }).toList();
+      List<TodoContent> todoContents = todoTasks
+          .map((e) => TodoContent(
+              title: e.title, timeline: e.timeline, taskType: e.taskType))
+          .toList();
+      TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly);
       for (var ele in todoTasks) {
         ref.readTodoHolder.addTodo(ele);
       }
 
+      print(' ref.watch(userProvider).value! :: ${ ref.watch(userProvider).value!}');
       final template = TodoTaskTemplateSample(
           templateName: "now",
           uid: "abc",

@@ -38,7 +38,9 @@ class TodoTemplateApi implements TodoTemplateRepository {
                 {
                   for (QueryDocumentSnapshot<Map<String, dynamic>> element
                       in value.docs)
-                    {ref.doc(element.id).delete(),
+                    {
+                      print("remove template :: $name"),
+                      ref.doc(element.id).delete(),
                     }
                 }
             });
