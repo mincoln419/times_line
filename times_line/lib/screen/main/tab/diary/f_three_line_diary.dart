@@ -10,6 +10,7 @@ import 'package:times_line/entity/diary/diary_type.dart';
 import 'package:times_line/screen/main/tab/diary/diary_item_widget.dart';
 import 'package:times_line/screen/main/tab/diary/provider/diary_data_provider.dart';
 import 'package:times_line/screen/main/tab/diary/provider/diary_select_date_provider.dart';
+import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
 
 import '../../w_menu_drawer.dart';
 import '../home/provider/todo_task_provider.dart';
@@ -96,11 +97,12 @@ class _ThreeLineDiaryState extends ConsumerState<ThreeLineDiary> {
 
   Future<List<DiaryContent>> _diaryFuture() async {
     final list = ref.watch(diaryDataProvider);
+    final textTecList = ref.watch(tecListProvider);
     if (list.isEmpty) {
       await RangeStream(0, 2).forEach((i) {
         list.add(DiaryContent(
             uid: 'abc',
-            contents: '',
+            contents: ,
             diaryType: DiaryType.values[i],
             workDate: selectedDate,
             sortOrder: i));

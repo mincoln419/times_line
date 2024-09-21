@@ -14,13 +14,14 @@ class DiaryApi {
   Future<SimpleResult<DiaryContent, Error>> addDiary(DiaryContent diary) async {
     final ref = db.collection("workDiary");
     diary.modifyTime = DateTime.now();
-
+    print("diary: $diary");
     ref.where('uid', isEqualTo: diary.uid)
         .where('workDate', isEqualTo: diary.workDate)
-        .where('diaryType', isEqualTo: diary.diaryType)
+        .where('diaryType', isEqualTo: diary.diaryType.name)
         .get()
         .then((e) {
       if (e.size == 0) {
+        diary.createTime = DateTime.now();
         ref.add(diary.toJson());
       } else {
         ref.doc(e.docs.first.id).update(diary.toJson());

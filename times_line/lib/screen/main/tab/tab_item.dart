@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 enum TabItem {
   writePlan(Icons.add_circle, '일정추가', WritePlanFragment()),
-  nearMe(Icons.note_alt, '세줄일기', ThreeLineDiary()),
+  diary(Icons.note_alt, '세줄일기', ThreeLineDiary()),
   home(Icons.format_list_bulleted, '일정', HomeFragment()),
   chat(Icons.stacked_bar_chart, '통계', ChatFragment()),
   my(Icons.settings, '설정', MyFragment()),

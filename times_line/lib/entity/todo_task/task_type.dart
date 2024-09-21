@@ -8,7 +8,8 @@ enum TaskType {
   social,
   etc,
   sleep,
-  waste, nill,
+  waste,
+  nill,
 }
 
 Color getTaskColor(BuildContext context, TaskType taskType ){

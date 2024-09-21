@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:times_line/common/dart/extension/datetime_extension.dart';
+import 'package:times_line/data/network/diary/diary_api.dart';
 import 'package:times_line/data/network/todo_api.dart';
+import 'package:times_line/entity/diary/diary_content.dart';
 import 'package:times_line/entity/todo_task/todo_content.dart';
 import 'package:times_line/entity/todo_task/todo_task_template.dart';
 import 'package:times_line/entity/todo_task/vo_todo_task.dart';
+import 'package:times_line/screen/main/tab/diary/provider/diary_data_provider.dart';
+import 'package:times_line/screen/main/tab/diary/provider/diary_select_date_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_home_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart';
 import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
@@ -108,7 +112,7 @@ class MainScreenState extends ConsumerState<MainScreen>
                         if (uid == null) {
                           return;
                         }
-                        context.go("/cart/$uid");
+                        context.go("/main/home");
                       },
                     );
                   }),
@@ -209,7 +213,8 @@ class MainScreenState extends ConsumerState<MainScreen>
                             ).toList();
 
                             //데이터 적재처리
-                            TodoApi.instance.addTodoTask(todoContents, selectedDate.formattedDateOnly, uid);
+                            TodoApi.instance.addTodoTask(todoContents,
+                                selectedDate.formattedDateOnly, uid);
 
                             /* TODO 샘플 템플릿 리스트 최신화 -> 공통 모듈로 refactoring 필요*/
                             // now 데이터 db 갱신
@@ -220,11 +225,13 @@ class MainScreenState extends ConsumerState<MainScreen>
                                 orderSort: 0,
                                 taskContents: todoContents
                                     .map((e) => TodoTask(
-                                        uid: uid,
-                                        workDate: selectedDate.formattedDateOnly,
-                                        timeline: e.timeline,
-                                        title: e.title,
-                                        taskType: e.taskType).toJson())
+                                            uid: uid,
+                                            workDate:
+                                                selectedDate.formattedDateOnly,
+                                            timeline: e.timeline,
+                                            title: e.title,
+                                            taskType: e.taskType)
+                                        .toJson())
                                     .toList());
 
                             final result = await TodoTemplateApi.instance
@@ -266,6 +273,30 @@ class MainScreenState extends ConsumerState<MainScreen>
                       ),
                     ],
                   ),
+                1 => Consumer(builder: (context, ref, child) {
+                    final user = ref.watch(userProvider);
+                    return FloatingActionButton(
+                      child: const Icon(Icons.save_as_outlined),
+                      onPressed: () {
+                        final uid = user.value;
+                        print('uid: $uid');
+                        if (uid == null) {
+                          return;
+                        }
+
+                        // provider에서 데이터 불러오기
+                        List<DiaryContent> diaryList =
+                        ref.watch(diaryDataProvider);
+                        // db에 적재
+                        for (var ele in diaryList) {
+                          print("ele: $ele");
+                          ref.readDairyHolder.addDiary(ele);
+                        }
+
+                        context.go("/main/diary");
+                      },
+                    );
+                  }),
                 int() => null,
               },
             ),

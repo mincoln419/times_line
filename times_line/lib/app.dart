@@ -166,7 +166,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
           }
       ),
       GoRoute(
-        path: '/main/:kind(home|writePlan|nearMe|chat|my)',
+        path: '/main/:kind(home|writePlan|diary|chat|my)',
         name: 'path',
         pageBuilder: (context, state) => FadeTransitionPage(
           key: _scaffoldKey,
