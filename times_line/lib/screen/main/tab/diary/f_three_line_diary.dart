@@ -13,6 +13,7 @@ import 'package:times_line/screen/main/tab/diary/provider/diary_select_date_prov
 import 'package:times_line/screen/main/tab/home/provider/todo_task_editor_provider.dart';
 
 import '../../w_menu_drawer.dart';
+import '../home/provider/diary_editor_provider.dart';
 import '../home/provider/todo_task_provider.dart';
 
 class ThreeLineDiary extends ConsumerStatefulWidget {
@@ -97,12 +98,12 @@ class _ThreeLineDiaryState extends ConsumerState<ThreeLineDiary> {
 
   Future<List<DiaryContent>> _diaryFuture() async {
     final list = ref.watch(diaryDataProvider);
-    final textTecList = ref.watch(tecListProvider);
+    final textTecList = ref.watch(diaryTecListProvider);
     if (list.isEmpty) {
       await RangeStream(0, 2).forEach((i) {
         list.add(DiaryContent(
             uid: 'abc',
-            contents: ,
+            contents: '',
             diaryType: DiaryType.values[i],
             workDate: selectedDate,
             sortOrder: i));

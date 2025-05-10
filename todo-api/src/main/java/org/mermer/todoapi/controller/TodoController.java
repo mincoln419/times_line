@@ -1,6 +1,8 @@
 package org.mermer.todoapi.controller;
 
 import jakarta.annotation.Resource;
+import org.mermer.todoapi.config.QueryString;
+import org.mermer.todoapi.dto.SearchCond;
 import org.mermer.todoapi.dto.TodoItemDto;
 import org.mermer.todoapi.service.TodoItemService;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,9 @@ public class TodoController {
 	@Resource
 	private TodoItemService todoItemService;
 	@GetMapping("/api/v1/todos")
-	public ResponseEntity<List<TodoItemDto>> selectTodoList(){
+	public ResponseEntity<List<TodoItemDto>> selectTodoList(@QueryString SearchCond searchCond){
 
-		List<TodoItemDto> todos = todoItemService.selectTodoList();
+		List<TodoItemDto> todos = todoItemService.selectTodoList(searchCond);
 
 	return ResponseEntity.of(Optional.ofNullable(todos));
 }

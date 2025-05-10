@@ -41,5 +41,5 @@ class DiaryControllerList extends StateNotifier<List<TextEditingController>> {
   }
 }
 
-final tecListProvider = StateNotifierProvider.autoDispose<
-    DiaryControllerList, List<TextEditingController>>((ref) => ControllerList());
+final diaryTecListProvider = StateNotifierProvider.autoDispose<
+    DiaryControllerList, List<TextEditingController>>((ref) => DiaryControllerList());
