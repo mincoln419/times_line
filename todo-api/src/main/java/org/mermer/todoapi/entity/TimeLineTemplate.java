@@ -1,12 +1,15 @@
 package org.mermer.todoapi.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
+import java.util.List;
+
 @Entity
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class TimeLineTemplate extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -16,9 +19,11 @@ public class TimeLineTemplate extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	public ContentType contentType;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "type_id")
-	public TypeRegister typeRegister;
+	public String typeRegister;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "todo_item_id")
+	public List<TodoItem> items;
 
 
 }

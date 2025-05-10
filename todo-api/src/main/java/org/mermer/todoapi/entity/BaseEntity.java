@@ -7,7 +7,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -17,9 +19,11 @@ public class BaseEntity {
 
 	@CreatedDate
 	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
 	private LocalDateTime createAt;
 
 	@LastModifiedDate
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
 	private LocalDateTime updateAt;
 
 	@CreatedBy
