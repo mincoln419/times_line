@@ -1,5 +1,6 @@
 package org.mermer.todoapi.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class TimeUser {
 
 	@Id
-	public String userId;
+	@Column(name = "user_id")
+	public String id;
 	public String userName;
 	public String email;
 	public String password;

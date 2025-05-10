@@ -10,32 +10,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @ToString
-public class TodoItem {
+public class TodoItem extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "todo_item_id")
 	private Long id;
-
-	private String title;
 
 	private String contents;
 
 	@Enumerated(EnumType.STRING)
-	private TaskType  taskType;
-
-	@Enumerated(EnumType.STRING)
-	private TodoTaskStatus todoTaskStatus;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate targetDate;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
-	private LocalDateTime createdAt;
-
+	private ContentType contentType;
 
 }
