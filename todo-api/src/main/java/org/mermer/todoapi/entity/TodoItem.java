@@ -22,9 +22,18 @@ public class TodoItem extends BaseEntity {
 	@Column(name = "todo_item_id")
 	private Long id;
 
+	private String title;
+
 	private String contents;
 
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
+
+	@Enumerated(EnumType.STRING)
+	private TaskStatus taskStatus;
+
+
+
+
 
 }
