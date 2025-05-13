@@ -31,12 +31,6 @@ public class BaseEntity {
 	@JoinColumn(updatable = false, name = "user_id")
 	private TimeUser createdBy;
 
-	@LastModifiedBy
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private TimeUser updatedBy;
-
-
 	@PrePersist
 	public void prePersist() {
 		LocalDateTime now = LocalDateTime.now();
