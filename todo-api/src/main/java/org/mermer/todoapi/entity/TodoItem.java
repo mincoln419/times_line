@@ -22,9 +22,18 @@ public class TodoItem extends BaseEntity {
 	@Column(name = "todo_item_id")
 	private Long id;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "daily_timeline_id")
+	private DailyTimeline dailyTimeline;
+
+	private String title;
+
 	private String contents;
 
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
+
+	@Enumerated(EnumType.STRING)
+	private TaskStatus taskStatus;
 
 }
