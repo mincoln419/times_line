@@ -13,17 +13,18 @@ import java.util.List;
 public class TimeLineTemplate extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name="timeline_template_id")
 	public Long id;
 
 	public String content;
 	@Enumerated(EnumType.STRING)
 	public ContentType contentType;
 
-	public String typeRegister;
+	public String templateTitle;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "todo_item_id")
-	public List<TodoItem> items;
+	@JoinColumn(name = "template_todo_item_id")
+	public List<TemplateTodoItem> items;
 
 
 }

@@ -1,0 +1,31 @@
+package org.mermer.todoapi.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@ToString
+public class TemplateTodoItem extends BaseEntity {
+
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "template_todo_item_id")
+	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "time_line_template_id")
+	private TimeLineTemplate timeLineTemplate;
+
+	private String title;
+
+	private String contents;
+
+	@Enumerated(EnumType.STRING)
+	private ContentType contentType;
+
+
+
+}
