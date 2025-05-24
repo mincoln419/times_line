@@ -46,7 +46,7 @@ public class TimeUser {
 		this.lastSignAt = lastSignAt;
 	}
 
-	public TimeUser registerTimeUser(TimeUserDto userDto){
+	public static TimeUser registerTimeUser(TimeUserDto userDto){
 
 		TimeUser user = TimeUser.builder()
 				.id(userDto.getId())
@@ -71,7 +71,7 @@ public class TimeUser {
 		this.password = PasswordUtil.encryptPassword(rawPassword);
 	}
 
-	public boolean verifyPassword(String rawPassword, String encryptPassword){
+	public static boolean verifyPassword(String rawPassword, String encryptPassword){
 		return PasswordUtil.verifyPassword(rawPassword, encryptPassword);
 	}
 }

@@ -13,7 +13,7 @@ class TimeUserTest {
 	@Test
 	void setPassword() {
 		String password = "1234";
-		TimeUser user =
+		TimeUser user = TimeUser.builder().build();
 
 
 	}
