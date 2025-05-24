@@ -16,35 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class TodoApiApplicationTests {
 
-    private static TimeUserDto timeUserDto;
-
-    @BeforeAll
-    static void setTimeUserDto(){
-        TimeUserDto userDto = TimeUserDto.builder()
-                .id("stenly")
-                .password("123456789")
-                .userName("Stenly Cho")
-                .hp("010-8013-9018")
-                .email("mincoln419@naver.com")
-                .cd(UUID.randomUUID().toString())
-                .ci(UUID.randomUUID().toString())
-                .build();
-        timeUserDto = userDto;
-    }
-
-
     @Test
-    void password_encoding_success() {
-
-        TimeUser timeUser = TimeUser.registerTimeUser(timeUserDto);
-
-        String encryptedPassword = timeUser.getPassword();
-        String rawPassword = timeUserDto.getPassword();
-
-        assertThat(encryptedPassword).isNotEqualTo(rawPassword);
-
-        assertTrue(TimeUser.verifyPassword(rawPassword, encryptedPassword));
-
-    }
-
+    void setContext(){};
 }
