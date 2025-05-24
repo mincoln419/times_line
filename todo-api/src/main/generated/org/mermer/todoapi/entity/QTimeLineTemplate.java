@@ -26,8 +26,6 @@ public class QTimeLineTemplate extends EntityPathBase<TimeLineTemplate> {
 
     public final StringPath content = createString("content");
 
-    public final EnumPath<ContentType> contentType = createEnum("contentType", ContentType.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createAt;
 
@@ -39,6 +37,8 @@ public class QTimeLineTemplate extends EntityPathBase<TimeLineTemplate> {
     public final ListPath<TemplateTodoItem, QTemplateTodoItem> items = this.<TemplateTodoItem, QTemplateTodoItem>createList("items", TemplateTodoItem.class, QTemplateTodoItem.class, PathInits.DIRECT2);
 
     public final StringPath templateTitle = createString("templateTitle");
+
+    public final QTimeUser timeUser;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateAt;
@@ -64,6 +64,7 @@ public class QTimeLineTemplate extends EntityPathBase<TimeLineTemplate> {
         this._super = new QBaseEntity(type, metadata, inits);
         this.createAt = _super.createAt;
         this.createdBy = _super.createdBy;
+        this.timeUser = inits.isInitialized("timeUser") ? new QTimeUser(forProperty("timeUser")) : null;
         this.updateAt = _super.updateAt;
     }
 

@@ -1,7 +1,8 @@
-package org.mermer.todoapi.repository;
+package org.mermer.todoapi.repository.impl;
 
-import org.mermer.todoapi.dto.SearchCond;
+import org.mermer.todoapi.dto.SearchCondItem;
 import org.mermer.todoapi.entity.TodoItem;
+import org.mermer.todoapi.repository.TodoItemRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class TodoItemJpaRepository implements TodoItemRepository {
 	}
 
 	@Override
-	public List<TodoItem> findAll(SearchCond searchCond) {
+	public List<TodoItem> findAll(SearchCondItem searchCondItem) {
 		return null;
 	}
 }

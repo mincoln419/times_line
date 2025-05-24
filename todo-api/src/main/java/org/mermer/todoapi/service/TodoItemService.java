@@ -2,7 +2,7 @@ package org.mermer.todoapi.service;
 
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
-import org.mermer.todoapi.dto.SearchCond;
+import org.mermer.todoapi.dto.SearchCondItem;
 import org.mermer.todoapi.dto.TodoItemDto;
 import org.mermer.todoapi.entity.TodoItem;
 import org.mermer.todoapi.repository.TodoItemRepository;
@@ -18,9 +18,9 @@ public class TodoItemService {
 	@Resource
 	final private TodoItemRepository todoItemRepository;
 
-	public List<TodoItemDto> selectTodoList(SearchCond searchCond) {
+	public List<TodoItemDto> selectTodoList(SearchCondItem searchCondItem) {
 
-		return todoItemRepository.findAll(searchCond)
+		return todoItemRepository.findAll(searchCondItem)
 				.stream()
 				.map(getTodoItemTodoItemDtoFunction())
 				.toList();
