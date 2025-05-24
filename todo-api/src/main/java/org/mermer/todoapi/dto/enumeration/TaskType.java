@@ -1,4 +1,4 @@
-package org.mermer.todoapi.dto;
+package org.mermer.todoapi.dto.enumeration;
 
 public enum TaskType {
 	SOUL("soul"),

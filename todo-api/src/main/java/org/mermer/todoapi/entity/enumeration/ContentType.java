@@ -1,4 +1,4 @@
-package org.mermer.todoapi.entity;
+package org.mermer.todoapi.entity.enumeration;
 
 import lombok.Getter;
 
