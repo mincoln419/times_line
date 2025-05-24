@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import org.mermer.todoapi.entity.enumeration.ContentType;
 
 
 /**
@@ -27,7 +26,7 @@ public class QTemplateTodoItem extends EntityPathBase<TemplateTodoItem> {
 
     public final StringPath contents = createString("contents");
 
-    public final EnumPath<ContentType> contentType = createEnum("contentType", ContentType.class);
+    public final EnumPath<org.mermer.todoapi.entity.enumeration.ContentType> contentType = createEnum("contentType", org.mermer.todoapi.entity.enumeration.ContentType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createAt;
