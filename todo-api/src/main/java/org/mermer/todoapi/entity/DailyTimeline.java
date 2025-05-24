@@ -22,10 +22,9 @@ public class DailyTimeline extends BaseEntity{
 	private LocalDate timelineDate;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", insertable=false, updatable=false)
+	@JoinColumn
 	private TimeUser timeUser;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "todo_item_id")
+	@OneToMany(mappedBy = "dailyTimeline", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TodoItem> items;
 }
