@@ -1,14 +1,9 @@
 package org.mermer.todoapi.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.*;
-import org.mermer.todoapi.dto.TaskType;
-import org.mermer.todoapi.dto.TodoTaskStatus;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import org.mermer.todoapi.entity.enumeration.ContentType;
+import org.mermer.todoapi.entity.enumeration.TaskStatus;
 
 @Getter
 @AllArgsConstructor

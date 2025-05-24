@@ -46,6 +46,9 @@ class TimeLineTemplateRepositoryTest {
 		timeUser = userRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("User not found"));
 	};
+
+
+
 	@Test
 	void findByUserId() {
 		//given
