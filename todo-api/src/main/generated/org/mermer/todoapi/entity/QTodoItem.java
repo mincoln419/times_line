@@ -26,7 +26,7 @@ public class QTodoItem extends EntityPathBase<TodoItem> {
 
     public final StringPath contents = createString("contents");
 
-    public final EnumPath<ContentType> contentType = createEnum("contentType", ContentType.class);
+    public final EnumPath<org.mermer.todoapi.entity.enumeration.ContentType> contentType = createEnum("contentType", org.mermer.todoapi.entity.enumeration.ContentType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createAt;
@@ -38,7 +38,7 @@ public class QTodoItem extends EntityPathBase<TodoItem> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<TaskStatus> taskStatus = createEnum("taskStatus", TaskStatus.class);
+    public final EnumPath<org.mermer.todoapi.entity.enumeration.TaskStatus> taskStatus = createEnum("taskStatus", org.mermer.todoapi.entity.enumeration.TaskStatus.class);
 
     public final StringPath title = createString("title");
 

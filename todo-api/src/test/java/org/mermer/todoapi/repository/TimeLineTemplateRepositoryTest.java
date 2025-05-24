@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.mermer.todoapi.dto.TimeUserDto;
 import org.mermer.todoapi.entity.TimeLineTemplate;
 import org.mermer.todoapi.entity.TimeUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -23,29 +24,12 @@ class TimeLineTemplateRepositoryTest {
 
 	@Resource
 	private TimeLineTemplateRepository repository;
-
-	@Resource
-	private TimeUserRepository userRepository;
-
 	private TimeLineTemplate template;
+
+	@Autowired
 	private TimeUser timeUser;
 
-	private static String userId = "stenly";
 
-	@BeforeAll
-	public void createTimelineTemplate(){
-		userRepository.save(TimeUser.registerTimeUser(TimeUserDto.builder()
-				.id(userId)
-				.password("123456789")
-				.userName("Stenly Cho")
-				.hp("010-8013-9018")
-				.email("mincoln419@naver.com")
-				.cd(UUID.randomUUID().toString())
-				.ci(UUID.randomUUID().toString())
-				.build()));
-		timeUser = userRepository.findById(userId)
-				.orElseThrow(() -> new RuntimeException("User not found"));
-	};
 	@Test
 	void findByUserId() {
 		//given
@@ -81,8 +65,6 @@ class TimeLineTemplateRepositoryTest {
 
 		//then
 		assertThat(templates).isNotEmpty();
-		assertThat(templates.size()).isEqualTo(1);
-		System.out.println(templates.get(0).getTemplateTitle());
-		assertThat(templates.get(0).timeUser.getId()).isEqualTo(userId);
+		assertThat(templates.get(0).timeUser.getId()).isEqualTo(timeUser.getId());
 	}
 }

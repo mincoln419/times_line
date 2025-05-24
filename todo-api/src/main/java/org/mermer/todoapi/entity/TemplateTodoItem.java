@@ -2,6 +2,7 @@ package org.mermer.todoapi.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.mermer.todoapi.entity.enumeration.ContentType;
 
 @Getter
 @AllArgsConstructor
