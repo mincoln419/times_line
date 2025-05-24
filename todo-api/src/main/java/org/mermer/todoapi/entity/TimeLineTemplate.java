@@ -3,6 +3,7 @@ package org.mermer.todoapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,14 +18,15 @@ public class TimeLineTemplate extends BaseEntity {
 	public Long id;
 
 	public String content;
-	@Enumerated(EnumType.STRING)
-	public ContentType contentType;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	public TimeUser timeUser;
 
 	public String templateTitle;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "template_todo_item_id")
-	public List<TemplateTodoItem> items;
+	public List<TemplateTodoItem> items = new ArrayList<>();
 
 
 }

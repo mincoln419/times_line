@@ -7,6 +7,7 @@ import org.mermer.todoapi.util.PasswordUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class TimeUser {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sign_in_history_id")
-	private List<SignInHistory> signInHistories;
+	private List<SignInHistory> signInHistories = new ArrayList<>();
 
 	private LocalDateTime lastSignAt;
 
