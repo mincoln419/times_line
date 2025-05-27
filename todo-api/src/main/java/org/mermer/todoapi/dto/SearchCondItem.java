@@ -11,4 +11,5 @@ public class SearchCondItem {
 
 	public LocalDate searchDate;
 	public String timeUserId;
+	public Long templateId;
 }
