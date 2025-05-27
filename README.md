@@ -42,7 +42,7 @@ https://hulking-mangosteen-b98.notion.site/TimeLine-API-1fe0b3bb32d480f99ac0dbd7
         }
     ]
 }
-
+```
 
 Flutter를 통해 개발중인 화면
 ![image](https://github.com/user-attachments/assets/ad219949-e1c3-4e58-b6bf-c64a52b911f6)
