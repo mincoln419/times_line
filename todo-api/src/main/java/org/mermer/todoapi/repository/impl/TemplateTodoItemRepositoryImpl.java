@@ -11,16 +11,18 @@ import static org.mermer.todoapi.entity.QTemplateTodoItem.templateTodoItem;
 import org.mermer.todoapi.entity.TemplateTodoItem;
 import org.mermer.todoapi.repository.TemplateTodoItemRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class TemplateTodoItemRepositoryImpl implements TemplateTodoItemRepository {
 
-	private final EntityManager em;
 	private final JPAQueryFactory query;
 
 	@Override
@@ -32,6 +34,16 @@ public class TemplateTodoItemRepositoryImpl implements TemplateTodoItemRepositor
 						templateIdEq(searchCondItem),
 						userIdEq(searchCondItem)
 				).fetch();
+		return null;
+	}
+
+	@Override
+	public Optional<TemplateTodoItem> findById(Long id) {
+		return Optional.empty();
+	}
+
+	@Override
+	public TemplateTodoItem save(TemplateTodoItem item) {
 		return null;
 	}
 

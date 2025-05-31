@@ -14,13 +14,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/tmpItem")
+@RequestMapping("/api/v1/tmp-item")
 public class TemplateTodoItemController {
 
 	final private TemplateTodoItemService templateTodoItemService;
 
 
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<List<TemplateTodoItemDto>> selectTemplateItem(@QueryString SearchCondItem searchCond){
 
 		//**validation

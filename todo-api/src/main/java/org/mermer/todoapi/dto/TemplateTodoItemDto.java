@@ -24,7 +24,7 @@ public class TemplateTodoItemDto {
 
 	public static List<TemplateTodoItemDto> body(List<TemplateTodoItem> todoItems) {
 
-		return todoItems.stream().map(item -> TemplateTodoItemDto
+		return todoItems == null ? List.of() : todoItems.stream().map(item -> TemplateTodoItemDto
 				.builder()
 								.timeUser(item.getTimeLineTemplate().getTimeUser())
 								.templateTitle(item.getTitle())
