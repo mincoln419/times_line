@@ -1,0 +1,74 @@
+[
+  {
+    "timeLineTemplateId": 100,
+    "title": "AI 연구",
+    "contents": "인공지능 알고리즘 최적화 연구 진행",
+    "contentType": "INTELLECTUAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "명상 시간",
+    "contents": "깊은 호흡과 마음의 안정 찾기",
+    "contentType": "SPIRITUAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "조깅",
+    "contents": "공원에서 5km 러닝",
+    "contentType": "PHYSICAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "독서 모임",
+    "contents": "철학 서적 토론 및 의견 공유",
+    "contentType": "SOCIAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "자유 시간",
+    "contents": "무작위 활동 및 휴식",
+    "contentType": "OTHER"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "SNS 스크롤링",
+    "contents": "SNS에서 의미 없이 시간을 보내기",
+    "contentType": "WASTE"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "코딩 연습",
+    "contents": "새로운 프로그래밍 기술 학습",
+    "contentType": "INTELLECTUAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "요가 수행",
+    "contents": "신체와 정신의 조화",
+    "contentType": "SPIRITUAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "헬스장 운동",
+    "contents": "근력 운동 및 유산소",
+    "contentType": "PHYSICAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "친구와 저녁식사",
+    "contents": "좋은 사람들과 함께하는 시간",
+    "contentType": "SOCIAL"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "DIY 프로젝트",
+    "contents": "새로운 취미 탐색",
+    "contentType": "OTHER"
+  },
+  {
+    "timeLineTemplateId": 100,
+    "title": "TV 보기",
+    "contents": "드라마 몰아보기",
+    "contentType": "WASTE"
+  }
+]

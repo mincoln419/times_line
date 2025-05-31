@@ -22,8 +22,6 @@ public class TemplateTodoItem extends BaseEntity {
 
 	private String title;
 
-	private String contents;
-
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
 

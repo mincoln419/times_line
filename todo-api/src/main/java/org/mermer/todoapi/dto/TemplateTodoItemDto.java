@@ -16,9 +16,9 @@ public class TemplateTodoItemDto {
 
 	private TimeUser timeUser;
 
-	private String templateTitle;
+	private Long timeLineTemplateId;
 
-	private String contents;
+	private String title;
 
 	private ContentType contentType;
 
@@ -27,8 +27,7 @@ public class TemplateTodoItemDto {
 		return todoItems == null ? List.of() : todoItems.stream().map(item -> TemplateTodoItemDto
 				.builder()
 								.timeUser(item.getTimeLineTemplate().getTimeUser())
-								.templateTitle(item.getTitle())
-								.contents(item.getContents())
+								.title(item.getTitle())
 								.contentType(item.getContentType())
 						.build()
 				)
