@@ -35,7 +35,6 @@ class TimeLineTemplateRepositoryTest {
 		//given
 		template = TimeLineTemplate.builder()
 				.templateTitle("test title")
-				.content("hello")
 				.timeUser(timeUser)
 				.items(new ArrayList<>())
 				.build();
@@ -53,7 +52,6 @@ class TimeLineTemplateRepositoryTest {
 		//given
 		template = TimeLineTemplate.builder()
 				.templateTitle("test title")
-				.content("hello")
 				.timeUser(timeUser)
 				.items(new ArrayList<>())
 				.build();

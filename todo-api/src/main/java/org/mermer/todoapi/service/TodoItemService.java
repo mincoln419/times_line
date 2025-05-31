@@ -20,7 +20,9 @@ public class TodoItemService {
 
 	public List<TodoItemDto> selectTodoList(SearchCondItem searchCondItem) {
 
-		return todoItemRepository.findAll(searchCondItem)
+		List<TodoItem> items = todoItemRepository.findAll(searchCondItem);
+		return items == null ? List.of() :
+				items
 				.stream()
 				.map(getTodoItemTodoItemDtoFunction())
 				.toList();

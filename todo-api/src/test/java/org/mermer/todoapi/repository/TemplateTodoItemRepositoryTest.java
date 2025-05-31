@@ -64,7 +64,6 @@ class TemplateTodoItemRepositoryTest {
 	private TimeLineTemplate getTimeLineTemplate() {
 		TimeLineTemplate template = TimeLineTemplate.builder()
 				.templateTitle("test title")
-				.content("hello")
 				.timeUser(timeUser)
 				.items(new ArrayList<>())
 				.build();

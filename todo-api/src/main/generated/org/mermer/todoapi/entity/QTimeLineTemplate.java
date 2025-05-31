@@ -24,8 +24,6 @@ public class QTimeLineTemplate extends EntityPathBase<TimeLineTemplate> {
 
     public final QBaseEntity _super;
 
-    public final StringPath content = createString("content");
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createAt;
 
