@@ -17,8 +17,6 @@ public class TimeLineTemplate extends BaseEntity {
 	@Column(name="timeline_template_id")
 	public Long id;
 
-	public String content;
-
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	public TimeUser timeUser;
 
