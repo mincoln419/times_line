@@ -20,6 +20,6 @@ public class TemplateTodoItemService {
 
 		List<TemplateTodoItem> todoItem = templateTodoItemRepository.findAll(searchCond);
 
-		return TemplateTodoItemDto.body(todoItem);
+		return TemplateTodoItemDto.convert(todoItem);
 	}
 }

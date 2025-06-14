@@ -18,6 +18,7 @@ public class TimeLineTemplate extends BaseEntity {
 	public Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "user_id", insertable=false, updatable=false)
 	public TimeUser timeUser;
 
 	public String templateTitle;
