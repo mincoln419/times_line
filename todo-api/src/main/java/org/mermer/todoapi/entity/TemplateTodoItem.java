@@ -5,6 +5,7 @@ import lombok.*;
 import org.mermer.todoapi.entity.enumeration.ContentType;
 
 import java.time.LocalDateTime;
+import java.util.function.Supplier;
 
 @Getter
 @AllArgsConstructor
@@ -28,7 +29,5 @@ public class TemplateTodoItem extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
-
-
 
 }

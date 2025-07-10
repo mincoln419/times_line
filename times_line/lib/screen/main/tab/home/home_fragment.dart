@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/streams.dart';
@@ -26,33 +25,74 @@ class HomeFragment extends ConsumerStatefulWidget {
 }
 
 class _HomeFragmentState extends ConsumerState<HomeFragment> {
-  final scrollController = ScrollController();
-  String title = "오늘";
-  bool isSelected = false;
+  final ScrollController scrollController = ScrollController();
   double turns = 0.0;
-  final uuid = const Uuid();
+  bool isLoading = true;
 
   @override
   void initState() {
-    scrollController.addListener(() {
-      final floatingState = ref.read(floatingButtonStateProvider);
-
-      if (scrollController.position.pixels > 100 && !floatingState.isSmall) {
-        ref.read(floatingButtonStateProvider.notifier).changeButtonSize(true);
-      } else if (scrollController.position.pixels < 100 &&
-          floatingState.isSmall) {
-        ref.read(floatingButtonStateProvider.notifier).changeButtonSize(false);
-      }
-    });
-
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _ensureDefaultData();
+      _loadInitialData();
+    });
+  }
+
+  void _ensureDefaultData() {
+    try {
+      final todoTaskList = ref.read(todoHomeListProvider);
+      if (todoTaskList.isEmpty) {
+        final today = DateTime.now();
+        final uid = 'default_user';
+        
+        final defaultTasks = List.generate(24, (i) => TodoTask(
+          timeline: i,
+          workDate: today.formattedDateOnly,
+          createdTime: DateTime.now(),
+          title: '',
+          taskType: TaskType.nill,
+          uid: uid,
+        ));
+
+        // Provider에 데이터 추가
+        final provider = ref.read(todoHomeListProvider.notifier);
+        provider.clear();
+        for (var task in defaultTasks) {
+          provider.addTodo(task);
+        }
+
+        debugPrint('HomeFragment: 기본 데이터 생성 완료');
+      }
+    } catch (e) {
+      debugPrint('HomeFragment: 기본 데이터 생성 오류: $e');
+    }
+  }
+
+  Future<void> _loadInitialData() async {
+    if (!mounted) return;
+    
+    setState(() => isLoading = true);
+    try {
+      await todoListStream();
+    } catch (e) {
+      debugPrint('데이터 로드 오류: $e');
+      // 에러 발생 시에도 기본 데이터는 유지
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    String selectedDate = ref.watch(selectedHomeDateProvider).formattedDateOnly;
+  Widget build(BuildContext context) {
+    final selectedDate = ref.watch(selectedHomeDateProvider);
+    final todoTaskList = ref.watch(todoHomeListProvider);
+    final doneTaskList = ref.watch(doneListProvider);
+
+    debugPrint('todoTaskList length: \\${todoTaskList.length}');
+    debugPrint('todoTaskList: \\${todoTaskList}');
+
     return Column(
       children: [
         AppBar(
@@ -60,11 +100,9 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
             children: [
               Row(
                 children: [
-                  selectedDate.text.size(15).make(),
+                  selectedDate.formattedDateOnly.text.size(15).make(),
                   IconButton(
-                    onPressed: () {
-                      _selectDate();
-                    },
+                    onPressed: () => _selectDate(),
                     icon: const Icon(Icons.calendar_month),
                   ),
                 ],
@@ -74,163 +112,186 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
           actions: [
             IconButton(
               onPressed: () {
-
+                // TODO: 알림 기능 구현
               },
               icon: const Icon(Icons.notifications_none_rounded),
             )
           ],
         ),
         Expanded(
-          child: FutureBuilder(
-              future: todoListStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData && context.mounted) {
-                  final taskMap = snapshot.data;
-                  final List<TodoTask> todoTaskList =
-                      ref.watch(todoHomeListProvider);
-                  final List<TodoTask> doneTaskList =
-                      ref.watch(doneListProvider);
-
-                  return ListView.separated(
-                    padding: const EdgeInsets.only(
-                        bottom: FloatingDaangnButton.height),
-                    controller: scrollController,
-                    itemBuilder: (context, index) => TimesLineItem(
-                      index: index,
-                      onTap: () async {
-                        //처리한 업무 다이얼로그 호출
-                        TextEditingController tec = TextEditingController(
-                          text: doneTaskList[index].title,
-                        );
-                        ref
-                            .watch(currentTaskTypeProvider)
-                            .currentTypeOnChange(doneTaskList[index].taskType);
-                        showAdaptiveDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: TextField(
-                              controller: tec,
-                            ),
-                            actions: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  width10,
-                                  Container(
-                                    width: 120,
-                                    height: 40,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.blue,
-                                    ),
-                                    child: Center(
-                                      child: _DropDownWidgetConsumer(),
-                                    ),
-                                  ),
-                                  width10,
-                                ],
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  if (tec.text.isNotEmpty) {
-                                    final TodoTask copyItem =
-                                        doneTaskList[index];
-                                    copyItem.title = tec.text.trim();
-                                    copyItem.taskType = ref
-                                        .watch(currentTaskTypeProvider).currentType;
-
-                                    addDoneTask(copyItem);
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                child: const Text("확인"),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("취소"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    itemCount: todoTaskList.length,
-                    separatorBuilder: (context, index) =>
-                        const Line().pSymmetric(h: 15),
-                  );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }),
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _buildTodoList(todoTaskList, doneTaskList),
         ),
       ],
     );
   }
 
-  void _changeRotation() {
-    setState(() => turns += 10.0);
-  }
-
-  Future<Map<String, dynamic>> todoListStream() async {
-    final todayTask = ref.watch(todoHomeListProvider);
-    final selectedDate = ref.watch(selectedHomeDateProvider);
-    if (todayTask.isEmpty) {
-      final writtenTodoTasks =
-          await TodoApi.instance.getTodoList(selectedDate).then(
-        (e) {
-          return e.successData;
-        },
+  Widget _buildTodoList(List<TodoTask> todoTaskList, List<TodoTask> doneTaskList) {
+    // 데이터가 없으면 기본 24시간 리스트 생성
+    if (todoTaskList.isEmpty) {
+      _ensureDefaultData();
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('데이터를 로딩 중입니다...'),
+          ],
+        ),
       );
-      List<TodoTask> todoTasks = writtenTodoTasks.docs.isEmpty
-          ? await RangeStream(0, 23).map((i) {
-              return TodoTask(
-                timeline: i,
-                workDate: selectedDate.formattedDateOnly,
-                createdTime: DateTime.now(),
-                title: '',
-                taskType: TaskType.nill,
-                uid: ref.watch(userProvider).value!,
-              );
-            }).toList()
-          : TodoTaskTemplate.fromJson(writtenTodoTasks.docs.first.data()).taskContents.map((ele) {
-              final e = TodoContent.fromJson(ele);
-              return TodoTask(
-                  workDate: selectedDate.formattedDateOnly,
-                  timeline: e.timeline,
-                  createdTime: DateTime.now(),
-                  title: e.title,
-                  taskType: e.taskType,
-                uid: ref.watch(userProvider).value!,
-              );
-            }).toList();
-
-      ref.readTodoHomeHolder.clear();
-      for (var ele in todoTasks) {
-        ref.readTodoHomeHolder.addTodo(ele.copyWith());
-      }
     }
 
-    final todayDoneTask = ref.watch(doneListProvider);
+    return ListView.separated(
+      padding: const EdgeInsets.only(bottom: FloatingDaangnButton.height),
+      controller: scrollController,
+      itemBuilder: (context, index) => TimesLineItem(
+        index: index,
+        onTap: () => _showTaskEditDialog(index, doneTaskList),
+      ),
+      itemCount: todoTaskList.length,
+      separatorBuilder: (context, index) => const Line().pSymmetric(h: 15),
+    );
+  }
 
-    if (todayDoneTask.isEmpty) {
-      final writtenDoneTasks =
-          await TodoApi.instance.getDoneTodoList(selectedDate).then(
-                (e) => e.successData,
-              );
+  void _showTaskEditDialog(int index, List<TodoTask> doneTaskList) async {
+    if (index >= doneTaskList.length) return;
+    
+    final task = doneTaskList[index];
+    final TextEditingController tec = TextEditingController(text: task.title);
+    
+    ref.watch(currentTaskTypeProvider).currentTypeOnChange(task.taskType);
+    
+    if (!mounted) return;
+    
+    showAdaptiveDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('${task.timeline}시 작업 수정'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: tec,
+              decoration: const InputDecoration(
+                labelText: '작업 내용',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Center(child: _DropDownWidgetConsumer()),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("취소"),
+          ),
+          TextButton(
+            onPressed: () {
+              if (tec.text.isNotEmpty) {
+                final updatedTask = task.copyWith(
+                  title: tec.text.trim(),
+                  taskType: ref.watch(currentTaskTypeProvider).currentType,
+                  modifyTime: DateTime.now(),
+                );
+                addDoneTask(updatedTask);
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text("확인"),
+          ),
+        ],
+      ),
+    );
+  }
 
+  Future<void> todoListStream() async {
+    final selectedDate = ref.watch(selectedHomeDateProvider);
+    
+    try {
+      // TODO 작업 로드
+      final todoTasks = await _loadTodoTasks(selectedDate);
+      ref.readTodoHomeHolder.clear();
+      for (var task in todoTasks) {
+        ref.readTodoHomeHolder.addTodo(task);
+      }
+
+      // 완료된 작업 로드
+      final doneTasks = await _loadDoneTasks(selectedDate);
+      ref.readDoneHolder.clear();
+      for (var task in doneTasks) {
+        ref.readDoneHolder.addTodo(task);
+      }
+    } catch (e) {
+      debugPrint('데이터 로드 오류: $e');
+      // 에러 발생 시에도 기본 데이터는 유지
+    }
+  }
+
+  Future<List<TodoTask>> _loadTodoTasks(DateTime selectedDate) async {
+    try {
+      final writtenTodoTasks = await TodoApi.instance.getTodoList(selectedDate);
+      
+      if (writtenTodoTasks.successData.docs.isEmpty) {
+        // 빈 템플릿 생성
+        return await RangeStream(0, 23).map((i) {
+          return TodoTask(
+            timeline: i,
+            workDate: selectedDate.formattedDateOnly,
+            createdTime: DateTime.now(),
+            title: '',
+            taskType: TaskType.nill,
+            uid: ref.watch(userProvider).value!,
+          );
+        }).toList();
+      } else {
+        // 기존 데이터 로드
+        final template = TodoTaskTemplate.fromJson(
+          writtenTodoTasks.successData.docs.first.data()
+        );
+        return template.taskContents.map((ele) {
+          final content = TodoContent.fromJson(ele);
+          return TodoTask(
+            workDate: selectedDate.formattedDateOnly,
+            timeline: content.timeline,
+            createdTime: DateTime.now(),
+            title: content.title,
+            taskType: content.taskType,
+            uid: ref.watch(userProvider).value!,
+          );
+        }).toList();
+      }
+    } catch (e) {
+      debugPrint('TODO 작업 로드 오류: $e');
+      return [];
+    }
+  }
+
+  Future<List<TodoTask>> _loadDoneTasks(DateTime selectedDate) async {
+    try {
+      final writtenDoneTasks = await TodoApi.instance.getDoneTodoList(selectedDate);
+      
       final List<TodoTask> tempList = [];
-      if (writtenDoneTasks.docs.isNotEmpty) {
-        tempList.addAll(writtenDoneTasks.docs.map((ele) {
+      if (writtenDoneTasks.successData.docs.isNotEmpty) {
+        tempList.addAll(writtenDoneTasks.successData.docs.map((ele) {
           TodoTask item = TodoTask.fromJson(ele.data());
           return item.copyWith(docId: ele.id);
         }).toList());
       }
 
-      List<TodoTask> doneTasks = await RangeStream(0, 23).map((i) {
-        final matchedTask =
-            tempList.filter((tmp) => tmp.timeline == i).toList();
+      // 24시간 전체 리스트 생성
+      return await RangeStream(0, 23).map((i) {
+        final matchedTask = tempList.where((tmp) => tmp.timeline == i).toList();
         return matchedTask.isEmpty
             ? TodoTask(
                 timeline: i,
@@ -238,27 +299,24 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
                 createdTime: DateTime.now(),
                 title: '',
                 taskType: TaskType.nill,
-          uid: ref.watch(userProvider).value!,
+                uid: ref.watch(userProvider).value!,
               )
             : matchedTask[0];
       }).toList();
-      ref.readDoneHolder.clear();
-      for (var ele in doneTasks) {
-        ref.readDoneHolder.addTodo(ele);
-      }
+    } catch (e) {
+      debugPrint('완료된 작업 로드 오류: $e');
+      return [];
     }
-
-    final Map<String, dynamic> returnMap = {
-      "todo": todayTask,
-      "done": todayDoneTask,
-    };
-
-    return returnMap;
   }
 
-  Future addDoneTask(TodoTask todoTask) async {
-    ref.readDoneHolder.updateTodo(todoTask);
-    TodoApi.instance.addDoneTask(todoTask);
+  Future<void> addDoneTask(TodoTask todoTask) async {
+    try {
+      ref.readDoneHolder.updateTodo(todoTask);
+      await TodoApi.instance.addDoneTask(todoTask);
+    } catch (e) {
+      debugPrint('작업 업데이트 오류: $e');
+      // 에러가 발생해도 UI는 업데이트
+    }
   }
 
   void _selectDate() async {
@@ -270,9 +328,7 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
     );
     if (date != null) {
       ref.readSelectHomeDateHolder.changeDate(DateUtils.dateOnly(date));
-      ref.readTodoHomeHolder.clear();
-      ref.readDoneHolder.clear();
-      todoListStream();
+      await _loadInitialData();
     }
   }
 }

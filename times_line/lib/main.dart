@@ -21,23 +21,23 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await AppPreferences.init();
 
+  // Firebase 초기화 (한 번만)
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // 카메라 초기화
   cameras = await availableCameras();
 
+  // 디버그 모드에서 에뮬레이터 사용
   if (kDebugMode) {
     try {
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-      FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+      await FirebaseAuth.instance.useAuthEmulator('10.0.2.2', 9099);
+      FirebaseFirestore.instance.useFirestoreEmulator('10.0.2.2', 8080);
+      FirebaseStorage.instance.useStorageEmulator('10.0.2.2', 9199);
+      print('Firebase 에뮬레이터 연결 성공');
     } catch (e) {
-      print(e);
+      print('Firebase 에뮬레이터 연결 실패: $e');
     }
   }
 

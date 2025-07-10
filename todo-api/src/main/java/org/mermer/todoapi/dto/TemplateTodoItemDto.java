@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mermer.todoapi.entity.TemplateTodoItem;
-import org.mermer.todoapi.entity.TimeUser;
 import org.mermer.todoapi.entity.enumeration.ContentType;
 
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ public class TemplateTodoItemDto {
 
 	private ContentType contentType;
 
-	public static List<TemplateTodoItemDto> convert(List<TemplateTodoItem> todoItems) {
+	public static List<TemplateTodoItemDto> parseTemplateItemDtoList(List<TemplateTodoItem> todoItems) {
 
 		return todoItems == null ? List.of() : todoItems.stream().map(item -> TemplateTodoItemDto
 				.builder()
@@ -39,4 +38,12 @@ public class TemplateTodoItemDto {
 				.collect(Collectors.toList());
 	}
 
+	public static TemplateTodoItemDto parseTemplateItemDto(TemplateTodoItem result) {
+		return TemplateTodoItemDto.builder()
+				.timeLineTemplateId(result.getId())
+				.contentType(result.getContentType())
+				.time(result.getTime())
+				.title(result.getTitle())
+				.build();
+	}
 }

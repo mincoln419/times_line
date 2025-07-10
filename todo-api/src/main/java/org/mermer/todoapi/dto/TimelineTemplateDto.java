@@ -26,14 +26,11 @@ public class TimelineTemplateDto {
 
 	public String templateTitle;
 
-	public static TimelineTemplateDto convert(Optional<TimeLineTemplate> param) {
-		if(param.isPresent()){
-			TimeLineTemplate timeLineTemplate = param.get();
+	public static TimelineTemplateDto convert(TimeLineTemplate timeLineTemplate) {
 			return TimelineTemplateDto.builder()
 					.timelineId(timeLineTemplate.getId())
 					.timeUserId(timeLineTemplate.getTimeUser().getId())
 					.templateTitle(timeLineTemplate.getTemplateTitle())
 					.build();
-		}else return null;
 	}
 }

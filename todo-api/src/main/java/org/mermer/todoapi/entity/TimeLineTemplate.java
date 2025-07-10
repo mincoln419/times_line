@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -28,4 +29,7 @@ public class TimeLineTemplate extends BaseEntity {
 	public List<TemplateTodoItem> items = new ArrayList<>();
 
 
+	public static Supplier<? extends TimeLineTemplate> empty() {
+		return () -> TimeLineTemplate.builder().build();
+	}
 }
