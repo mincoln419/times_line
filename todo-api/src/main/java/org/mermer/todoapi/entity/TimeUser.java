@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.mermer.todoapi.dto.TimeUserDto;
 import org.mermer.todoapi.util.PasswordUtil;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class TimeUser {
 	private String email;
 	private String password;
 	private String ci;
-	private String cd;
+	private String di;
 	private String hp;
 	private LocalDateTime signUpAt;
 
@@ -33,7 +32,7 @@ public class TimeUser {
 	private LocalDateTime lastSignAt;
 
 	@Builder
-	private TimeUser(String id, String userName, String email, String password, String hp, String ci, String cd,
+	private TimeUser(String id, String userName, String email, String password, String hp, String ci, String di,
 	             LocalDateTime signUpAt, List<SignInHistory> signInHistories, LocalDateTime lastSignAt) {
 		this.id = id;
 		this.userName = userName;
@@ -41,7 +40,7 @@ public class TimeUser {
 		this.password = password;
 		this.hp = hp;
 		this.ci = ci;
-		this.cd = cd;
+		this.di = di;
 		this.signUpAt = signUpAt;
 		this.signInHistories = signInHistories;
 		this.lastSignAt = lastSignAt;
@@ -54,7 +53,7 @@ public class TimeUser {
 				.userName(userDto.getUserName())
 				.email(userDto.getEmail())
 				.ci(userDto.getCi())
-				.cd(userDto.getCd())
+				.di(userDto.getDi())
 				.hp(userDto.getHp())
 				.build();
 		user.setPassword(userDto.getPassword());

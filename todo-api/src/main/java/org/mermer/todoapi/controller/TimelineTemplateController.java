@@ -35,7 +35,7 @@ public class TimelineTemplateController {
 										.selectTimelineTemplate(searchCond))));
 	}
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<TimelineTemplateDto> saveTimelineTemplate(@RequestBody TimelineTemplateDto dto){
 
 		return ResponseEntity

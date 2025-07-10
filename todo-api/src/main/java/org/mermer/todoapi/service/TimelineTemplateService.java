@@ -5,10 +5,7 @@ import org.mermer.todoapi.dto.SearchCondTemplate;
 import org.mermer.todoapi.dto.TimelineTemplateDto;
 import org.mermer.todoapi.entity.TimeLineTemplate;
 import org.mermer.todoapi.repository.TimeLineTemplateRepository;
-import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +16,7 @@ public class TimelineTemplateService {
 	private final TimeUserService timeUserService;
 
 
-	public Optional<TimeLineTemplate> selectTimelineTemplate(SearchCondTemplate searchCond) {
+	public TimeLineTemplate selectTimelineTemplate(SearchCondTemplate searchCond) {
 
 		return timeLineTemplateRepository.findById(searchCond.templateId);
 	}

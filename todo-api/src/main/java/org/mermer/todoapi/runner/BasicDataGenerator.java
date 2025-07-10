@@ -6,18 +6,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.mermer.todoapi.dto.TemplateTodoItemDto;
+import org.mermer.todoapi.dto.TimeUserDto;
 import org.mermer.todoapi.dto.TimelineTemplateDto;
 import org.mermer.todoapi.entity.TemplateTodoItem;
 import org.mermer.todoapi.entity.TimeLineTemplate;
-import org.mermer.todoapi.entity.TimeUser;
 import org.mermer.todoapi.entity.TodoItem;
 import org.mermer.todoapi.repository.TemplateTodoItemRepository;
 import org.mermer.todoapi.repository.TimeLineTemplateRepository;
-import org.mermer.todoapi.repository.TimeUserRepository;
 import org.mermer.todoapi.repository.TodoItemRepository;
+import org.mermer.todoapi.service.TimeUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +39,7 @@ public class BasicDataGenerator implements CommandLineRunner{
 	final private TimeLineTemplateRepository timeLineTemplateRepository;
 
 	@Resource
-	final private TimeUserRepository timeUserRepository;
+	final private TimeUserService timeUserService;
 
 	@Autowired
 	final private ObjectMapper mapper;
@@ -49,15 +48,15 @@ public class BasicDataGenerator implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		timeuserGenerator();
+		timeUserGenerator();
 		todoItemGenerator();
 		timelineTemplateGenerator();
 		templateTodoItemGenerator();
 	}
 
-	private void timeuserGenerator() throws IOException {
-		TimeUser user = mapper.readValue(parsingPayload("timeUser.json"), TimeUser.class);
-		timeUserRepository.save(user);
+	private void timeUserGenerator() throws IOException {
+		TimeUserDto user = mapper.readValue(parsingPayload("timeUser.json"), TimeUserDto.class);
+		timeUserService.saveTimeUser(user);
 		System.out.println(user);
 	}
 
@@ -68,7 +67,7 @@ public class BasicDataGenerator implements CommandLineRunner{
 
 			TimeLineTemplate template = TimeLineTemplate.builder()
 					.templateTitle(dto.templateTitle)
-					.timeUser(timeUserRepository.findById(dto.getTimeUserId()).orElse(new TimeUser()))
+					.timeUser(timeUserService.selectTimeUser(dto.getTimeUserId()))
 					.build();
 			//todo tmmplatetodoitemId 를 받아서 tmplate 객체로 변경해서 등록하는 프로세스로 수정 필요
 			timeLineTemplateRepository.save(template);
