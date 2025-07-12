@@ -1,9 +1,7 @@
 package org.mermer.todoapi.repository.impl;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.mermer.todoapi.dto.SearchCondItem;
 import static org.mermer.todoapi.entity.QTemplateTodoItem.templateTodoItem;
@@ -13,7 +11,6 @@ import org.mermer.todoapi.repository.TemplateTodoItemRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +18,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 @Transactional
-public class TemplateTodoItemRepositoryImpl implements TemplateTodoItemRepository {
+public class TimeLineTemplateItemRepositoryImpl implements TemplateTodoItemRepository {
 
 	private final JPAQueryFactory query;
 

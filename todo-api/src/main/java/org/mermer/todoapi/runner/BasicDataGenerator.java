@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
-import org.mermer.todoapi.dto.TemplateTodoItemDto;
+import org.mermer.todoapi.dto.TimeLineTemplateItemDto;
 import org.mermer.todoapi.dto.TimeUserDto;
 import org.mermer.todoapi.dto.TimelineTemplateDto;
 import org.mermer.todoapi.entity.TemplateTodoItem;
@@ -75,7 +75,7 @@ public class BasicDataGenerator implements CommandLineRunner{
 	}
 
 	private void templateTodoItemGenerator() throws IOException {
-		List<TemplateTodoItemDto> templateTodoItems = mapper.readValue(parsingPayload("templateTodoItem.json"), new TypeReference<List<TemplateTodoItemDto>>() {
+		List<TimeLineTemplateItemDto> templateTodoItems = mapper.readValue(parsingPayload("templateTodoItem.json"), new TypeReference<List<TimeLineTemplateItemDto>>() {
 		});
 		templateTodoItems.forEach(dto -> {
 

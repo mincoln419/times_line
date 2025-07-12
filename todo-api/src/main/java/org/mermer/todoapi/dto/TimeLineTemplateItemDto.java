@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TemplateTodoItemDto {
+public class TimeLineTemplateItemDto {
 
 
 	private Long timeLineTemplateId;
@@ -26,9 +26,9 @@ public class TemplateTodoItemDto {
 
 	private ContentType contentType;
 
-	public static List<TemplateTodoItemDto> parseTemplateItemDtoList(List<TemplateTodoItem> todoItems) {
+	public static List<TimeLineTemplateItemDto> parseTemplateItemDtoList(List<TemplateTodoItem> todoItems) {
 
-		return todoItems == null ? List.of() : todoItems.stream().map(item -> TemplateTodoItemDto
+		return todoItems == null ? List.of() : todoItems.stream().map(item -> TimeLineTemplateItemDto
 				.builder()
 								.title(item.getTitle())
 								.time(item.getTime())
@@ -38,8 +38,8 @@ public class TemplateTodoItemDto {
 				.collect(Collectors.toList());
 	}
 
-	public static TemplateTodoItemDto parseTemplateItemDto(TemplateTodoItem result) {
-		return TemplateTodoItemDto.builder()
+	public static TimeLineTemplateItemDto parseTemplateItemDto(TemplateTodoItem result) {
+		return TimeLineTemplateItemDto.builder()
 				.timeLineTemplateId(result.getId())
 				.contentType(result.getContentType())
 				.time(result.getTime())
