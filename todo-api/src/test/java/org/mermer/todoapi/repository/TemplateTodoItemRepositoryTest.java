@@ -37,7 +37,6 @@ class TemplateTodoItemRepositoryTest {
 		String content = getContent();
 		TemplateTodoItem item = TemplateTodoItem.builder()
 				.title(title)
-				.contents(content)
 				.contentType(contentType)
 				.timeLineTemplate(getTimeLineTemplate())
 				.build();
@@ -48,9 +47,7 @@ class TemplateTodoItemRepositoryTest {
 
 		//then
 		assertThat(selectedItem).isNotNull();
-		assertThat(selectedItem.getContents()).isEqualTo(content);
 		assertThat(selectedItem.getTitle()).isEqualTo(title);
-		assertThat(selectedItem.getContents()).isEqualTo(content);
 	}
 
 	private String getTitle() {

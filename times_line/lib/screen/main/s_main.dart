@@ -30,6 +30,7 @@ import '../dialog/d_confirm.dart';
 import '../dialog/d_message.dart';
 import '../login/provider/login_provider.dart';
 import 'w_menu_drawer.dart';
+import 'package:times_line/screen/main/tab/home/provider/done_task_provider.dart';
 
 final currentTabProvider = StateProvider((ref) => TabItem.home);
 
@@ -69,6 +70,43 @@ class MainScreenState extends ConsumerState<MainScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeTodayData();
+    });
+  }
+
+  void _initializeTodayData() {
+    try {
+      final today = DateTime.now();
+      final selectedDate = ref.watch(selectedHomeDateProvider);
+      
+      // 오늘 날짜에 대한 24시간 기본 데이터 생성
+      final defaultTasks = List.generate(24, (i) => TodoTask(
+        timeline: i,
+        workDate: today.formattedDateOnly,
+        createdTime: DateTime.now(),
+        title: '',
+        taskType: TaskType.nill,
+        uid: 'default_user',
+      ));
+
+      // 홈 화면용 데이터 초기화
+      ref.readTodoHomeHolder.clear();
+      for (var task in defaultTasks) {
+        ref.readTodoHomeHolder.addTodo(task);
+      }
+
+      // 완료된 작업도 기본 생성 (올바른 Provider 사용)
+      final doneProvider = ref.read(doneListProvider.notifier);
+      doneProvider.clear();
+      for (var task in defaultTasks) {
+        doneProvider.addTodo(task);
+      }
+
+      debugPrint('오늘 날짜 기본 데이터 초기화 완료');
+    } catch (e) {
+      debugPrint('기본 데이터 초기화 오류: $e');
+    }
   }
 
   @override

@@ -3,7 +3,6 @@ package org.mermer.todoapi.entity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mermer.todoapi.dto.TimeUserDto;
-import org.mermer.todoapi.util.PasswordUtil;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
@@ -25,7 +24,7 @@ class TimeUserTest {
 				.userName("Stenly Cho")
 				.hp("010-8013-9018")
 				.email("mincoln419@naver.com")
-				.cd(UUID.randomUUID().toString())
+				.di(UUID.randomUUID().toString())
 				.ci(UUID.randomUUID().toString())
 				.build();
 	}

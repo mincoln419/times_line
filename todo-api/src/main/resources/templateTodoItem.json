@@ -1,0 +1,75 @@
+ [
+    {
+      "timeLineTemplateId": 1,
+      "title": "책 읽기",
+      "time": "2025-06-14T06:00:00",
+      "contentType": "INTELLECTUAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "아침 명상",
+      "time": "2025-06-14T07:00:00",
+      "contentType": "SPIRITUAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "조깅",
+      "time": "2025-06-14T08:00:00",
+      "contentType": "PHYSICAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "출근 및 동료와 소통",
+      "time": "2025-06-14T09:00:00",
+      "contentType": "SOCIAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "업무 수행",
+      "time": "2025-06-14T10:00:00",
+      "contentType": "INTELLECTUAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "점심 식사 및 휴식",
+      "time": "2025-06-14T12:00:00",
+      "contentType": "OTHER"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "운동 (헬스)",
+      "time": "2025-06-14T15:00:00",
+      "contentType": "PHYSICAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "SNS 및 인터넷 서핑",
+      "time": "2025-06-14T16:00:00",
+      "contentType": "WASTE"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "저녁 식사",
+      "time": "2025-06-14T19:00:00",
+      "contentType": "OTHER"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "친구와 만나서 대화",
+      "time": "2025-06-14T20:00:00",
+      "contentType": "SOCIAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "독서 및 자기계발",
+      "time": "2025-06-14T21:00:00",
+      "contentType": "INTELLECTUAL"
+    },
+    {
+      "timeLineTemplateId": 1,
+      "title": "취침 전 명상",
+      "time": "2025-06-14T22:00:00",
+      "contentType": "SPIRITUAL"
+    }
+  ]
+

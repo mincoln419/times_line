@@ -13,6 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class SearchCondTemplate {
 
-	public String templateId;
+	public Long templateId;
 	public String timeUserId;
 }

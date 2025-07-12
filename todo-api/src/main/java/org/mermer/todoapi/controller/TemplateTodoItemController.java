@@ -3,12 +3,10 @@ package org.mermer.todoapi.controller;
 import lombok.RequiredArgsConstructor;
 import org.mermer.todoapi.config.QueryString;
 import org.mermer.todoapi.dto.SearchCondItem;
-import org.mermer.todoapi.dto.TemplateTodoItemDto;
+import org.mermer.todoapi.dto.TimeLineTemplateItemDto;
 import org.mermer.todoapi.service.TemplateTodoItemService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class TemplateTodoItemController {
 
 
 	@GetMapping
-	public ResponseEntity<List<TemplateTodoItemDto>> selectTemplateItem(@QueryString SearchCondItem searchCond){
+	public ResponseEntity<List<TimeLineTemplateItemDto>> selectTemplateItem(@QueryString SearchCondItem searchCond) {
 
 		//**validation
 		//+ required parameter
@@ -31,11 +29,27 @@ public class TemplateTodoItemController {
 
 
 		//service call
-		List<TemplateTodoItemDto> result = templateTodoItemService.selectTemplateTodoItems(searchCond);
+		List<TimeLineTemplateItemDto> result = templateTodoItemService.selectTemplateTodoItems(searchCond);
 
 
 		//response
 		return ResponseEntity.ok(result);
 	}
 
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<TimeLineTemplateItemDto> selectTemplateItem(@PathVariable("id") Long id) {
+
+
+		TimeLineTemplateItemDto result = templateTodoItemService.selectTemplateTodoItems(SearchCondItem.builder().templateId(id).build()).get(0);
+		return ResponseEntity.ok().body(result);
+	}
+
+	@PostMapping("/")
+	public ResponseEntity<TimeLineTemplateItemDto> saveTemplateItem(@RequestBody TimeLineTemplateItemDto dto) {
+
+		TimeLineTemplateItemDto result = templateTodoItemService.saveTemplateTodoItem(dto);
+
+		return ResponseEntity.ok().body(result);
+	}
 }

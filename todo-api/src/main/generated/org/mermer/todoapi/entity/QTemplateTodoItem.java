@@ -24,8 +24,6 @@ public class QTemplateTodoItem extends EntityPathBase<TemplateTodoItem> {
 
     public final QBaseEntity _super;
 
-    public final StringPath contents = createString("contents");
-
     public final EnumPath<org.mermer.todoapi.entity.enumeration.ContentType> contentType = createEnum("contentType", org.mermer.todoapi.entity.enumeration.ContentType.class);
 
     //inherited
@@ -35,6 +33,8 @@ public class QTemplateTodoItem extends EntityPathBase<TemplateTodoItem> {
     public final QTimeUser createdBy;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final DateTimePath<java.time.LocalDateTime> time = createDateTime("time", java.time.LocalDateTime.class);
 
     public final QTimeLineTemplate timeLineTemplate;
 

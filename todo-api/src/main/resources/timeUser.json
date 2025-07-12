@@ -1,0 +1,10 @@
+{
+  "id": "user_001",
+  "userName": "홍길동",
+  "email": "hong@example.com",
+  "password": "hashed_password_example",
+  "ci": "CI00123456789",
+  "cd": "CD00123456789",
+  "hp": "010-1234-5678",
+  "signUpAt": "2025-06-14T08:30:00"
+}

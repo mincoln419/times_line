@@ -1,0 +1,12 @@
+[
+  {
+    "timelineId": 1,
+    "timeUserId": "user_001",
+    "templateTitle": "오늘의 할 일"
+  },
+  {
+    "timelineId": 2,
+    "timeUserId": "user_001",
+    "templateTitle": "내일의 목표"
+  }
+]

@@ -12,6 +12,6 @@ public class TimeUserDto {
 	private String password;
 	private String email;
 	private String ci;
-	private String cd;
+	private String di;
 	private String hp;
 }
