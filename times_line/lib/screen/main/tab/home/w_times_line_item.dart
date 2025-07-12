@@ -10,101 +10,83 @@ import 'package:times_line/screen/main/tab/home/provider/todo_task_provider.dart
 
 import '../../widget/todo_status_widget.dart';
 
-class TimesLineItem extends ConsumerStatefulWidget {
+class TimesLineItem extends ConsumerWidget {
   final VoidCallback onTap;
   final int index;
 
   const TimesLineItem({required this.onTap, super.key, required this.index});
 
   @override
-  ConsumerState<TimesLineItem> createState() => _TimesLineItemState();
-}
-
-class _TimesLineItemState extends ConsumerState<TimesLineItem>
-    with SingleTickerProviderStateMixin {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todoTask = ref.watch(todoHomeListProvider)[index];
+    final doneTask = ref.watch(doneListProvider)[index];
+    
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return FutureBuilder(
-        future: _todoListFuture(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final TodoTask todoTask = snapshot.data!['todoList'];
-            final TodoTask doneTask = snapshot.data!['doneList'];
-            return Flex(
-              direction: Axis.horizontal,
+    return Flex(
+      direction: Axis.horizontal,
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
                   child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: SizedBox(
-                            width: screenWidth * 0.06,
-                            child: todoTask.timeline.toString().text.make(),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          width: screenWidth * 0.36,
-                          height: 40,
-                          color: getTaskColor(context, todoTask.taskType),
-                          child: todoTask.title.text.make(),
-                        ),
-                        emptyExpanded,
-                        Row(
-                          children: [
-                            TodoStatusWidget(
-                              TodoTask(
-                                docId: doneTask.docId,
-                                title: todoTask.title,
-                                createdTime: DateTime.now(),
-                                modifyTime: DateTime.now(),
-                                taskType: todoTask.taskType,
-                                timeline: todoTask.timeline,
-                                todoTaskStatus: doneTask.todoTaskStatus,
-                                workDate: todoTask.workDate,
-                                uid: ref.watch(userProvider).value!,
-                              ),
-                              todo: todoTask,
-                            ),
-
-                            GestureDetector(
-                              onTap: widget.onTap,
-                              child: Container(
-                                margin: EdgeInsets.only(left: 6),
-                                alignment: Alignment.center,
-                                width: screenWidth * 0.41,
-                                height: 40,
-                                color: getTaskColor(context, doneTask.taskType),
-                                child: doneTask.title.text.make(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    width: screenWidth * 0.06,
+                    child: todoTask.timeline.toString().text.make(),
                   ),
                 ),
+                Container(
+                  alignment: Alignment.center,
+                  width: screenWidth * 0.36,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: getTaskColor(context, todoTask.taskType),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: todoTask.title.text.make(),
+                ),
+                emptyExpanded,
+                Row(
+                  children: [
+                    TodoStatusWidget(
+                      TodoTask(
+                        docId: doneTask.docId,
+                        title: todoTask.title,
+                        createdTime: DateTime.now(),
+                        modifyTime: DateTime.now(),
+                        taskType: todoTask.taskType,
+                        timeline: todoTask.timeline,
+                        todoTaskStatus: doneTask.todoTaskStatus,
+                        workDate: todoTask.workDate,
+                        uid: ref.watch(userProvider).value!,
+                      ),
+                      todo: todoTask,
+                    ),
+                    GestureDetector(
+                      onTap: onTap,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 6),
+                        alignment: Alignment.center,
+                        width: screenWidth * 0.41,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: getTaskColor(context, doneTask.taskType),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: doneTask.title.text.make(),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-  }
-
-  Future<Map> _todoListFuture() async {
-    final todoTask = ref.watch(todoHomeListProvider)[widget.index];
-    final doneTask = ref.watch(doneListProvider)[widget.index];
-    final todoTaskMap = Map();
-    todoTaskMap.putIfAbsent("todoList", () => todoTask);
-    todoTaskMap.putIfAbsent("doneList", () => doneTask);
-    return todoTaskMap;
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

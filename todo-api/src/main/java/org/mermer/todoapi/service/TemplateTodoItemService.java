@@ -2,8 +2,10 @@ package org.mermer.todoapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.mermer.todoapi.dto.SearchCondItem;
-import org.mermer.todoapi.dto.TemplateTodoItemDto;
+import org.mermer.todoapi.dto.SearchCondTemplate;
+import org.mermer.todoapi.dto.TimeLineTemplateItemDto;
 import org.mermer.todoapi.entity.TemplateTodoItem;
+import org.mermer.todoapi.entity.TimeLineTemplate;
 import org.mermer.todoapi.repository.TemplateTodoItemRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +18,23 @@ import java.util.List;
 public class TemplateTodoItemService {
 
 	private final TemplateTodoItemRepository templateTodoItemRepository;
-	public List<TemplateTodoItemDto> selectTemplateTodoItems(SearchCondItem searchCond) {
+
+	private final TimelineTemplateService timelineTemplateService;
+
+	public List<TimeLineTemplateItemDto> selectTemplateTodoItems(SearchCondItem searchCond) {
 
 		List<TemplateTodoItem> todoItem = templateTodoItemRepository.findAll(searchCond);
 
-		return TemplateTodoItemDto.body(todoItem);
+		return TimeLineTemplateItemDto.parseTemplateItemDtoList(todoItem);
+	}
+
+	public TimeLineTemplateItemDto saveTemplateTodoItem(TimeLineTemplateItemDto dto) {
+
+		TemplateTodoItem parse = TemplateTodoItem.builder()
+				.timeLineTemplate(timelineTemplateService.selectTimelineTemplate(SearchCondTemplate.builder().build()).orElseGet(TimeLineTemplate.empty()))
+
+				.build();
+		TemplateTodoItem result = templateTodoItemRepository.save(parse);
+		return TimeLineTemplateItemDto.parseTemplateItemDto(result);
 	}
 }

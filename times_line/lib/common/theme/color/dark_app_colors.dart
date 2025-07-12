@@ -5,41 +5,92 @@ class DarkAppColors extends AbstractThemeColors {
   const DarkAppColors();
 
   @override
-  Color get seedColor => AppColors.mediumBlue;
+  Color get seedColor => AppColors.accentBlue;
 
   @override
-  Color get activate => Colors.white;
+  Color get activate => AppColors.accentBlue;
 
   @override
-  Color get badgeBg => AppColors.darkOrange;
+  Color get badgeBg => AppColors.primaryBlue;
 
   @override
-  Color get divider => const Color.fromARGB(255, 93, 93, 93);
+  Color get divider => AppColors.darkGrey;
 
   @override
-  Color get drawerBg => const Color.fromARGB(255, 42, 42, 42);
+  Color get drawerBg => AppColors.veryDarkGrey;
 
   @override
   Color get hintText => AppColors.grey;
 
   @override
-  Color get iconButton => const Color.fromARGB(255, 255, 255, 255);
+  Color get iconButton => Colors.white;
 
   @override
-  Color get iconButtonInactivate => const Color.fromARGB(255, 131, 131, 131);
+  Color get iconButtonInactivate => AppColors.middleGrey;
 
   @override
-  Color get inActivate => const Color.fromARGB(255, 65, 68, 74);
+  Color get inActivate => AppColors.darkGrey;
 
   @override
   Color get text => Colors.white;
 
   @override
-  Color get focusedBorder => AppColors.darkGrey;
+  Color get focusedBorder => AppColors.accentBlue;
 
   @override
-  Color get confirmText => AppColors.brightBlue;
+  Color get confirmText => AppColors.accentBlue;
 
   @override
-  Color get blueButtonBackground => AppColors.blue;
+  Color get blueButtonBackground => AppColors.primaryBlue;
+
+  @override
+  Color get drawerText => Colors.white;
+
+  @override
+  Color get snackbarBgColor => AppColors.primaryBlue;
+
+  @override
+  Color get floatingActionLayer => AppColors.primaryBlue;
+
+  @override
+  Color get lessImportantColor => AppColors.grey;
+
+  @override
+  Color get unreadColor => AppColors.accentBlue;
+
+  @override
+  Color get lessImportant => AppColors.middleGrey;
+
+  @override
+  Color get knowlegeColor => AppColors.green;
+
+  @override
+  Color get soulColor => AppColors.darkGreen;
+
+  @override
+  Color get physicalColor => AppColors.accentBlue;
+
+  @override
+  Color get socialColor => AppColors.darkOrange;
+
+  @override
+  Color get etcColor => AppColors.grey;
+
+  @override
+  Color get sleepColor => AppColors.lightBlue;
+
+  @override
+  Color get wasteColor => AppColors.middleGrey;
+
+  @override
+  Color get checkBoxColor => AppColors.green;
+
+  @override
+  Color get feeling => AppColors.salmon;
+
+  @override
+  Color get thanks => AppColors.accentBlue;
+
+  @override
+  Color get adapt => AppColors.subtleBlue;
 }

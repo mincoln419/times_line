@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -18,6 +19,7 @@ public class TimeLineTemplate extends BaseEntity {
 	public Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "user_id", insertable=false, updatable=false)
 	public TimeUser timeUser;
 
 	public String templateTitle;
@@ -27,4 +29,7 @@ public class TimeLineTemplate extends BaseEntity {
 	public List<TemplateTodoItem> items = new ArrayList<>();
 
 
+	public static Supplier<? extends TimeLineTemplate> empty() {
+		return () -> TimeLineTemplate.builder().build();
+	}
 }

@@ -23,7 +23,7 @@ public class TimeUserSetup {
 				.userName("Stenly Cho")
 				.hp("010-8013-9018")
 				.email("mincoln419@naver.com")
-				.cd(UUID.randomUUID().toString())
+				.di(UUID.randomUUID().toString())
 				.ci(UUID.randomUUID().toString())
 				.build()));
 //		return userRepository.findById(userId)

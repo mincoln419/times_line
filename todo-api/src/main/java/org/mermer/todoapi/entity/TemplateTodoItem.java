@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.mermer.todoapi.entity.enumeration.ContentType;
 
+import java.time.LocalDateTime;
+import java.util.function.Supplier;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,11 +25,9 @@ public class TemplateTodoItem extends BaseEntity {
 
 	private String title;
 
-	private String contents;
+	private LocalDateTime time;
 
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
-
-
 
 }
