@@ -74,4 +74,15 @@ public class TimeUser {
 	public static boolean verifyPassword(String rawPassword, String encryptPassword){
 		return PasswordUtil.verifyPassword(rawPassword, encryptPassword);
 	}
+
+	public TimeUserDto parseDto() {
+		return TimeUserDto.builder()
+				.id(this.getId())
+				.userName(this.getUserName())
+				.email(this.getEmail())
+				.ci(this.getCi())
+				.di(this.getDi())
+				.hp(this.getHp())
+				.build();
+	}
 }

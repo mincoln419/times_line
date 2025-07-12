@@ -31,8 +31,10 @@ public class TemplateTodoItemService {
 	public TimeLineTemplateItemDto saveTemplateTodoItem(TimeLineTemplateItemDto dto) {
 
 		TemplateTodoItem parse = TemplateTodoItem.builder()
-				.timeLineTemplate(timelineTemplateService.selectTimelineTemplate(SearchCondTemplate.builder().build()).orElseGet(TimeLineTemplate.empty()))
-
+				.timelineTemplateId(dto.getTimeLineTemplateId())
+				.title(dto.getTitle())
+				.time(dto.getTime())
+				.contentType(dto.getContentType())
 				.build();
 		TemplateTodoItem result = templateTodoItemRepository.save(parse);
 		return TimeLineTemplateItemDto.parseTemplateItemDto(result);

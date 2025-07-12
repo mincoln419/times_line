@@ -16,11 +16,11 @@ public class TimeUserService {
 
 	static LocalDateTime NOW = LocalDateTime.now();
 
-	public TimeUser selectTimeUser(String userId){
-		return timeUserRepository.findById(userId).orElseThrow(RuntimeException::new);
+	public TimeUserDto selectTimeUser(String userId){
+		return timeUserRepository.findById(userId).orElseThrow(RuntimeException::new).parseDto();
 	}
 
-	public TimeUser saveTimeUser(TimeUserDto userDto){
+	public TimeUserDto saveTimeUser(TimeUserDto userDto){
 
 		TimeUser parse = TimeUser.builder()
 				.id(userDto.getId())
@@ -33,7 +33,7 @@ public class TimeUserService {
 				.userName(userDto.getUserName())
 				.build();
 
-		return timeUserRepository.save(parse);
+		return timeUserRepository.save(parse).parseDto();
 	}
 
 }
