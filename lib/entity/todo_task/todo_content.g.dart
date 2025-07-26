@@ -9,7 +9,7 @@ part of 'todo_content.dart';
 _$TodoContentImpl _$$TodoContentImplFromJson(Map<String, dynamic> json) =>
     _$TodoContentImpl(
       title: json['title'] as String,
-      timeline: json['timeline'] as int?,
+      timeline: (json['timeline'] as num?)?.toInt(),
       taskType: $enumDecode(_$TaskTypeEnumMap, json['taskType']),
     );
 

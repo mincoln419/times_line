@@ -17,7 +17,7 @@ _$TodoTaskTemplateSampleImpl _$$TodoTaskTemplateSampleImplFromJson(
           ? null
           : DateTime.parse(json['modifyTime'] as String),
       taskContents: json['taskContents'] as List<dynamic>,
-      orderSort: json['orderSort'] as int,
+      orderSort: (json['orderSort'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$TodoTaskTemplateSampleImplToJson(

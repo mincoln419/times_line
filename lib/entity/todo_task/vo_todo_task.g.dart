@@ -18,7 +18,7 @@ _$TodoTaskImpl _$$TodoTaskImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['modifyTime'] as String),
       title: json['title'] as String,
-      timeline: json['timeline'] as int?,
+      timeline: (json['timeline'] as num?)?.toInt(),
       taskType: $enumDecode(_$TaskTypeEnumMap, json['taskType']),
       todoTaskStatus: $enumDecodeNullable(
               _$TodoTaskStatusEnumMap, json['todoTaskStatus']) ??

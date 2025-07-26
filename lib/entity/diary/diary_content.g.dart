@@ -18,7 +18,7 @@ _$DiaryContentImpl _$$DiaryContentImplFromJson(Map<String, dynamic> json) =>
       modifyTime: json['modifyTime'] == null
           ? null
           : DateTime.parse(json['modifyTime'] as String),
-      sortOrder: json['sortOrder'] as int,
+      sortOrder: (json['sortOrder'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$DiaryContentImplToJson(_$DiaryContentImpl instance) =>

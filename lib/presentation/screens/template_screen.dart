@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:times_line/data/services/database_service.dart';
+import 'package:times_line/data/models/template.dart';
 
 class TemplateScreen extends ConsumerStatefulWidget {
   const TemplateScreen({super.key});
@@ -9,18 +12,33 @@ class TemplateScreen extends ConsumerStatefulWidget {
 }
 
 class _TemplateScreenState extends ConsumerState<TemplateScreen> {
-  final List<Map<String, dynamic>> _templates = [
-    {
-      'name': '기본 템플릿',
-      'isDefault': true,
-      'tasks': 24,
-    },
-    {
-      'name': '주말 템플릿',
-      'isDefault': false,
-      'tasks': 24,
-    },
-  ];
+  List<Template> _templates = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTemplates();
+  }
+
+  Future<void> _loadTemplates() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final templates = await DatabaseService.getAllTemplates();
+      setState(() {
+        _templates = templates;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      // 에러 처리
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,43 +46,39 @@ class _TemplateScreenState extends ConsumerState<TemplateScreen> {
       appBar: AppBar(
         title: const Text('템플릿 관리'),
         actions: [
-          IconButton(
-            onPressed: _createTemplate,
-            icon: const Icon(Icons.add),
-          ),
+          IconButton(onPressed: _createTemplate, icon: const Icon(Icons.add)),
         ],
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _templates.length,
-        itemBuilder: (context, index) {
-          final template = _templates[index];
-          return _buildTemplateCard(template, index);
-        },
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _templates.length,
+              itemBuilder: (context, index) {
+                final template = _templates[index];
+                return _buildTemplateCard(template, index);
+              },
+            ),
     );
   }
 
-  Widget _buildTemplateCard(Map<String, dynamic> template, int index) {
+  Widget _buildTemplateCard(Template template, int index) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: template['isDefault'] ? Colors.blue : Colors.grey,
-          child: const Icon(
-            Icons.dashboard,
-            color: Colors.white,
-          ),
+          backgroundColor: template.isDefault ? Colors.blue : Colors.grey,
+          child: const Icon(Icons.dashboard, color: Colors.white),
         ),
         title: Text(
-          template['name'],
+          template.name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text('${template['tasks']}개의 태스크'),
+        subtitle: Text('${template.tasks.length}개의 태스크'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (template['isDefault'])
+            if (template.isDefault)
               const Chip(
                 label: Text('기본'),
                 backgroundColor: Colors.blue,
@@ -93,7 +107,7 @@ class _TemplateScreenState extends ConsumerState<TemplateScreen> {
                     ],
                   ),
                 ),
-                if (!template['isDefault'])
+                if (!template.isDefault)
                   const PopupMenuItem(
                     value: 'delete',
                     child: Row(
@@ -108,9 +122,13 @@ class _TemplateScreenState extends ConsumerState<TemplateScreen> {
             ),
           ],
         ),
-        onTap: () => _editTemplate(index),
+        onTap: () => _viewTemplateDetail(template.id.toString()),
       ),
     );
+  }
+
+  void _viewTemplateDetail(String templateId) {
+    context.go('/template/$templateId');
   }
 
   void _createTemplate() {
@@ -166,11 +184,11 @@ class _TemplateScreenState extends ConsumerState<TemplateScreen> {
             child: const Text('취소'),
           ),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _templates.removeAt(index);
-              });
+            onPressed: () async {
+              final template = _templates[index];
+              await DatabaseService.deleteTemplate(template.id.toString());
               Navigator.pop(context);
+              await _loadTemplates(); // 데이터 다시 로드
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('삭제'),

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:times_line/presentation/screens/home_screen.dart';
 import 'package:times_line/presentation/screens/diary_screen.dart';
 import 'package:times_line/presentation/screens/template_screen.dart';
+import 'package:times_line/presentation/screens/template_detail_screen.dart';
 import 'package:times_line/presentation/screens/statistics_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -29,6 +30,14 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const TemplateScreen(),
         ),
         GoRoute(
+          path: '/template/:id',
+          name: 'template-detail',
+          builder: (context, state) {
+            final templateId = state.pathParameters['id']!;
+            return TemplateDetailScreen(templateId: templateId);
+          },
+        ),
+        GoRoute(
           path: '/statistics',
           name: 'statistics',
           builder: (context, state) => const StatisticsScreen(),
@@ -41,10 +50,7 @@ final GoRouter appRouter = GoRouter(
 class ScaffoldWithNavigation extends StatelessWidget {
   final Widget child;
 
-  const ScaffoldWithNavigation({
-    super.key,
-    required this.child,
-  });
+  const ScaffoldWithNavigation({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -52,22 +58,10 @@ class ScaffoldWithNavigation extends StatelessWidget {
       body: child,
       bottomNavigationBar: NavigationBar(
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.book),
-            label: '일기',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.dashboard),
-            label: '템플릿',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.analytics),
-            label: '통계',
-          ),
+          NavigationDestination(icon: Icon(Icons.home), label: '홈'),
+          NavigationDestination(icon: Icon(Icons.book), label: '일기'),
+          NavigationDestination(icon: Icon(Icons.dashboard), label: '템플릿'),
+          NavigationDestination(icon: Icon(Icons.analytics), label: '통계'),
         ],
         onDestinationSelected: (index) {
           switch (index) {
