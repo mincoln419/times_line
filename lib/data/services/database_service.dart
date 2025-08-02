@@ -99,6 +99,31 @@ class DatabaseService {
     }
   }
 
+  static Future<void> deleteDailyTasks(DateTime date) async {
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    await _isar.writeTxn(() async {
+      await _isar.dailyTasks
+          .filter()
+          .dateBetween(startOfDay, endOfDay)
+          .deleteAll();
+    });
+  }
+
+  static Future<void> updateDailyTaskActualContent(
+    DateTime date,
+    int hour,
+    String actualContent,
+  ) async {
+    final task = await getDailyTask(date, hour);
+    if (task != null) {
+      task.actualContent = actualContent;
+      task.updatedAt = DateTime.now();
+      await saveDailyTask(task);
+    }
+  }
+
   static Future<void> createDailyTasksFromTemplate(
     DateTime date,
     Template template,

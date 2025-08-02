@@ -17,44 +17,60 @@ const DailyTaskSchema = CollectionSchema(
   name: r'DailyTask',
   id: -233896565239787639,
   properties: {
-    r'content': PropertySchema(
+    r'actualContent': PropertySchema(
       id: 0,
+      name: r'actualContent',
+      type: IsarType.string,
+    ),
+    r'content': PropertySchema(
+      id: 1,
       name: r'content',
       type: IsarType.string,
     ),
     r'createdAt': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'date': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'date',
       type: IsarType.dateTime,
     ),
     r'hour': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'hour',
       type: IsarType.long,
     ),
     r'isCompleted': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'isCompleted',
       type: IsarType.bool,
     ),
+    r'plannedContent': PropertySchema(
+      id: 6,
+      name: r'plannedContent',
+      type: IsarType.string,
+    ),
+    r'plannedTaskType': PropertySchema(
+      id: 7,
+      name: r'plannedTaskType',
+      type: IsarType.byte,
+      enumMap: _DailyTaskplannedTaskTypeEnumValueMap,
+    ),
     r'taskType': PropertySchema(
-      id: 5,
+      id: 8,
       name: r'taskType',
       type: IsarType.byte,
       enumMap: _DailyTasktaskTypeEnumValueMap,
     ),
     r'templateId': PropertySchema(
-      id: 6,
+      id: 9,
       name: r'templateId',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 7,
+      id: 10,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -79,7 +95,19 @@ int _dailyTaskEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.actualContent;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.content.length * 3;
+  {
+    final value = object.plannedContent;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.templateId;
     if (value != null) {
@@ -95,14 +123,17 @@ void _dailyTaskSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.content);
-  writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeDateTime(offsets[2], object.date);
-  writer.writeLong(offsets[3], object.hour);
-  writer.writeBool(offsets[4], object.isCompleted);
-  writer.writeByte(offsets[5], object.taskType.index);
-  writer.writeString(offsets[6], object.templateId);
-  writer.writeDateTime(offsets[7], object.updatedAt);
+  writer.writeString(offsets[0], object.actualContent);
+  writer.writeString(offsets[1], object.content);
+  writer.writeDateTime(offsets[2], object.createdAt);
+  writer.writeDateTime(offsets[3], object.date);
+  writer.writeLong(offsets[4], object.hour);
+  writer.writeBool(offsets[5], object.isCompleted);
+  writer.writeString(offsets[6], object.plannedContent);
+  writer.writeByte(offsets[7], object.plannedTaskType.index);
+  writer.writeByte(offsets[8], object.taskType.index);
+  writer.writeString(offsets[9], object.templateId);
+  writer.writeDateTime(offsets[10], object.updatedAt);
 }
 
 DailyTask _dailyTaskDeserialize(
@@ -112,17 +143,22 @@ DailyTask _dailyTaskDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = DailyTask();
-  object.content = reader.readString(offsets[0]);
-  object.createdAt = reader.readDateTimeOrNull(offsets[1]);
-  object.date = reader.readDateTime(offsets[2]);
-  object.hour = reader.readLong(offsets[3]);
+  object.actualContent = reader.readStringOrNull(offsets[0]);
+  object.content = reader.readString(offsets[1]);
+  object.createdAt = reader.readDateTimeOrNull(offsets[2]);
+  object.date = reader.readDateTime(offsets[3]);
+  object.hour = reader.readLong(offsets[4]);
   object.id = id;
-  object.isCompleted = reader.readBool(offsets[4]);
+  object.isCompleted = reader.readBool(offsets[5]);
+  object.plannedContent = reader.readStringOrNull(offsets[6]);
+  object.plannedTaskType = _DailyTaskplannedTaskTypeValueEnumMap[
+          reader.readByteOrNull(offsets[7])] ??
+      TaskType.spiritual;
   object.taskType =
-      _DailyTasktaskTypeValueEnumMap[reader.readByteOrNull(offsets[5])] ??
+      _DailyTasktaskTypeValueEnumMap[reader.readByteOrNull(offsets[8])] ??
           TaskType.spiritual;
-  object.templateId = reader.readStringOrNull(offsets[6]);
-  object.updatedAt = reader.readDateTimeOrNull(offsets[7]);
+  object.templateId = reader.readStringOrNull(offsets[9]);
+  object.updatedAt = reader.readDateTimeOrNull(offsets[10]);
   return object;
 }
 
@@ -134,27 +170,51 @@ P _dailyTaskDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 4:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 5:
-      return (_DailyTasktaskTypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          TaskType.spiritual) as P;
+      return (reader.readBool(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
+      return (_DailyTaskplannedTaskTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          TaskType.spiritual) as P;
+    case 8:
+      return (_DailyTasktaskTypeValueEnumMap[reader.readByteOrNull(offset)] ??
+          TaskType.spiritual) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _DailyTaskplannedTaskTypeEnumValueMap = {
+  'spiritual': 0,
+  'intellectual': 1,
+  'social': 2,
+  'physical': 3,
+  'waste': 4,
+  'sleep': 5,
+};
+const _DailyTaskplannedTaskTypeValueEnumMap = {
+  0: TaskType.spiritual,
+  1: TaskType.intellectual,
+  2: TaskType.social,
+  3: TaskType.physical,
+  4: TaskType.waste,
+  5: TaskType.sleep,
+};
 const _DailyTasktaskTypeEnumValueMap = {
   'spiritual': 0,
   'intellectual': 1,
@@ -263,6 +323,160 @@ extension DailyTaskQueryWhere
 
 extension DailyTaskQueryFilter
     on QueryBuilder<DailyTask, DailyTask, QFilterCondition> {
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'actualContent',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'actualContent',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'actualContent',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'actualContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'actualContent',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'actualContent',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      actualContentIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'actualContent',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition> contentEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -634,6 +848,216 @@ extension DailyTaskQueryFilter
     });
   }
 
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'plannedContent',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'plannedContent',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'plannedContent',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'plannedContent',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'plannedContent',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'plannedContent',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedContentIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'plannedContent',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedTaskTypeEqualTo(TaskType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'plannedTaskType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedTaskTypeGreaterThan(
+    TaskType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'plannedTaskType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedTaskTypeLessThan(
+    TaskType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'plannedTaskType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition>
+      plannedTaskTypeBetween(
+    TaskType lower,
+    TaskType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'plannedTaskType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterFilterCondition> taskTypeEqualTo(
       TaskType value) {
     return QueryBuilder.apply(this, (query) {
@@ -917,6 +1341,18 @@ extension DailyTaskQueryLinks
     on QueryBuilder<DailyTask, DailyTask, QFilterCondition> {}
 
 extension DailyTaskQuerySortBy on QueryBuilder<DailyTask, DailyTask, QSortBy> {
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByActualContent() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'actualContent', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByActualContentDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'actualContent', Sort.desc);
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByContent() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'content', Sort.asc);
@@ -977,6 +1413,30 @@ extension DailyTaskQuerySortBy on QueryBuilder<DailyTask, DailyTask, QSortBy> {
     });
   }
 
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByPlannedContent() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedContent', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByPlannedContentDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedContent', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByPlannedTaskType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedTaskType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByPlannedTaskTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedTaskType', Sort.desc);
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterSortBy> sortByTaskType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'taskType', Sort.asc);
@@ -1016,6 +1476,18 @@ extension DailyTaskQuerySortBy on QueryBuilder<DailyTask, DailyTask, QSortBy> {
 
 extension DailyTaskQuerySortThenBy
     on QueryBuilder<DailyTask, DailyTask, QSortThenBy> {
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByActualContent() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'actualContent', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByActualContentDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'actualContent', Sort.desc);
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByContent() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'content', Sort.asc);
@@ -1088,6 +1560,30 @@ extension DailyTaskQuerySortThenBy
     });
   }
 
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByPlannedContent() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedContent', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByPlannedContentDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedContent', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByPlannedTaskType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedTaskType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByPlannedTaskTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'plannedTaskType', Sort.desc);
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QAfterSortBy> thenByTaskType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'taskType', Sort.asc);
@@ -1127,6 +1623,14 @@ extension DailyTaskQuerySortThenBy
 
 extension DailyTaskQueryWhereDistinct
     on QueryBuilder<DailyTask, DailyTask, QDistinct> {
+  QueryBuilder<DailyTask, DailyTask, QDistinct> distinctByActualContent(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'actualContent',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QDistinct> distinctByContent(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1158,6 +1662,20 @@ extension DailyTaskQueryWhereDistinct
     });
   }
 
+  QueryBuilder<DailyTask, DailyTask, QDistinct> distinctByPlannedContent(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'plannedContent',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<DailyTask, DailyTask, QDistinct> distinctByPlannedTaskType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'plannedTaskType');
+    });
+  }
+
   QueryBuilder<DailyTask, DailyTask, QDistinct> distinctByTaskType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'taskType');
@@ -1183,6 +1701,12 @@ extension DailyTaskQueryProperty
   QueryBuilder<DailyTask, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<DailyTask, String?, QQueryOperations> actualContentProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'actualContent');
     });
   }
 
@@ -1213,6 +1737,19 @@ extension DailyTaskQueryProperty
   QueryBuilder<DailyTask, bool, QQueryOperations> isCompletedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isCompleted');
+    });
+  }
+
+  QueryBuilder<DailyTask, String?, QQueryOperations> plannedContentProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'plannedContent');
+    });
+  }
+
+  QueryBuilder<DailyTask, TaskType, QQueryOperations>
+      plannedTaskTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'plannedTaskType');
     });
   }
 

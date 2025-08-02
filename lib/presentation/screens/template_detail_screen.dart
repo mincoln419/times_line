@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:times_line/domain/entities/task_type.dart';
 import 'package:times_line/data/services/database_service.dart';
 import 'package:times_line/data/models/template.dart';
@@ -51,7 +52,10 @@ class _TemplateDetailScreenState extends ConsumerState<TemplateDetailScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              // TODO: 템플릿 편집 기능
+              print(
+                '=== 연필 버튼 클릭됨, /template/edit/${widget.templateId}로 이동 ===',
+              );
+              context.go('/template/edit/${widget.templateId}');
             },
             icon: const Icon(Icons.edit),
           ),

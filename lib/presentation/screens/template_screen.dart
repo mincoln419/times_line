@@ -132,30 +132,13 @@ class _TemplateScreenState extends ConsumerState<TemplateScreen> {
   }
 
   void _createTemplate() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('새 템플릿'),
-        content: const Text('새 템플릿을 생성하시겠습니까?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // TODO: 템플릿 생성 로직
-            },
-            child: const Text('생성'),
-          ),
-        ],
-      ),
-    );
+    print('=== + 버튼 클릭됨, /template/new로 이동 ===');
+    context.go('/template/new');
   }
 
   void _editTemplate(int index) {
-    // TODO: 템플릿 편집 화면으로 이동
+    final template = _templates[index];
+    context.go('/template/edit/${template.id}');
   }
 
   void _handleMenuAction(String action, int index) {

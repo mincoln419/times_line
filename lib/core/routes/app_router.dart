@@ -4,6 +4,7 @@ import 'package:times_line/presentation/screens/home_screen.dart';
 import 'package:times_line/presentation/screens/diary_screen.dart';
 import 'package:times_line/presentation/screens/template_screen.dart';
 import 'package:times_line/presentation/screens/template_detail_screen.dart';
+import 'package:times_line/presentation/screens/template_edit_screen.dart';
 import 'package:times_line/presentation/screens/statistics_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -28,6 +29,23 @@ final GoRouter appRouter = GoRouter(
           path: '/template',
           name: 'template',
           builder: (context, state) => const TemplateScreen(),
+        ),
+        GoRoute(
+          path: '/template/new',
+          name: 'template-new',
+          builder: (context, state) {
+            print('=== 라우터: /template/new 경로 호출됨 ===');
+            return const TemplateEditScreen();
+          },
+        ),
+        GoRoute(
+          path: '/template/edit/:id',
+          name: 'template-edit',
+          builder: (context, state) {
+            final templateId = state.pathParameters['id']!;
+            print('=== 라우터: /template/edit/$templateId 경로 호출됨 ===');
+            return TemplateEditScreen(templateId: templateId);
+          },
         ),
         GoRoute(
           path: '/template/:id',
